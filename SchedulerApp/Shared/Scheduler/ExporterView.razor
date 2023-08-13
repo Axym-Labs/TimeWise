@@ -21,10 +21,6 @@
     [Parameter]
     public EventCallback<ProblemScope> OnProblemScopeChanged { get; set; }
 
-    private bool ErrorDisplayed = false;
-
-    private string ErrorMessage = "";
-
     private async Task DownloadFileStream()
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ProblemScope)));
