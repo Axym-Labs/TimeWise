@@ -1,5 +1,6 @@
 ﻿@namespace SchedulerApp.Shared.Scheduler
 @using Data.Scheduler
+@using SchedulerApp.Modules.Helpers
 
 @using MudBlazor
 
@@ -10,32 +11,64 @@
     {
         @if (Solution.Status)
         {
-            <MudAutocomplete T="string" Label="Employee" SearchFunc="SearchEmployee" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
-            <MudTreeView T="string" ExpandOnClick="true">
-                @foreach(var weekI in Enumerable.Range(0,Solution.Result.Count))
-                {
-                    <MudTreeViewItem Value="@("Week " + (weekI + 1).ToString())">
-                        @foreach(var dayI in Enumerable.Range(0,Solution.Result[weekI].Count))
-                        {
-                            <MudTreeViewItem Value="@("Day " + (dayI + 1).ToString())">
-                                @foreach (var timeSlotI in Enumerable.Range(0, Solution.Result[weekI][dayI].Count))
+            <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Employee" SearchFunc="SearchEmployee" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+            @if (inputName == string.Empty)
+            {
+                <MudTreeView T="string" ExpandOnClick="true">
+                    @foreach (var weekI in Enumerable.Range(0, Solution.Result.Count))
+                    {
+                        <MudTreeViewItem Value="@("Week " + (weekI + 1).ToString())">
+                            @foreach (var dayI in Enumerable.Range(0, Solution.Result[weekI].Count))
+                            {
+                                <MudTreeViewItem Value="@("Day " + (dayI + 1).ToString())">
+                                    @foreach (var timeSlotI in Enumerable.Range(0, Solution.Result[weekI][dayI].Count))
                                 {
                                     <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())">
                                         @foreach (var shiftI in Enumerable.Range(0, Solution.Result[weekI][dayI][timeSlotI].Count))
+                                    {
+                                        <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())">
+                                            @foreach (var employeeName in Solution.Result[weekI][dayI][timeSlotI][shiftI])
                                         {
-                                            <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())">
-                                                @foreach(var employeeName in Solution.Result[weekI][dayI][timeSlotI][shiftI]) {
-                                                    <MudTreeViewItem Value="@employeeName"/>
-                                                }
-                                        </MudTreeViewItem>
+                                            <MudTreeViewItem Value="@employeeName" />
                                         }
                                     </MudTreeViewItem>
+                                    }
+                                </MudTreeViewItem>
                                 }
                             </MudTreeViewItem>
-                        }
-                    </MudTreeViewItem>
-                }
-            </MudTreeView>
+                            }
+                        </MudTreeViewItem>
+                    }
+                </MudTreeView>
+            }
+            else
+            {
+                var indicesCollection = StringHelper.FindStringIndices(Solution, inputName);
+
+                <MudTreeView T="string" ExpandOnClick="true">
+                    @foreach (var weekI in indicesCollection.Select(x => x.Item1).Distinct())
+                    {
+                        <MudTreeViewItem Value="@("Week " + (weekI + 1).ToString())" Expanded="true">
+                            @foreach (var dayI in indicesCollection.Where(x => x.Item1 == weekI).Select(x => x.Item2).Distinct())
+                            {
+                                <MudTreeViewItem Value="@("Day " + (dayI + 1).ToString())" Expanded="true">
+                                    @foreach (var timeSlotI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI).Select(x => x.Item3).Distinct())
+                                {
+                                    <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())" Expanded="true">
+                                        @foreach (var shiftI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI && x.Item3 == timeSlotI).Select(x => x.Item4).Distinct())
+                                    {
+                                        <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())" Expanded="true">
+                                        </MudTreeViewItem>
+                                    }
+                                </MudTreeViewItem>
+                                }
+                            </MudTreeViewItem>
+                            }
+                        </MudTreeViewItem>
+                    }
+                </MudTreeView>
+            }
+            
         }
         else{
             Snackbar.Add("The model couldn't be solved. Please look through your constraints'");
@@ -56,7 +89,7 @@
     [Parameter]
     public Solution Solution { get; set; } = default!;
 
-    private string input = string.Empty;
+    private string inputName = string.Empty;
 
     private async Task<IEnumerable<string>> SearchEmployee(string value)
     {
