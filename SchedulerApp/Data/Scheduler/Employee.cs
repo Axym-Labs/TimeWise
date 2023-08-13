@@ -1,4 +1,4 @@
-namespace SchedulingApp.Data.Scheduler;
+namespace SchedulerApp.Data.Scheduler;
 
 public class Employee {
     public string Name { get; set; } = "";

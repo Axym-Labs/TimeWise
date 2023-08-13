@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace SchedulingApp.Data.Migrations
+namespace SchedulerApp.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

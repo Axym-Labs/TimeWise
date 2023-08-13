@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SchedulingApp.Data
+namespace SchedulerApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
