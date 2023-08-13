@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using SchedulerApp.Shared.Layout
 
-<MudThemeProvider IsDarkMode="@(true)" />
+<MudThemeProvider IsDarkMode="@(true)" Theme="CustomDarkTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <PageTitle>SchedulerApp</PageTitle>
@@ -20,6 +20,19 @@
 
 @code {
     bool _drawerOpen = true;
+
+    MudTheme CustomDarkTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = Colors.Blue.Darken2,
+                Secondary = Colors.Green.Accent4
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = Colors.Blue.Darken2
+            }
+        };
 
     void DrawerToggle()
     {

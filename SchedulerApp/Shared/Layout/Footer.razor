@@ -1,5 +1,7 @@
 @namespace SchedulerApp.Shared.Layout
 @using SchedulerApp.Modules
+@using MudBlazor
+
 @inject ContentStorage content
 
 
@@ -8,7 +10,7 @@
         <div class="grid justify-items-center" style="grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));">     
         @foreach (var linkPair in c.footer.links) {
             <div class="m-2 text-center">
-                <a href="@linkPair[1].ToString()" class="hover:underline text-gray-300 hover:text-focusColor">@linkPair[0]</a>
+                    <MudElement HtmlTag="a" Style="@($"color:{Colors.Grey.Darken4};")" href="@linkPair[1].ToString()" Class="hover:underline text-gray-300 hover:text-focusColor">@linkPair[0]</MudElement>
             </div>
         }
         </div>

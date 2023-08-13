@@ -10,10 +10,6 @@
 @inject IJSRuntime JS
 @inject Exporter exporter
 
-<h3>Exporters</h3>
-<div>
-    <MudButton Variant="Variant.Outlined" Style="@($"color:{Colors.LightBlue.Darken3};")" OnClick="_ => DownloadFileStream()">Download Problem as Json</MudButton>
-</div>
 <div>
     <MudFileUpload T="IBrowserFile" Accept=".json" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
         <ButtonTemplate>
@@ -40,7 +36,7 @@
 
     private async Task UploadJson(IBrowserFile file)
     {
-        if(file.ContentType == "application/json")
+        if (file.ContentType == "application/json")
         {
             var stream = file.OpenReadStream();
 
@@ -68,10 +64,4 @@
         }
     }
 
-    private async Task DownloadFileStream()
-    {
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ProblemScope)));
-        using var streamref = new DotNetStreamReference(stream: stream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", "scheduling-problem.json", streamref);
-    }
 }

@@ -5,9 +5,7 @@
 
 @inject ISnackbar Snackbar
 
-<h3>Solution Display</h3>
-
-<div>
+<div class="h-20">
     @if(Solution is not null)
     {
         @if (Solution.Status)
@@ -42,6 +40,12 @@
         else{
             Snackbar.Add("The model couldn't be solved. Please look through your constraints'");
         }
+    }
+    else
+    {
+        <div class="flex justify-center items-center text-lg">
+            Nothing Here.
+        </div>
     }
 </div>
 

@@ -15,6 +15,9 @@
 @inject ContentStorage content
 @inject Exporter exporter
 
+<SchedulerSection title="Start">
+    <Importer ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
+</SchedulerSection>
 
 <SchedulerSection title="Add employees">
     <EmployeePlanner Employees="ProblemScope.Problem.Workers" OnEmployeesChanged="employees => ProblemScope.Problem.Workers = employees" />
@@ -22,26 +25,27 @@
 
 <SchedulerSection title="Customize scheduling options">
     <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
+
 @*    <MudNumericField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
 *@    
+
     <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120">
         Maximum working hours: @ProblemScope.Problem.MaxHoursPerWeek
     </MudSlider>
 </SchedulerSection>
 
 <SchedulerSection title="Add Slots">
-    <SchedulerSlots ProblemScope="ProblemScope" ProblemScopeChanged="value => ProblemScope = value">
-
-    </SchedulerSlots>
+    <SchedulerSlots ProblemScope="ProblemScope" ProblemScopeChanged="value => ProblemScope = value"/>
 </SchedulerSection>
 
-<SchedulerSection title="Solution">
-    <Exporters ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"></Exporters>
+<SchedulerSection title="Solution View">
     <MudButton OnClick="_ => FetchSolution()" Variant="Variant.Filled">Get Solution</MudButton>
-    <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"></SolutionDisplay>
+    <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
 </SchedulerSection>
 
-
+<SchedulerSection title="Export solution">
+    <ExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
+</SchedulerSection>
 
 @code {
     private ProblemScope ProblemScope = new ProblemScope();
