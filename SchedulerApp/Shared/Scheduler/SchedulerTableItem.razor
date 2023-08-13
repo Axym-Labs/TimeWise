@@ -17,14 +17,14 @@
             }
             else
             {
-                <MudButton Class="bg-btnPrimary m-1 rounded-xl px-5" Variant="Variant.Filled" OnClick="@TriggerSelected">
+                <MudButton Style="@($"background:{Colors.LightBlue.Darken3}; color: #ffffff")" Class="bg-btnPrimary m-1 rounded-xl px-5" Variant="Variant.Filled" OnClick="@TriggerSelected">
                     @column @columnIndex
                 </MudButton>
             }
         }
         else
         {
-            <MudButton Class="mud-info m-1 rounded-xl px-5" Variant="Variant.Filled"  OnClick="@TriggerSelected">
+            <MudButton Class="m-1 rounded-xl px-5" Variant="Variant.Filled"  OnClick="@TriggerSelected">
                 @column @columnIndex
             </MudButton>
         }

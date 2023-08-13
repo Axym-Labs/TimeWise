@@ -4,6 +4,7 @@ using SchedulerApp.Data;
 using MudBlazor;
 using MudBlazor.Services;
 using SchedulerApp.Modules;
+using SchedulerApp.Pages.Fundamental;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/Fundamental/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -34,6 +35,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapFallbackToPage("/Fundamental/_Host");
 
 app.Run();
