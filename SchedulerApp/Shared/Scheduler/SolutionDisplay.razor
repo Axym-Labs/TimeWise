@@ -43,8 +43,8 @@
             }
             else
             {
+                // Filter logic
                 var indicesCollection = StringHelper.FindStringIndices(Solution, inputName);
-
                 <MudTreeView T="string" ExpandOnClick="true">
                     @foreach (var weekI in indicesCollection.Select(x => x.Item1).Distinct())
                     {
@@ -57,8 +57,7 @@
                                     <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())" Expanded="true">
                                         @foreach (var shiftI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI && x.Item3 == timeSlotI).Select(x => x.Item4).Distinct())
                                     {
-                                        <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())" Expanded="true">
-                                        </MudTreeViewItem>
+                                        <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())" Expanded="true" />
                                     }
                                 </MudTreeViewItem>
                                 }
@@ -71,13 +70,13 @@
             
         }
         else{
-            Snackbar.Add("The model couldn't be solved. Please look through your constraints'");
+            Snackbar.Add("The model couldn't be solved. Please look through your constraints");
         }
     }
     else
     {
         <div class="flex justify-center items-center text-lg">
-            Nothing Here.
+            Nothing Here yet.
         </div>
     }
 </div>
