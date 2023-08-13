@@ -108,17 +108,18 @@
 
         if (tableName == "Day" || tableName == "Time slot" || tableName == "Shift")
         {
-            if (SelectedWeek == -1 || SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); }
+            if (SelectedWeek < 0 || SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); }
             if (tableName != "Day")
             {
-                if (SelectedDay == -1 || SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); }
+                if (SelectedDay < 0 || SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); }
                 if (tableName != "Time slot")
                 {
-                    if (SelectedTimeSlot == -1 || SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); }
+                    if (SelectedTimeSlot < 0 || SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); }
                 }
             }
         }
     }
+
     private int SelectedWeek = 0;
     private int SelectedDay = 0;
     private int SelectedTimeSlot = 0;
