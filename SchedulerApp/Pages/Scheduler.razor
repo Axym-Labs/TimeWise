@@ -53,11 +53,17 @@
 </SchedulerSection>
 
 <SchedulerSection title="Solution View">
-    <MudButton OnClick="_ => FetchSolution()" Variant="Variant.Filled">Get Solution</MudButton>
+    <div class="d-flex flex-row">
+        <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Variant="Variant.Filled">Get Solution</MudButton>
+        @if (showSolutionLoadingCircle)
+        {
+            <MudProgressCircular Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
+        }
+    </div>
     <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
 </SchedulerSection>
 
-<SchedulerSection title="Export solution">
+<SchedulerSection title="Export problem">
     <ExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
 </SchedulerSection>
 
@@ -67,14 +73,15 @@
     private Solution? solution = null;
 
     private bool showLoadingCircle = true;
-
+    private bool showSolutionLoadingCircle = false;
     private bool DisplayConnectionError = false;
-
     private string Version = string.Empty;
 
     private async Task FetchSolution()
     {
+        showSolutionLoadingCircle = true;
         solution = await sAPIs.GetSolution(ProblemScope.Problem);
+        showSolutionLoadingCircle = false;
     }
 
     protected override async Task OnInitializedAsync()
