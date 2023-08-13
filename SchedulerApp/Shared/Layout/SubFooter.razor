@@ -13,7 +13,7 @@
             </MudItem>
             <MudItem>
                 @foreach (var linkPair in c.subfooter.links) {
-                    <MudLink Href=@linkPair[1].ToString() Class="p-3">@linkPair[0]</MudLink>
+                    <MudLink Href=@linkPair[1].ToString() Style="@($"color: rgb(130 130 140) !important;")" Class="p-3 text-sm">@linkPair[0]</MudLink>
                 }
             </MudItem>
         </MudGrid>
