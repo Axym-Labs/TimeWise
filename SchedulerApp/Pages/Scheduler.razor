@@ -1,0 +1,52 @@
+@namespace SchedulerApp.Pages
+@page "/scheduler"
+
+@using SchedulerApp.Shared.Scheduler
+@using SchedulerApp.Shared.BaseUI.btn
+@using SchedulerApp.Data.Scheduler
+@using SchedulerApp.Modules
+@using SchedulerApp.Shared
+
+@using MudBlazor
+@using Newtonsoft.Json
+
+@inject SchedulingAPIService sAPIs
+@inject Constants constants
+@inject ContentStorage content
+@inject Exporter exporter
+
+
+<div>
+    <EmployeePlanner Employees="ProblemScope.Problem.Workers" OnEmployeesChanged="employees => ProblemScope.Problem.Workers = employees" />
+</div>
+<div>
+    <div>
+        <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
+    </div>
+</div>
+<div>
+    <MudTextField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
+</div>
+<div>
+    <SchedulerSlots ProblemScope="ProblemScope" ProblemScopeChanged="value => ProblemScope = value"></SchedulerSlots>
+</div>
+
+<Exporters ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"></Exporters>
+<MudButton OnClick="_ => FetchSolution()">Get Solution</MudButton>
+<SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"></SolutionDisplay>
+@code {
+    private ProblemScope ProblemScope = new ProblemScope();
+
+    private Solution? solution = null;
+
+    private async Task FetchSolution()
+    {
+        solution = await sAPIs.GetSolution(ProblemScope.Problem);
+    }
+
+    protected override void OnInitialized()
+    {
+        dynamic schedulingPage = content.files["schedulingPage"];
+    }
+
+}

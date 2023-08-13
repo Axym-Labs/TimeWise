@@ -1,0 +1,79 @@
+@page "/schedulerTest"
+@using MudBlazor
+@using SchedulerApp.Data.Scheduler
+@using SchedulerApp.Modules
+@inject SchedulingAPIService sAPIs
+@using SchedulerApp.Shared
+@inject Constants constants
+@inject ContentStorage content
+
+
+<h1>Scheduler</h1>
+
+<div>
+    <MudButton OnClick="FetchAPIVersion">API Version</MudButton>
+    <MudText>@version</MudText>
+    <MudButton OnClick="FetchSolution"></MudButton>
+    <MudText>@solution</MudText>
+    <p>@state</p>
+</div>
+
+
+
+@code {
+    private string version = "";
+    private string solution = "";
+    private bool state = false;
+    protected async Task FetchAPIVersion(MouseEventArgs args) {
+        string? fetchResult = await Task.Run(() => sAPIs.GetAPIVersion());
+        version = fetchResult == null ? "Error occured" : fetchResult;
+    }
+
+    protected async Task FetchSolution(MouseEventArgs args) {
+
+        var shifts = new List<ShiftInfo>() 
+            {
+                new ShiftInfo("Morning Shift", 8.0, new List<RequiredPersonnel>() {new RequiredPersonnel(1,new List<string>(){"EMT"}), new RequiredPersonnel(1,new List<string>(){"Doctor"})},                                  1.2),
+                new ShiftInfo("Late Shift",    8.0, new List<RequiredPersonnel>() {new RequiredPersonnel(1,new List<string>(){"EMT"}), new RequiredPersonnel(1,new List<string>(){"Doctor"}), new RequiredPersonnel(1,new List<string>(){"Nurse"})}, 1.0),
+                new ShiftInfo("Night Shift",   8.0, new List<RequiredPersonnel>() {new RequiredPersonnel(1,new List<string>(){"Doctor"})},                                                                 1.8)
+            };
+
+        var timeSlotsPerDay = new List<TimeSlot>()
+            {
+                new TimeSlot(new List<ShiftInfo>(){shifts[0]}),
+                new TimeSlot(new List<ShiftInfo>(){shifts[1]}),
+                new TimeSlot(new List<ShiftInfo>(){shifts[2]})
+            };
+
+
+        var week = new Week(Enumerable.Range(1,7).Select(x => new Day(timeSlotsPerDay)).ToList());
+
+        var schedule = new Schedule(Enumerable.Range(1,1).Select(x => week).ToList());
+
+        var employees = new List<Employee>(){
+                new Employee("Jenna",    new List<string>(){"EMT"},    25),
+                new Employee("Hannah",   new List<string>(){"Nurse"},  20),
+                new Employee("George",   new List<string>(){"Doctor"}, 30),
+                new Employee("Freddy",   new List<string>(){"Doctor"}, 31),
+                new Employee("Kiley",    new List<string>(){"Doctor"}, 28),
+                new Employee("Delta",    new List<string>(){"EMT"},    24),
+                new Employee("Marlee",   new List<string>(){"Doctor"}, 35),
+                new Employee("Tucker",   new List<string>(){"Nurse"},  18),
+                new Employee("Lawrence", new List<string>(){"EMT"},    25)
+            };
+        var problem = new Problem(
+            employees,
+            schedule,
+            50.0,
+            new SchedulingOptions(true,true,true,true,true));
+        Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(problem));
+        var result = await sAPIs.GetSolution(problem);
+        solution = result == null ? "Error occured fetching results" : result.Result.ToString()!;
+        state = result == null ? false : result.Status;
+    }
+
+    protected override void OnInitialized()
+    {
+        
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "siteBase": {
+        "projectName": "SchedulerApp"
+    },
+    "navbar": {
+        "links": [
+            ["Scheduler", "/scheduler"],
+            ["Contact", "/contact"]
+        ],
+        "specialAnnouncement": "We launched: Try our scheduler for free!",
+        "specialAnnouncementBypass": false
+    },
+    "footer": {
+        "links": [
+            ["Scheduler", "/scheduler"],
+            ["Contact", "/contact"]
+        ]
+    },
+    "subfooter": {
+        "links": [
+            ["Terms of Service", "/terms-of-service"],
+            ["Privacy Policy", "/impressum-privacy-policy#privacy-policy"],
+            ["Impressum", "/impressum-privacy-policy#impressum"]
+        ]
+    }
+}

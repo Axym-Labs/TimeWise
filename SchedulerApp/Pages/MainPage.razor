@@ -1,0 +1,30 @@
+@namespace SchedulerApp.Pages
+@page "/"
+@using SchedulerApp.Modules
+@inject ContentStorage content
+@using MudBlazor
+@using SchedulerApp.Shared.Sections
+@using SchedulerApp.Shared
+@using SchedulerApp.Pages
+@using SchedulerApp.Shared.BaseUI.btn
+
+@inject Constants constants
+
+<PageTitle>SchedulerApp</PageTitle>
+
+<HeroSection title="SchedulerApp" description="Generate optimal schedules for your workers."
+    imageLoc="/static/img/sample.png">
+    <PrimaryLinkBtn link="/scheduler" t="Try now" />
+</HeroSection>
+
+
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        dynamic landingPage = content.files["main"];
+
+    }
+}
+

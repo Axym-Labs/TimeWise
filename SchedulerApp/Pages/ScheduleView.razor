@@ -1,0 +1,15 @@
+@namespace SchedulerApp.Pages
+@using MudBlazor
+@using SchedulerApp.Shared
+@using SchedulerApp.Modules
+@inject ContentStorage content
+
+
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        dynamic pagecontent = content.files["main"];
+    }
+}
