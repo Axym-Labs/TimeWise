@@ -1,0 +1,133 @@
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using MudBlazor
+@using Newtonsoft.Json
+@using SchedulerApp.Shared.Scheduler
+@using System.Collections.Generic
+@using SchedulerApp.Data.Scheduler
+@using SchedulerApp.Modules
+@using MudBlazorFix
+
+@inject SchedulingAPIService sAPIs
+@inject ISnackbar Snackbar
+
+<div>
+    <MudPaper Elevation="5">
+        <div class="d-flex d-table-row">
+            @try
+            {
+                var weekCollection = ProblemScope.Problem.Schedule.Weeks.Cast<dynamic>().ToList();
+                <SchedulerSlotsColumn SelectedIndex="@SelectedWeek" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Week" collection="@weekCollection" InstanceType="typeof(Week)" />
+            }
+            catch
+            {
+                <p>An error occured</p>
+            }
+
+            @try {
+                var dayCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Cast<dynamic>().ToList();
+                <SchedulerSlotsColumn SelectedIndex="@SelectedDay" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Day" collection="@dayCollection" InstanceType="typeof(Day)" />
+            }
+            catch (ArgumentOutOfRangeException) {
+                <SchedulerSlotsColumn SelectedIndex="@SelectedDay" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Day" collection="new List<dynamic>()" InstanceType="typeof(Day)" />
+            }
+
+            @try {
+                var timeSlotCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Cast<dynamic>().ToList();
+                <SchedulerSlotsColumn SelectedIndex="@SelectedTimeSlot" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Time slot" collection="@timeSlotCollection" InstanceType="typeof(TimeSlot)" />
+            }
+            catch(ArgumentOutOfRangeException){
+                <SchedulerSlotsColumn SelectedIndex="@SelectedTimeSlot" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Time slot" collection="new List<dynamic>()" InstanceType="typeof(TimeSlot)" />
+            }
+
+            @try {
+                var shiftCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots[SelectedTimeSlot].Shifts.Cast<dynamic>().ToList();
+                <SchedulerSlotsColumn SelectedIndex="@SelectedShift" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Shift" collection="@shiftCollection" InstanceType="typeof(ShiftInfo)" />
+            }
+            catch(ArgumentOutOfRangeException) {
+                <SchedulerSlotsColumn SelectedIndex="@SelectedShift" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Shift" collection="new List<dynamic>()" InstanceType="typeof(ShiftInfo)" />
+            }
+        </div>
+    </MudPaper>
+</div>
+
+@code {
+    private async Task OnScheduleChanged((List<dynamic> collection, string tableName) caller) 
+    {
+        CheckExistingSlots(caller.tableName);
+
+        switch (caller.tableName){
+            default:
+                throw new NotImplementedException("No implemented collection handler");
+            case "Week":
+                ProblemScope.Problem.Schedule.Weeks = caller.collection.Cast<Week>().ToList();
+                break;
+            case "Day":
+                ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days = caller.collection.Cast<Day>().ToList();
+                break;
+            case "Time slot":
+                ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots = caller.collection.Cast<TimeSlot>().ToList();
+                break;
+            case "Shift":
+                ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots[SelectedTimeSlot].Shifts = caller.collection.Cast<ShiftInfo>().ToList();
+                break;
+        }
+        await ProblemScopeChanged.InvokeAsync(ProblemScope);
+    }
+
+    private async Task OnIndexChanged((int, string) indexCall)
+    {
+        switch (indexCall.Item2)
+        {
+            default:
+                throw new NotImplementedException("No implemented handler");
+            case "Week":
+                SelectedWeek = indexCall.Item1;
+                ProblemScope.SelectedWeek = SelectedWeek;
+                break;
+            case "Day":
+                SelectedDay = indexCall.Item1;
+                ProblemScope.SelectedDay = SelectedDay;
+                break;
+            case "Time slot":
+                SelectedTimeSlot = indexCall.Item1;
+                ProblemScope.SelectedTimeSlot = SelectedTimeSlot;
+                break;
+            case "Shift":
+                SelectedShift = indexCall.Item1;
+                ProblemScope.SelectedShift = SelectedShift;
+                break;
+        }
+        await ProblemScopeChanged.InvokeAsync(ProblemScope);
+    }
+
+
+
+    private void CheckExistingSlots(string tableName)
+    {
+        // check if the needed slots exist before trying to add one
+
+        if (tableName == "Day" || tableName == "Time slot" || tableName == "Shift")
+        {
+            if (SelectedWeek == -1 || SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); }
+            if (tableName != "Day")
+            {
+                if (SelectedDay == -1 || SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); }
+                if (tableName != "Time slot")
+                {
+                    if (SelectedTimeSlot == -1 || SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); }
+                }
+            }
+        }
+    }
+    private int SelectedWeek = 0;
+    private int SelectedDay = 0;
+    private int SelectedTimeSlot = 0;
+    private int SelectedShift = 0;
+
+
+    [Parameter]
+    public EventCallback<ProblemScope> ProblemScopeChanged { get; set; }
+
+    [Parameter]
+    public ProblemScope ProblemScope { get; set; } = default!;
+}

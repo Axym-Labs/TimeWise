@@ -1,0 +1,43 @@
+@namespace SchedulerApp.Shared.SchedulingInputs
+@using MudBlazor
+@using SchedulerApp.Data.Scheduler
+@using SchedulerApp.Modules.Helpers
+
+
+@if (EmployeeData != null)
+{
+    <MudPaper Class="rounded-5 mud-theme-primary m-4">
+        <div class="d-flex flex-row">
+            <MudTextField Class="" @bind-Value="EmployeeData.Name" Label="Name" Variant="Variant.Filled" Margin="Margin.Dense"></MudTextField>
+
+            <MudTextField Class="" Margin="Margin.Dense" HelperText="Seperate using comma(,)" @bind-Value:get="StringHelper.JoinList(EmployeeData.Occupations)" @bind-Value:set="value => EmployeeData.Occupations = StringHelper.FormatSplitString(value)" Label="Occupations" Variant="Variant.Filled" HelperTextOnFocus="true"></MudTextField>
+
+            <MudNumericField Class="" @bind-Value="EmployeeData.Wage" Margin="Margin.Dense" Variant="Variant.Filled" T="double" Label="Hourly wage" Adornment="Adornment.End" AdornmentText="€"></MudNumericField>
+
+            <div class="flex flex-col justify-center">
+                <MudButton Class="" OnClick="RemovedTriggered">✖</MudButton>
+            </div>
+        </div>
+    </MudPaper>
+
+}
+
+@code {
+    [Parameter]
+    public Employee EmployeeData {get;set;} = default!;
+
+    [Parameter]
+    public EventCallback<Employee> OnRemovedClickEvent { get; set; }
+
+    private async Task RemovedTriggered()
+    {
+        await OnRemovedClickEvent.InvokeAsync(EmployeeData);
+    }
+
+    private string OccupationToString() { return string.Join(", ", EmployeeData.Occupations); }
+
+    private void Log()
+    {
+        Console.WriteLine(EmployeeData.ToString());
+    }
+}

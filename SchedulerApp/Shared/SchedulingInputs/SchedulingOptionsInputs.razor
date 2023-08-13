@@ -1,0 +1,27 @@
+@namespace SchedulerApp.Shared.SchedulingInputs
+@using SchedulerApp.Data.Scheduler
+@using SchedulerApp.Shared
+
+@using MudBlazor
+
+
+
+<h3>Scheduling Options Component</h3>
+
+
+<div class="d-flex">
+    <MudCheckBox Label="Strain Minimizing" @bind-Checked="Options.StrainMinimizing" />
+    <MudCheckBox Label="Expense Minimizing" @bind-Checked="Options.ExpenseMinimizing" />
+    <MudCheckBox Label="Ensure qualified personnel" @bind-Checked="Options.EnsureQualifiedPersonnelConstraint" />
+    <MudCheckBox Label="No double shift" @bind-Checked="Options.NoDoubleShiftConstraint" />
+    <MudCheckBox Label="Cap maximum working hours" @bind-Checked="Options.CapMaximumWorkingHoursConstraint"/>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public SchedulingOptions Options {get;set;} = new SchedulingOptions();
+    [Parameter]
+    public EventCallback<SchedulingOptions> OnOptionsChanged { get; set; }
+}

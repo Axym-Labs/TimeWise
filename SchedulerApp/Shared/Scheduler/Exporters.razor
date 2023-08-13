@@ -1,0 +1,77 @@
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using SchedulerApp.Modules
+@using Data.Scheduler
+@using System.Text;
+@using System.Text.Json;
+
+@using MudBlazor
+@using Newtonsoft.Json
+
+@inject IJSRuntime JS
+@inject Exporter exporter
+
+<h3>Exporters</h3>
+<div>
+    <MudButton Variant="Variant.Outlined" Style="@($"color:{Colors.LightBlue.Darken3};")" OnClick="_ => DownloadFileStream()">Download Problem as Json</MudButton>
+</div>
+<div>
+    <MudFileUpload T="IBrowserFile" Accept=".json" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
+        <ButtonTemplate>
+            <MudButton HtmlTag="label"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                       for="@context">
+                Import JSON schedule
+            </MudButton>
+        </ButtonTemplate>
+    </MudFileUpload>
+</div>
+@code {
+    [Parameter]
+    public ProblemScope ProblemScope { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<ProblemScope> OnProblemScopeChanged { get; set; }
+
+    private bool ErrorDisplayed = false;
+
+    private string ErrorMessage = "";
+
+    private async Task UploadJson(IBrowserFile file)
+    {
+        if(file.ContentType == "application/json")
+        {
+            var stream = file.OpenReadStream();
+
+            try
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    var problemScope = JsonConvert.DeserializeObject<ProblemScope>(Encoding.UTF8.GetString(memoryStream.ToArray()))!;
+                    ProblemScope = problemScope;
+                    await OnProblemScopeChanged.InvokeAsync(ProblemScope);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorDisplayed = true;
+                ErrorMessage = ex.Message;
+            }
+        }
+        else
+        {
+            ErrorDisplayed = true;
+            ErrorMessage = "Submitted Json seems to be corrupted";
+        }
+    }
+
+    private async Task DownloadFileStream()
+    {
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ProblemScope)));
+        using var streamref = new DotNetStreamReference(stream: stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", "scheduling-problem.json", streamref);
+    }
+}

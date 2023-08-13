@@ -1,0 +1,65 @@
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using Data.Scheduler
+
+@using MudBlazor
+
+@inject ISnackbar Snackbar
+
+<h3>Solution Display</h3>
+
+<div>
+    @if(Solution is not null)
+    {
+        @if (Solution.Status)
+        {
+            <MudAutocomplete T="string" Label="Employee" SearchFunc="SearchEmployee" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+            <MudTreeView T="string" ExpandOnClick="true">
+                @foreach(var weekI in Enumerable.Range(0,Solution.Result.Count))
+                {
+                    <MudTreeViewItem Value="@("Week " + (weekI + 1).ToString())">
+                        @foreach(var dayI in Enumerable.Range(0,Solution.Result[weekI].Count))
+                        {
+                            <MudTreeViewItem Value="@("Day " + (dayI + 1).ToString())">
+                                @foreach (var timeSlotI in Enumerable.Range(0, Solution.Result[weekI][dayI].Count))
+                                {
+                                    <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())">
+                                        @foreach (var shiftI in Enumerable.Range(0, Solution.Result[weekI][dayI][timeSlotI].Count))
+                                        {
+                                            <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())">
+                                                @foreach(var employeeName in Solution.Result[weekI][dayI][timeSlotI][shiftI]) {
+                                                    <MudTreeViewItem Value="@employeeName"/>
+                                                }
+                                        </MudTreeViewItem>
+                                        }
+                                    </MudTreeViewItem>
+                                }
+                            </MudTreeViewItem>
+                        }
+                    </MudTreeViewItem>
+                }
+            </MudTreeView>
+        }
+        else{
+            Snackbar.Add("The model couldn't be solved. Please look through your constraints'");
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Problem Problem { get; set; } = default!;
+
+    [Parameter]
+    public Solution Solution { get; set; } = default!;
+
+    private string input = string.Empty;
+
+    private async Task<IEnumerable<string>> SearchEmployee(string value)
+    {
+        await Task.Delay(1);
+        var workersName = Problem.Workers.Select(emp => emp.Name);
+        if (string.IsNullOrEmpty(value))
+            return workersName;
+        return workersName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+}

@@ -1,0 +1,35 @@
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using MudBlazor
+@using SchedulerApp.Shared.SchedulingInputs
+@using Data.Scheduler
+
+<h3>Employees</h3>
+
+<div>
+    <MudList>
+        @foreach(var employee in Employees) {
+            <MudItem>
+                <EmployeeInput EmployeeData="@employee" OnRemovedClickEvent="RemoveEmployee" />
+            </MudItem>
+        }
+    </MudList>
+    <MudButton OnClick="AddEmployee" Variant="Variant.Filled" Class="bg-btnPrimary m-1 rounded-lg px-5 w-full">Add an employee</MudButton>
+</div>
+
+@code {
+    [Parameter]
+    public List<Employee> Employees {get;set;} = new List<Employee>();
+    [Parameter]
+    public EventCallback<List<Employee>> OnEmployeesChanged {get;set;}
+
+    private async Task RemoveEmployee(Employee employee)
+    {
+        Employees.Remove(employee);
+        await OnEmployeesChanged.InvokeAsync(Employees);
+    }
+
+    private async Task AddEmployee() {
+        Employees.Add(new Data.Scheduler.Employee());
+        await OnEmployeesChanged.InvokeAsync(Employees);
+    }
+}

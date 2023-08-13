@@ -1,0 +1,56 @@
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using Data.Scheduler
+
+@using MudBlazor
+
+
+<MudListItem>
+    <div style="align-items: center;">
+        @if (SelectedIndex == columnIndex - 1)
+        {
+            @if (column == "Shift")
+            {
+                <MudButton Class="bg-btnPrimary m-1 rounded-xl px-5" Variant="Variant.Filled" OnClick="@TriggerSelected">
+                    @column @columnIndex
+                </MudButton>
+                <ShiftInfoInput OnShiftInfoChanged="AssociatedInstanceChanged" ShiftData="@AssociatedInstance" />
+            }
+            else
+            {
+                <MudButton Class="bg-btnPrimary m-1 rounded-xl px-5" Variant="Variant.Filled" OnClick="@TriggerSelected">
+                    @column @columnIndex
+                </MudButton>
+            }
+        }
+        else
+        {
+            <MudButton Class="mud-info m-1 rounded-xl px-5" Variant="Variant.Filled"  OnClick="@TriggerSelected">
+                @column @columnIndex
+            </MudButton>
+        }
+    </div>
+</MudListItem>
+@code {
+    [Parameter] public string column {get;set;} = default!;
+
+    [Parameter] public int columnIndex {get;set;} = default!;
+
+    [Parameter] public int SelectedIndex {get; set;}
+
+    [Parameter] public dynamic AssociatedInstance { get; set; } = default!;
+
+    [Parameter] public EventCallback<dynamic> OnAssociatedInstanceChanged {get;set;}
+
+    [Parameter] public EventCallback<int> OnIndexSelected {get;set;}
+
+    private async Task TriggerSelected(EventArgs args) {
+        SelectedIndex = columnIndex - 1;
+        await OnIndexSelected.InvokeAsync(SelectedIndex);
+    }
+
+    private async Task AssociatedInstanceChanged(dynamic instance)
+    {
+        AssociatedInstance = instance;
+        await OnAssociatedInstanceChanged.InvokeAsync(AssociatedInstance);
+    }
+}

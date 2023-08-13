@@ -1,0 +1,54 @@
+@namespace SchedulerApp.Shared.SchedulingInputs
+@using SchedulerApp.Data.Scheduler
+@using SchedulerApp.Shared
+@using SchedulerApp.Modules.Helpers
+
+@using MudBlazor
+
+
+
+@if (ShiftData != null)
+{
+    <div>
+        <MudTextField @bind-Value="ShiftData.Name" Label="Name" Variant="Variant.Filled" />
+    </div>
+    <div>
+        <MudTextField T="double" @bind-Value="ShiftData.Length" Label="Length" Variant="Variant.Filled" />
+    </div>
+    <div>
+        <MudTextField T="double" @bind-Value="ShiftData.Strain" Label="Strain" Variant="Variant.Filled" />
+    </div>
+    <div>
+        <label>Required Personnel:</label>
+        @foreach(var personnel in ShiftData.RequiredPersonnel)
+        {
+            <div class="d-flex flex-row" style="height:auto">
+                <MudTextField Class="" T="int" @bind-Value:get="personnel.Count" @bind-Value:set="value => personnel.Count = value" Label="Count" Variant="Variant.Filled" Margin="Margin.Dense"/>
+                <MudTextField Class="" T="string" Label="Roles" Variant="Variant.Filled" Margin="Margin.Dense" type="text" @bind-Value:get="StringHelper.JoinList(personnel.RequiredQualifications)" @bind-Value:set="value => personnel.RequiredQualifications = StringHelper.FormatSplitString(value)" />
+                <button @onclick="_ => RemovePersonnelRole(personnel)">Remove</button>
+            </div>
+        }
+
+        <button @onclick="AddPersonnelRole">Add Role</button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public ShiftInfo ShiftData {get;set;} = default!;
+    [Parameter]
+    public EventCallback<ShiftInfo> OnShiftInfoChanged { get; set; }
+
+
+    private async Task AddPersonnelRole()
+    {
+        ShiftData.RequiredPersonnel.Add(new RequiredPersonnel(1, new List<string>() {string.Empty}));
+        await OnShiftInfoChanged.InvokeAsync(ShiftData);
+    }
+
+    private async Task RemovePersonnelRole(RequiredPersonnel personnel)
+    {
+        ShiftData.RequiredPersonnel.Remove(personnel);
+        await OnShiftInfoChanged.InvokeAsync(ShiftData);
+    }
+}
