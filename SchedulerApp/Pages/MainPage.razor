@@ -18,41 +18,23 @@
 </HeroSection>
 
 <div style="margin: 50px 300px; text-align: center;">
-    <MudPaper Elevation="5" Style="background: #2A3439; margin: 0 auto;" Class="rounded-lg">
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg">
         <MudText Typo="Typo.h3">Introduction</MudText>
     </MudPaper>
-    <MudPaper Elevation="5" Style="background: #2A3439; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="text-align:left;">
             This scheduler is based on ILP (integer linear programming) and allows for optimal distribution of shifts among workers and guarantees an optimal solution (within constraints).
             It allows for complete control of the proccess and has adaptable constraints and objectives as well as a simple UI to allow for fast, replicable results.
-            In the following I will explain functionality of the different components
         </MudText>
     </MudPaper>
 
-    <MudGrid Spacing="4" Justify="Justify.Center">
-        <MudItem xs="6">
-            <MudPaper Class="pa-2 mt-4">
-                <MudText Typo="Typo.h5">Importers & Exporters</MudText>
-                <MudText Typo="Typo.body1" >
-                    You can use the in-built in and exporters for a given problem as well as for a solution to use in Excel or other tools to boost your productivity
-                </MudText>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="6">
-            <MudPaper Class="pa-2 mt-4">
-                <MudText Typo="Typo.h5">In-built Filters</MudText>
-                <MudText Typo="Typo.body1" >
-                    The scheduler provides a UI for displaying a work schedule, as well as functions to filter by name
-                </MudText>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
 
 
-    <MudPaper Elevation="5" Style="background: #2A3439; margin: 0 auto;" Class="rounded-lg mt-6">
+
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6">
         <MudText Typo="Typo.h3">How it works</MudText>
     </MudPaper>
-    <MudPaper Elevation="5" Style="background: #2A3439; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="">
             The scheduler follows a simple structure where every week has days, every day has time slots and every time slot has shifts.
             The time slots specifically are an abstraction to allow for multiple concurrent shifts. <br />
@@ -63,17 +45,51 @@
         </MudText>
     </MudPaper>
 
-    <MudPaper Elevation="5" Style="background: #2A3439; margin: 0 auto;" Class="rounded-lg mt-6">
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6">
         <MudText Typo="Typo.h3">The Parameters</MudText>
     </MudPaper>
-    <MudPaper Elevation="5" Style="background: #2A3439; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="">
-            There a couple of parameters one can access in the scheduler. The most important being the options represented by the checkmarks.
-            By default it is recommended to keep all constraints on unless you know exactly what you want to achieve.
+            There a couple of parameters one can access in the scheduler. Like other ILP problems, this one requires an target function and constraints.
+            <br />All possible options for the problem settings can be accessed via the checkbox
         </MudText>
-    </MudPaper>
-</div>
+    </MudPaper>    
+    <MudGrid Spacing="4" Justify="Justify.Center">
+        <MudItem xs="6">
+            <MudPaper Class="pa-2 mt-4">
+                <MudText Typo="Typo.h5">Expense Minimizing</MudText>
+                <MudText Typo="Typo.body1">
+                    This option is used to set the target function to minimize the objective value of staffing costs
+                    Staffing costs are just the sum of the product of every employee's hourly wage and the length of the shifts in which they work.
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="6">
+            <MudPaper Class="pa-2 mt-4">
+                <MudText Typo="Typo.h5">Strain Minimizing</MudText>
+                <MudText Typo="Typo.body1">
+                    To allow for approximate fairness I introduced a strain value associated with each shift. 
+                    Strain incentivizes the scheduler to distribute shifts more equally within the given constraints.
+                    The target function is, simalarly to the Expense Minimizing objective, just a sum of the sum of strain in the shifts they worked for every employee.
+                </MudText>
+            </MudPaper>
+        </MudItem>
 
+        <MudItem xs="6">
+            <MudPaper Class="pa-2 mt-4">
+                <MudText Typo="Typo.h5">Ensure qualified personnel constraint</MudText>
+                <MudText Typo="Typo.body1">
+                    This one is pretty straight forward and only permits the use of employees for certain shifts, if their qualifications match those of the shift.
+                    This is also the case for hybrid shifts. Both employees and 
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+</div>
+<MudScrollToTop>
+    <MudFab Style="background: #1976d2;" Color="Color.Primary" Class="mr-5 mb-2" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
+</MudScrollToTop>
 
 
 
