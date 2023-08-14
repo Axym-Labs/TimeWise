@@ -23,8 +23,8 @@
     </MudPaper>
     <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="text-align:left;">
-            This scheduler is based on ILP (integer linear programming) and allows for optimal distribution of shifts among workers and guarantees an optimal solution (within constraints).
-            It allows for complete control of the proccess and has adaptable constraints and objectives as well as a simple UI to allow for fast, replicable results.
+            This scheduler is based on ILP (integer linear programming), allows for the optimal distribution of shifts among workers, and guarantees an optimal solution (within constraints).
+            It allows for complete control of the process and has adaptable constraints and objectives, as well as a simple UI to allow for fast, replicable results.
         </MudText>
     </MudPaper>
 
@@ -36,11 +36,10 @@
     </MudPaper>
     <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="">
-            The scheduler follows a simple structure where every week has days, every day has time slots and every time slot has shifts.
-            The time slots specifically are an abstraction to allow for multiple concurrent shifts. <br />
-            To illustrate this point lets think of a hospital where we need a schedule.
-            The hospital has 3 major working blocks each day (namely: early, late and night shifts). In every working block of 
-            eight hours both the ER and OR need to be staffed. I.e. the working blocks are represented by time slots, while the shifts 
+            The scheduler follows a simple structure where each week has days, every day has time slots, and every time slot has shifts.
+            The time slots specifically are an abstraction to allow for multiple concurrent shifts.
+            To illustrate this, let's think of a hospital where we need a schedule.
+            The hospital has three major working blocks each day (namely: early, late, and night shifts). In every working block, both the ER and OR need to be staffed. I.e. the working blocks are represented by time slots, while the shifts
             could account for different workplaces or differing departments when sharing one worker pool.
         </MudText>
     </MudPaper>
@@ -50,8 +49,8 @@
     </MudPaper>
     <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="">
-            There a couple of parameters one can access in the scheduler. Like other ILP problems, this one requires an target function and constraints.
-            <br />All possible options for the problem settings can be accessed via the checkbox
+            There are a couple of parameters one can access in the scheduler. Like other ILP problems, this one requires a target function and constraints.
+            All parameters for the problem can be accessed via the checkbox menu.
         </MudText>
     </MudPaper>    
     <MudGrid Spacing="4" Justify="Justify.Center">
@@ -68,9 +67,10 @@
             <MudPaper Class="pa-2 mt-4">
                 <MudText Typo="Typo.h5">Strain Minimizing</MudText>
                 <MudText Typo="Typo.body1">
-                    To allow for approximate fairness I introduced a strain value associated with each shift. 
+                    To allow for approximate fairness, I introduced a strain value associated with each shift.
                     Strain incentivizes the scheduler to distribute shifts more equally within the given constraints.
-                    The target function is, simalarly to the Expense Minimizing objective, just a sum of the sum of strain in the shifts they worked for every employee.
+                    The target function is, similar to the Expense Minimizing objective, just a sum of the sum of strain in the shifts
+                    they worked for every employee.
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -79,9 +79,8 @@
             <MudPaper Class="pa-2 mt-4">
                 <MudText Typo="Typo.h5">No double shift constraint</MudText>
                 <MudText Typo="Typo.body1">
-                    This constraint limits the use of every employee to 1 time per day. This is should nearly always be turned on, 
-                    unless you really know what you are doing, 
-                    as this might lead to workers' rights violations (in Europe at least).
+                    This constraint limits the use of every employee to 1 time per day. It should nearly always be turned on, 
+                    unless you know what you are doing, as this might lead to workers' rights violations (in Europe, at least).
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -89,7 +88,8 @@
             <MudPaper Class="pa-2 mt-4">
                 <MudText Typo="Typo.h5">Maximum working hour constraint</MudText>
                 <MudText Typo="Typo.body1">
-                    This constraint is straightforward and limits the working hours per week of every employee to the value specified by the slider
+                    This constraint is straightforward and limits the working hours per week of every employee to the value specified 
+                    by the slider
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -97,10 +97,11 @@
             <MudPaper Class="pa-2 mt-4">
                 <MudText Typo="Typo.h5">Ensure qualified personnel constraint</MudText>
                 <MudText Typo="Typo.body1">
-                    This constraint only permits the use of employees for certain shifts, if their qualifications match those of the shift.
-                    This is also the case for hybrid shifts. Both employees and shifts can require mixed qualifications. For example,
-                    employee "Jeff" is both doctor and OR-qualified. This would qualify him for the OR Shift, which requires one doctor with OR qualifications, one anesthesiologist and one surgeon.
-                    Employee "Hannah", on the other hand, is both doctor, OR-qualified and a surgeon and is therefore eligible for two of the positions in that shift.
+                    This constraint only permits the scheduling of employees for the shifts their qualifications match. 
+                    It is also the case for hybrid shifts. Both employees and shifts can require mixed qualifications. 
+                    For example, employee "Jeff" is both doctor and OR-qualified. That would qualify him for the OR Shift, 
+                    which requires one doctor with OR qualifications, one anesthesiologist, and one surgeon. Employee "Hannah" 
+                    on the other hand, is both a doctor, OR-qualified, and a surgeon and is, therefore, eligible for two of the positions in that shift.
                 </MudText>
             </MudPaper>
         </MudItem>
@@ -111,8 +112,8 @@
     </MudPaper>
     <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
         <MudText Typo="Typo.body1" Style="">
-            If your model is solvable within the constraints (you will reveive an error message if it isn't) a solution tree will appear. 
-            This solution tree consists of a list of the weeks, days, time slots and shifts. If you expand it fully you will then be able 
+            If your model is solvable within the constraints (you will receive an error message if it isn't), a solution tree will appear.
+            This solution tree consists of a list of the weeks, days, time slots, and shifts. If you expand it fully, you will then be able
             to see the names of the employees designated for a specific shift. <br/>
             Alternatively, you can use the box to input an employee's name and filter their working days and shifts.
         </MudText>
