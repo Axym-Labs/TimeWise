@@ -14,15 +14,15 @@ public enum SupportedFileTypes
 
 public class Exporter
 {
-    public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, string FileExt)
+    public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, SupportedFileTypes FileExt)
     {
-        switch (FileExt.ToLower())
+        switch (FileExt)
         {
             default: throw new NotImplementedException("No implemented collection handler");
-            case "json": return GetJSONStream(ProblemScope);
-            case "csv": return GetCSVStream(ProblemScope);
-            case "xslx": return GetXLSXStream(ProblemScope);
-            case "gsheet": return GetGSHEETStream(ProblemScope);
+            case SupportedFileTypes.JSON: return GetJSONStream(ProblemScope);
+            case SupportedFileTypes.CSV: return GetCSVStream(ProblemScope);
+            case SupportedFileTypes.XLSX: return GetXLSXStream(ProblemScope);
+            case SupportedFileTypes.GSHEET: return GetGSHEETStream(ProblemScope);
         }
     }
     public MemoryStream GetJSONStream(ProblemScope ProblemScope)
