@@ -7,14 +7,15 @@ using Newtonsoft.Json;
 
 public class SchedulingAPIService
 {
-    private readonly RestClient _client = new(new RestClientOptions(Constants.apiEndpoint));
+    private readonly RestClient _client = new(new RestClientOptions(Constants.apiEndpoint) { MaxTimeout = 20 * 1000 });
 
     public async Task<string?> GetAPIVersion()
     {
         try{
-            return (await _client.GetAsync(new RestRequest("version"))).Content;
+            return (await _client.GetAsync(new RestRequest("version") { Timeout = 3000})).Content;
         }
-        catch (Exception) {
+        catch (Exception ex) {
+            await Console.Out.WriteLineAsync(ex.Message);
             return null;
         }
     }
@@ -25,13 +26,10 @@ public class SchedulingAPIService
     {
         try
         {
-            // Post the JSON to the API and get the response
             return await _client.PostAsync<Solution>(new RestRequest("solve").AddJsonBody(JsonConvert.SerializeObject(problem)));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Handle any exceptions here
-            Console.WriteLine($"Error: {ex.Message}");
             return null;
         }
     }
