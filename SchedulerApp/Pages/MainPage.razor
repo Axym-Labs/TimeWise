@@ -77,15 +77,47 @@
 
         <MudItem xs="6">
             <MudPaper Class="pa-2 mt-4">
-                <MudText Typo="Typo.h5">Ensure qualified personnel constraint</MudText>
+                <MudText Typo="Typo.h5">No double shift constraint</MudText>
                 <MudText Typo="Typo.body1">
-                    This one is pretty straight forward and only permits the use of employees for certain shifts, if their qualifications match those of the shift.
-                    This is also the case for hybrid shifts. Both employees and 
+                    This constraint limits the use of every employee to 1 time per day. This is should nearly always be turned on, 
+                    unless you really know what you are doing, 
+                    as this might lead to workers' rights violations (in Europe at least).
                 </MudText>
             </MudPaper>
         </MudItem>
-
+        <MudItem xs="6">
+            <MudPaper Class="pa-2 mt-4">
+                <MudText Typo="Typo.h5">Maximum working hour constraint</MudText>
+                <MudText Typo="Typo.body1">
+                    This constraint is straightforward and limits the working hours per week of every employee to the value specified by the slider
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12">
+            <MudPaper Class="pa-2 mt-4">
+                <MudText Typo="Typo.h5">Ensure qualified personnel constraint</MudText>
+                <MudText Typo="Typo.body1">
+                    This constraint only permits the use of employees for certain shifts, if their qualifications match those of the shift.
+                    This is also the case for hybrid shifts. Both employees and shifts can require mixed qualifications. For example,
+                    employee "Jeff" is both doctor and OR-qualified. This would qualify him for the OR Shift, which requires one doctor with OR qualifications, one anesthesiologist and one surgeon.
+                    Employee "Hannah", on the other hand, is both doctor, OR-qualified and a surgeon and is therefore eligible for two of the positions in that shift.
+                </MudText>
+            </MudPaper>
+        </MudItem>
     </MudGrid>
+
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6">
+        <MudText Typo="Typo.h3">Solution</MudText>
+    </MudPaper>
+    <MudPaper Elevation="5" Style="background: #171717; margin: 0 auto;" Class="rounded-lg mt-6 pa-4">
+        <MudText Typo="Typo.body1" Style="">
+            If your model is solvable within the constraints (you will reveive an error message if it isn't) a solution tree will appear. 
+            This solution tree consists of a list of the weeks, days, time slots and shifts. If you expand it fully you will then be able 
+            to see the names of the employees designated for a specific shift. <br/>
+            Alternatively, you can use the box to input an employee's name and filter their working days and shifts.
+        </MudText>
+    </MudPaper>
+
 </div>
 <MudScrollToTop>
     <MudFab Style="background: #1976d2;" Color="Color.Primary" Class="mr-5 mb-2" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
