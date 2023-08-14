@@ -30,7 +30,7 @@
 *@    
 
     <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120">
-        Maximum working hours: @ProblemScope.Problem.MaxHoursPerWeek
+        Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
     </MudSlider>
 </SchedulerSection>
 
@@ -43,7 +43,7 @@
     <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
 </SchedulerSection>
 
-<SchedulerSection title="Export solution">
+<SchedulerSection title="Export Schedule">
     <ExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
 </SchedulerSection>
 

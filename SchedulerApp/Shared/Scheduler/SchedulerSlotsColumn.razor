@@ -7,7 +7,7 @@
 
 <div style="width: fit-content;" aria-orientation="horizontal">
     <div style="height: 10rem; overflow-x:auto;" class="d-flex flex-column">
-        <MudButton Class="bg-btnPrimary rounded-lg px-5 w-full" Variant="Variant.Filled" OnClick="RemoveSelected">Remove a @tableName</MudButton>
+        <MudButton Class="bg-btnPrimary rounded-lg px-5 w-full" Variant="Variant.Filled" Color="Color.Primary" OnClick="RemoveSelected">Remove a @tableName</MudButton>
         <MudList>
             @if (collection != null && collection.Count > 0){
                 @for(int i = 1; i < collection.Count + 1; i++) {
@@ -16,7 +16,7 @@
             }
         </MudList>
 
-        <MudButton Class="bg-btnPrimary rounded-lg px-5 w-full" Variant="Variant.Filled" OnClick="AddNew">
+        <MudButton Class="bg-btnPrimary rounded-lg px-5 w-full" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNew">
             Add a @tableName
         </MudButton>
     </div>

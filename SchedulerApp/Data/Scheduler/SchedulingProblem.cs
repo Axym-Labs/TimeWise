@@ -4,7 +4,7 @@ public class Problem {
 
     public List<Employee> Workers { get; set; } = new List<Employee>();
     public Schedule Schedule { get; set; } = new Schedule();
-    public double MaxHoursPerWeek { get; set; } = 80.0;
+    public double MaxHoursPerWeek { get; set; } = 50;
     public SchedulingOptions Options { get; set; } = new SchedulingOptions();
     
     public Problem() {}

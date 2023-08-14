@@ -4,7 +4,8 @@ using SchedulerApp.Data;
 using MudBlazor;
 using MudBlazor.Services;
 using SchedulerApp.Modules;
-using SchedulerApp.Pages.Fundamental;
+using Microsoft.Extensions.FileProviders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,8 +44,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
+//app.UseStaticFiles(
+//    new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(app.Environment.ContentRootPath, "static")),
+//    RequestPath = "/static"
+//}
+//    );
 app.UseRouting();
 
 app.MapBlazorHub();
