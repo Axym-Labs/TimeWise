@@ -29,8 +29,7 @@ builder.Services.AddMudServices();
 //    config.SnackbarConfiguration.VisibleStateDuration = 8000;
 //    config.SnackbarConfiguration.HideTransitionDuration = 500;
 //    config.SnackbarConfiguration.ShowTransitionDuration = 500;
-//    config.SnackbarConfiguration.SnackbarVariant = V
-//    ariant.Filled;
+//    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 //});
 
 var app = builder.Build();
