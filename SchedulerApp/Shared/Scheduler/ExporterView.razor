@@ -30,7 +30,7 @@
 
     private string FileName = "Schedule";
 
-    private async Task DownloadFileStream(string FileExt)
+    private async Task DownloadFileStream(SupportedFileTypes FileExt)
     {
         var stream = exporter.GetStreamByFileExt(ProblemScope, FileExt);
         using var streamref = new DotNetStreamReference(stream: stream);
