@@ -1,17 +1,17 @@
 ﻿@namespace SchedulerApp.Shared.Scheduler
+
 @using Data.Scheduler
 @using SchedulerApp.Modules.Helpers
-
 @using MudBlazor
 
 @inject ISnackbar Snackbar
 
-<div class="h-20">
     @if(Solution is not null)
     {
         @if (Solution.Status)
         {
-            <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Employee" SearchFunc="SearchEmployee" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+        <div class="min-h-20">
+            <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Seach by Employee" SearchFunc="SearchEmployee" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
             <MudCheckBox T="bool" @bind-Checked="expandTree">Expand Tree</MudCheckBox>
             @if (inputName == string.Empty)
             {
@@ -69,18 +69,18 @@
                 </MudTreeView>
             }
             
+        </div>
         }
         else{
-            Snackbar.Add("The model couldn't be solved. Please look through your constraints");
+            Snackbar.Add("The model couldn't be solved. Please change your options and click 'generate solution' again.");
         }
     }
     else
     {
-        <div class="flex justify-center items-center text-lg">
+        <div class="h-20 flex justify-center items-center text-lg">
             Nothing Here yet.
         </div>
     }
-</div>
 
 @code {
     [Parameter]

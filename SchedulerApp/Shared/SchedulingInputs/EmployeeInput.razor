@@ -2,24 +2,24 @@
 @using MudBlazor
 @using SchedulerApp.Data.Scheduler
 @using SchedulerApp.Modules.Helpers
+@using System.Globalization
 
 
 @if (EmployeeData != null)
 {
-    <MudPaper Class="rounded-5 mud-theme-dark m-4">
+    <MudPaper Class="rounded-lg m-4 p-1.5">
         <div class="d-flex flex-row">
-            <MudTextField Class="" @bind-Value="EmployeeData.Name" Label="Name" Variant="Variant.Filled" Margin="Margin.Dense"></MudTextField>
+            <MudTextField Class="mx-2 my-2" @bind-Value="EmployeeData.Name" Label="Full name" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
 
-            <MudTextField Class="" Margin="Margin.Dense" HelperText="Seperate using comma(,)" @bind-Value:get="StringHelper.JoinList(EmployeeData.Occupations)" @bind-Value:set="value => EmployeeData.Occupations = StringHelper.FormatSplitString(value)" Label="Occupations" Variant="Variant.Filled" HelperTextOnFocus="true"></MudTextField>
+            <MudTextField Class="mx-2 my-2" Margin="Margin.Dense" @bind-Value:get="StringHelper.JoinList(EmployeeData.Occupations)" @bind-Value:set="value => EmployeeData.Occupations = StringHelper.FormatSplitString(value)" Label="Occupations (seperate using comma)" Variant="Variant.Outlined" HelperTextOnFocus="true"></MudTextField>
 
-            <MudNumericField Class="" @bind-Value="EmployeeData.Wage" Margin="Margin.Dense" Variant="Variant.Filled" T="double" Label="Hourly wage" Adornment="Adornment.End" AdornmentText="€"></MudNumericField>
+            <MudNumericField Class="mx-2 my-2" @bind-Value="EmployeeData.Wage" Culture="@CultureInfo.GetCultureInfo("de-DE")" Margin="Margin.Dense" Variant="Variant.Outlined" T="double" Label="Hourly wage" Adornment="Adornment.End" AdornmentText="€"></MudNumericField>
 
-            <div class="flex flex-col justify-center">
+            <div class="flex flex-col justify-center bg-red-600 rounded-lg m-2">
                 <MudButton Class="" OnClick="RemovedTriggered">✖</MudButton>
             </div>
         </div>
     </MudPaper>
-
 }
 
 @code {

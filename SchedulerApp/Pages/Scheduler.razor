@@ -10,6 +10,7 @@
 @using MudBlazor
 @using Newtonsoft.Json
 
+@inject ISnackbar Snackbar
 @inject SchedulingAPIService sAPIs
 @inject Constants constants
 @inject ContentStorage content
@@ -21,15 +22,16 @@
     <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center;align-items: center; z-index: 9999;">
         <div class="d-flex flex-column" style="align-items:center;">
             <MudText Typo="Typo.h2">Connecting to the Scheduling API</MudText>
-            <MudProgressLinear Color="Color.Error" Indeterminate="true" Class="my-7" />
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
         </div>
     </div>
 }
 @if(DisplayConnectionError)
 {
-    <MudAlert Severity="Severity.Error">The connection to the API could not be established</MudAlert>
+    <MudAlert Severity="Severity.Error">The connection to the API could not be established. You can only import Schedules, not generate them on this version of the page. If you want to generate a new schedule, try again later.</MudAlert>
 }
-<SchedulerSection title="Start">
+<SchedulerSection title="Optional: Import">
+    <p class="mb-3">If you have a saved schedule as JSON, you can import it here to view/edit it, and export it afterwards.</p>
     <ImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
 </SchedulerSection>
 
@@ -38,12 +40,14 @@
 </SchedulerSection>
 
 <SchedulerSection title="Customize scheduling options">
-    <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
+    <div class="mb-4">
+        <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
+    </div>
 
 @*    <MudNumericField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
 *@    
 
-    <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120">
+    <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
         Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
     </MudSlider>
 </SchedulerSection>
@@ -53,12 +57,16 @@
 </SchedulerSection>
 
 <SchedulerSection title="Solution View">
-    <div class="d-flex flex-row">
-        <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Variant="Variant.Filled">Get Solution</MudButton>
-        @if (showSolutionLoadingCircle)
-        {
-            <MudProgressCircular Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
-        }
+    <div class="d-flex flex-row mb-5">
+        <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full" Variant="Variant.Filled">
+            @if (showSolutionLoadingCircle)
+            {
+                <MudProgressCircular Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
+            } else
+            {
+                <p>Generate Solution</p>
+            }
+        </MudButton>
     </div>
     <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
 </SchedulerSection>
@@ -82,6 +90,11 @@
         showSolutionLoadingCircle = true;
         solution = await sAPIs.GetSolution(ProblemScope.Problem);
         showSolutionLoadingCircle = false;
+
+        if (solution == null)
+        {
+            Snackbar.Add("Schedule count not be generated. Try completing and sanitizing your inputs.");
+        }
     }
 
     protected override async Task OnInitializedAsync()

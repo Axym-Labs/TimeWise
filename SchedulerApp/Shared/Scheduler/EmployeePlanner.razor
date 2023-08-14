@@ -3,7 +3,9 @@
 @using SchedulerApp.Shared.SchedulingInputs
 @using Data.Scheduler
 
-<h3>Employees</h3>
+<h1 class="text-lg m-3">
+    Employees
+</h1>
 
 <div>
     <MudList>
@@ -31,5 +33,10 @@
     private async Task AddEmployee() {
         Employees.Add(new Data.Scheduler.Employee());
         await OnEmployeesChanged.InvokeAsync(Employees);
+    }
+
+    public bool AllEmployeeValuesFilled()
+    {
+        return Employees.All(employee => employee.AllAttributesSet());
     }
 }

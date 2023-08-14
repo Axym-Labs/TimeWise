@@ -11,8 +11,19 @@ public class Employee {
         Name = name;
         Occupations = occupations;
         Wage = wage;
+
     }
 
+    public bool AllAttributesSet()
+    {
+        // Compare each attribute to its default value
+        if (Name == "" || Occupations.Count == 0 || Wage == 0.0)
+        {
+            return false;
+        }
+
+        return true;
+    }
     override public string ToString() {
         var qualis = "";
         if (Occupations != null) {

@@ -11,49 +11,30 @@
 @inject ISnackbar Snackbar
 
 <div>
-    <MudPaper Elevation="5">
-        <div class="d-flex d-table-row">
-            @try
-            {
-                var weekCollection = ProblemScope.Problem.Schedule.Weeks.Cast<dynamic>().ToList();
-                <SchedulerSlotsColumn SelectedIndex="@SelectedWeek" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Week" collection="@weekCollection" InstanceType="typeof(Week)" />
-            }
-            catch
-            {
-                <p>An error occured</p>
-            }
+    <div>
+         <MudSwitch Label="Duplicate 1st entry?" Color="Color.Info" @bind-Checked="UseFirstForNewDay" />
+        <MudSwitch Label="Duplicate 1st entry?" Color="Color.Info" @bind-Checked="UseFirstForNewWeek" />
 
-            @try {
-                var dayCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Cast<dynamic>().ToList();
-                <SchedulerSlotsColumn SelectedIndex="@SelectedDay" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Day" collection="@dayCollection" InstanceType="typeof(Day)" />
-            }
-            catch (ArgumentOutOfRangeException) {
-                <SchedulerSlotsColumn SelectedIndex="@SelectedDay" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Day" collection="new List<dynamic>()" InstanceType="typeof(Day)" />
-            }
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <SchedulerSlotsColumn SelectedIndex="@SelectedWeek" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Week" collection="@weekCollection" InstanceType="typeof(Week)" UseFirstForNew="@UseFirstForNewWeek" />
+            <SchedulerSlotsColumn SelectedIndex="@SelectedDay" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Day" collection="@dayCollection" InstanceType="typeof(Day)" UseFirstForNew="@UseFirstForNewDay" />
+            <SchedulerSlotsColumn SelectedIndex="@SelectedTimeSlot" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Time slot" collection="@timeSlotCollection" InstanceType="typeof(TimeSlot)" />
+            <SchedulerSlotsColumn SelectedIndex="@SelectedShift" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Shift" collection="@shiftCollection" InstanceType="typeof(ShiftInfo)" />
 
-            @try {
-                var timeSlotCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Cast<dynamic>().ToList();
-                <SchedulerSlotsColumn SelectedIndex="@SelectedTimeSlot" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Time slot" collection="@timeSlotCollection" InstanceType="typeof(TimeSlot)" />
-            }
-            catch(ArgumentOutOfRangeException){
-                <SchedulerSlotsColumn SelectedIndex="@SelectedTimeSlot" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Time slot" collection="new List<dynamic>()" InstanceType="typeof(TimeSlot)" />
-            }
-
-            @try {
-                var shiftCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots[SelectedTimeSlot].Shifts.Cast<dynamic>().ToList();
-                <SchedulerSlotsColumn SelectedIndex="@SelectedShift" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Shift" collection="@shiftCollection" InstanceType="typeof(ShiftInfo)" />
-            }
-            catch(ArgumentOutOfRangeException) {
-                <SchedulerSlotsColumn SelectedIndex="@SelectedShift" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Shift" collection="new List<dynamic>()" InstanceType="typeof(ShiftInfo)" />
-            }
         </div>
-    </MudPaper>
+    </div>
 </div>
 
 @code {
+    public bool UseFirstForNewDay;
+    public bool UseFirstForNewWeek;
+
     private async Task OnScheduleChanged((List<dynamic> collection, string tableName) caller) 
     {
-        CheckExistingSlots(caller.tableName);
+        if (CheckExistingSlotsWrong(caller.tableName))
+        {
+            return;
+        }
 
         switch (caller.tableName){
             default:
@@ -102,22 +83,23 @@
 
 
 
-    private void CheckExistingSlots(string tableName)
+    private bool CheckExistingSlotsWrong(string tableName)
     {
         // check if the needed slots exist before trying to add one
 
-        if (tableName == "Day" || tableName == "Time slot" || tableName == "Shift")
+        if (tableName != "Week")
         {
-            if (SelectedWeek < 0 || SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); }
+            if (SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); return true; }
             if (tableName != "Day")
             {
-                if (SelectedDay < 0 || SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); }
+                if (SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); return true; }
                 if (tableName != "Time slot")
                 {
-                    if (SelectedTimeSlot < 0 || SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); }
+                    if (SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); return true; }
                 }
             }
         }
+        return false;
     }
 
     private int SelectedWeek = 0;
@@ -125,10 +107,23 @@
     private int SelectedTimeSlot = 0;
     private int SelectedShift = 0;
 
+    List<dynamic> weekCollection = new();
+    List<dynamic> dayCollection = new();
+    List<dynamic> timeSlotCollection = new();
+    List<dynamic> shiftCollection = new();
+
 
     [Parameter]
     public EventCallback<ProblemScope> ProblemScopeChanged { get; set; }
 
     [Parameter]
     public ProblemScope ProblemScope { get; set; } = default!;
+
+    override protected void OnInitialized()
+    {
+        try { weekCollection = ProblemScope.Problem.Schedule.Weeks.Cast<dynamic>().ToList(); } catch { } // return;
+        try { dayCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Cast<dynamic>().ToList(); } catch { }
+        try { timeSlotCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Cast<dynamic>().ToList(); } catch { }
+        try { shiftCollection = ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots[SelectedTimeSlot].Shifts.Cast<dynamic>().ToList(); } catch { }
+    }
 }
