@@ -6,17 +6,16 @@
 
 
 
-<h3>Scheduling Options Component</h3>
+<h3>Options</h3>
 
 
 <div class="d-flex">
-    <MudCheckBox Label="Strain Minimizing" @bind-Checked="Options.StrainMinimizing" />
-    <MudCheckBox Label="Expense Minimizing" @bind-Checked="Options.ExpenseMinimizing" />
-    <MudCheckBox Label="Ensure qualified personnel" @bind-Checked="Options.EnsureQualifiedPersonnelConstraint" />
-    <MudCheckBox Label="No double shift" @bind-Checked="Options.NoDoubleShiftConstraint" />
-    <MudCheckBox Label="Cap maximum working hours" @bind-Checked="Options.CapMaximumWorkingHoursConstraint"/>
+    <MudCheckBox Label="Strain Minimizing" @bind-Checked="Options.StrainMinimizing" Color="Color.Primary" />
+    <MudCheckBox Label="Expense Minimizing" @bind-Checked="Options.ExpenseMinimizing" Color="Color.Primary" />
+    <MudCheckBox Label="Ensure qualified personnel" @bind-Checked="Options.EnsureQualifiedPersonnelConstraint" Color="Color.Primary" />
+    <MudCheckBox Label="No double shift" @bind-Checked="Options.NoDoubleShiftConstraint" Color="Color.Primary" />
+    <MudCheckBox Label="Cap maximum working hours" @bind-Checked="Options.CapMaximumWorkingHoursConstraint" Color="Color.Primary" />
 </div>
-
 
 @code {
 
