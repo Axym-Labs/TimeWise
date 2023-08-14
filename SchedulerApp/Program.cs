@@ -44,13 +44,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(
-    new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(app.Environment.ContentRootPath, "static")),
-    RequestPath = "/static"
-}
-    );
+app.UseStaticFiles();
 app.UseRouting();
 
 app.MapBlazorHub();
