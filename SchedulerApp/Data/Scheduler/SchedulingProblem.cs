@@ -4,7 +4,7 @@ public class Problem {
 
     public List<Employee> Workers { get; set; } = new List<Employee>();
     public Schedule Schedule { get; set; } = new Schedule();
-    public double MaxHoursPerWeek { get; set; } = 40.0;
+    public double MaxHoursPerWeek { get; set; } = 48.0;
     public SchedulingOptions Options { get; set; } = new SchedulingOptions();
     
     public Problem() {}
@@ -15,5 +15,4 @@ public class Problem {
         this.MaxHoursPerWeek = MaxHoursPerWeek;
         Options = schedulingOptions;
     }
-
 }
