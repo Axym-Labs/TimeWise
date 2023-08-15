@@ -57,7 +57,7 @@
 </SchedulerSection>
 
 <SchedulerSection title="Solution View">
-    <div class="d-flex flex-row mb-5">
+    <div class="d-flex flex-row mb-8">
         <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full" Variant="Variant.Filled">
             @if (showSolutionLoadingCircle)
             {
@@ -68,7 +68,9 @@
             }
         </MudButton>
     </div>
-    <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
+    <div>
+        <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
+    </div>
 </SchedulerSection>
 
 <SchedulerSection title="Export Schedule">

@@ -11,8 +11,9 @@
         @if (Solution.Status)
         {
         <div class="min-h-20">
-            <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Seach by Employee" SearchFunc="SearchEmployee" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
-            <MudCheckBox T="bool" @bind-Checked="expandTree">Expand Tree</MudCheckBox>
+            <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Search by Employee" SearchFunc="SearchEmployee" Class="px-3 mb-8" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+            <MudCheckBox T="bool" @bind-Checked="expandTree">Tree fully expanded</MudCheckBox>
+
             @if (inputName == string.Empty)
             {
                 <MudTreeView T="string" ExpandOnClick="true">

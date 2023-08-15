@@ -14,10 +14,15 @@
     <h1 class="text-lg m-3">
         Download Options
     </h1>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">Json</MudButton>
+    <p class="m-3">
+        If you want to import a schedule later on, make sure to download it as JSON too.
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">Json</MudButton>
+    </div>
 </div>
 
 @code {
