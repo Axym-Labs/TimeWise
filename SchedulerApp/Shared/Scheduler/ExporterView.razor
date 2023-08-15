@@ -1,45 +1,5 @@
-﻿@namespace SchedulerApp.Shared.Scheduler
-@using SchedulerApp.Modules
-@using Data.Scheduler
-@using System.Text;
-@using System.Text.Json;
-
-@using MudBlazor
-@using Newtonsoft.Json
-
-@inject IJSRuntime JS
-@inject Exporter exporter
-
-<div>
-    <h1 class="text-lg m-3">
-        Download Options
-    </h1>
-    <p class="m-3">
-        If you want to import a schedule later on, make sure to download it as JSON too.
-    </p>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">Json</MudButton>
-    </div>
-</div>
+﻿<h3>Component</h3>
 
 @code {
-    [Parameter]
-    public ProblemScope ProblemScope { get; set; } = default!;
-
-    [Parameter]
-    public EventCallback<ProblemScope> OnProblemScopeChanged { get; set; }
-
-
-
-
-    private async Task DownloadFileStream(SupportedFileTypes FileExt)
-    {
-        var stream = exporter.GetStreamByFileExt(ProblemScope, FileExt);
-        using var streamref = new DotNetStreamReference(stream: stream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", Exporter.FileName + "." + FileExt, streamref);
-    }
 
 }

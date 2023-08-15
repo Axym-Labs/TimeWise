@@ -8,7 +8,7 @@
 @using Newtonsoft.Json
 
 @inject IJSRuntime JS
-@inject Exporter exporter
+@inject InputsExporter exporter
 
 <div>
     <MudFileUpload T="IBrowserFile" Accept=".json" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
@@ -19,7 +19,7 @@
                        Class="rounded-lg"
                        StartIcon="@Icons.Material.Filled.CloudUpload"
                        for="@context">
-                Import JSON Schedule
+                Import JSON Inputs
             </MudButton>
         </ButtonTemplate>
     </MudFileUpload>

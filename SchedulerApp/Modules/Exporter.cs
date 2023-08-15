@@ -1,4 +1,4 @@
-namespace SchedulerApp.Modules;
+﻿namespace SchedulerApp.Modules;
 using SchedulerApp.Data.Scheduler;
 using Newtonsoft.Json;
 using Csv;
@@ -7,37 +7,38 @@ using System.Text;
 using System.IO;
 
 
-public enum SupportedFileTypes
-{
-    JSON, CSV, XLSX, GSHEET
-}
 
 public class Exporter
 {
     public const string FileName = "Schedule";
-    public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, SupportedFileTypes FileExt)
+    public MemoryStream GetStreamByFileExt(Solution Solution, SupportedFileTypes FileExt)
     {
         switch (FileExt)
         {
             default: throw new NotImplementedException("No implemented collection handler");
-            case SupportedFileTypes.JSON: return GetJSONStream(ProblemScope);
-            case SupportedFileTypes.CSV: return GetCSVStream(ProblemScope);
-            case SupportedFileTypes.XLSX: return GetXLSXStream(ProblemScope);
-            case SupportedFileTypes.GSHEET: return GetGSHEETStream(ProblemScope);
+            case SupportedFileTypes.JSON: return GetJSONStream(Solution);
+            case SupportedFileTypes.CSV: return GetCSVStream(Solution);
+            case SupportedFileTypes.XLSX: return GetXLSXStream(Solution);
+            case SupportedFileTypes.GSHEET: return GetGSHEETStream(Solution);
         }
     }
-    public MemoryStream GetJSONStream(ProblemScope ProblemScope)
+
+    public MemoryStream GetJSONStream(Solution Solution)
     {
-        return new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ProblemScope)));
+        throw new NotImplementedException("Implement JSON exporter");
+        // return new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Solution)));
     }
 
-    public MemoryStream GetCSVStream(ProblemScope ProblemScope) {
+    public MemoryStream GetCSVStream(Solution Solution)
+    {
         throw new NotImplementedException("Implement CSV exporter");
     }
-    public MemoryStream GetXLSXStream(ProblemScope ProblemScope) {
+    public MemoryStream GetXLSXStream(Solution Solution)
+    {
         throw new NotImplementedException("Implement XLSX exporter");
     }
-    public MemoryStream GetGSHEETStream(ProblemScope ProblemScope) {
+    public MemoryStream GetGSHEETStream(Solution Solution)
+    {
         throw new NotImplementedException("Implement GSHEET exporter");
     }
 }

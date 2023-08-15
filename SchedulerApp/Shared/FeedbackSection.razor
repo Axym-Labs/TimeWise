@@ -1,0 +1,25 @@
+﻿
+
+
+<div class="d-flex flex-column align-center">
+    <MudRating @bind-SelectedValue="selectedStarVal" HoveredValueChanged="HandleHoveredValueChanged" />
+    <MudText Typo="Typo.subtitle1" Class="blue-600 mt-2">@LabelText</MudText>
+</div>
+
+
+@code {
+    private int selectedStarVal = 0;
+    private int? activeStarVal;
+
+    private void HandleHoveredValueChanged(int? val) => activeStarVal = val;
+
+    private string LabelText => (activeStarVal ?? selectedStarVal) switch
+    {
+        1 => "Very bad",
+        2 => "Bad",
+        3 => "Sufficient",
+        4 => "Good",
+        5 => "Awesome!",
+        _ => "Rate our product!"
+    };
+}

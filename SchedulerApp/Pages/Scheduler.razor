@@ -14,7 +14,7 @@
 @inject SchedulingAPIService sAPIs
 @inject Constants constants
 @inject ContentStorage content
-@inject Exporter exporter
+@inject InputsExporter exporter
 
 
 @if (showLoadingCircle)
@@ -31,8 +31,8 @@
     <MudAlert Severity="Severity.Error">The connection to the API could not be established. You can only import Schedules, not generate them on this version of the page. If you want to generate a new schedule, try again later. If this error persists, <a href="/contact">contact us</a>.</MudAlert>
 }
 <SchedulerSection title="Optional: Import">
-    <p class="mb-3">If you have a saved schedule as JSON, you can import it here to view/edit it, and export it afterwards.</p>
-    <ImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
+    <p class="mb-3">If you have saved your inputs as JSON, you can import it here to start your configuration off with them.</p>
+    <InputsImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
 </SchedulerSection>
 
 <SchedulerSection title="Add employees">
@@ -73,9 +73,13 @@
     </div>
 </SchedulerSection>
 
-<SchedulerSection title="Export Inputs">
-    <ExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
+<SchedulerSection title="Export Options">
+    <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
+
+
+    <FeedbackSection />
 </SchedulerSection>
+
 
 @code {
     private ProblemScope ProblemScope = new ProblemScope();
