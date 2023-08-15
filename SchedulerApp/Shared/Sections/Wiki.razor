@@ -1,0 +1,101 @@
+﻿@namespace SchedulerApp.Shared.Sections
+
+
+
+<div class="w-screen bg-neutral-200 flex justify-center py-20 text-neutral-900">
+    <div class="max-w-3xl" id="Introduction">
+        <MudElement HtmlTag="div">
+            <MudText Typo="Typo.h3" Class="text-b600">Introduction</MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Class="text-b500 text-lg">
+                This scheduler is based on <a class="underline" href="https://en.wikipedia.org/wiki/Integer_programming" target="_blank">ILP (integer linear programming)</a>, allows for the optimal distribution of shifts among workers, and guarantees an optimal solution (within constraints).
+                It allows for complete control of the process and has adaptable constraints and objectives, as well as a simple UI to allow for fast, replicable results.
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Typo="Typo.h3" Class="text-b600">How it works</MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Typo="Typo.body1">
+                The scheduler follows a simple structure where each week has days, every day has time slots, and every time slot has shifts.
+                The time slots specifically are an abstraction to allow for multiple concurrent shifts.
+                <br />
+                <br />
+                To illustrate this, let's think of a hospital where we need a schedule.
+                The hospital has three major working blocks each day (namely: early, late, and night shifts). In every working block, both the ER and OR need to be staffed. I.e. the working blocks are represented by time slots, while the shifts
+                could account for different workplaces or differing departments when sharing one worker pool.
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Typo="Typo.h3" Class="text-b600">Constraint Options</MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Typo="Typo.body1">
+                There are a couple of parameters one can access in the scheduler. Like other ILP problems, this one requires a target function and constraints.
+                All parameters for the problem can be accessed via the checkbox menu.
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-4">
+            <MudText Typo="Typo.h5" Class="mb-2">Expense Minimizing</MudText>
+            <MudText Typo="Typo.body1">
+                This option is used to set the target function to minimize the objective value of staffing costs
+                Staffing costs are just the sum of the product of every employee's hourly wage and the length of the shifts in which they work.
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-4">
+            <MudText Typo="Typo.h5" Class="mb-2">Strain Minimizing</MudText>
+            <MudText Typo="Typo.body1">
+                To allow for approximate fairness between each employee, we introduced a strain value associated with each shift.
+                Strain incentivizes the scheduler to distribute shifts more equally within the given constraints.
+                The target function is, similar to the Expense Minimizing objective, just a sum of the sum of strain in the shifts
+                they worked for every employee.
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-4">
+            <MudText Typo="Typo.h5" Class="mb-2">No double shift constraint</MudText>
+            <MudText Typo="Typo.body1">
+                This constraint limits the use of every employee to 1 time per day. It should nearly always be turned on,
+                unless you know what you are doing, as this might lead to workers' rights violations (in Europe, at least).
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-4">
+            <MudText Typo="Typo.h5" Class="mb-2">Maximum working hour constraint</MudText>
+            <MudText Typo="Typo.body1">
+                This constraint is straightforward and limits the working hours per week of every employee to the value specified
+                by the slider
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-4">
+            <MudText Typo="Typo.h5" Class="mb-2">Ensure qualified personnel constraint</MudText>
+            <MudText Typo="Typo.body1">
+                This constraint only permits the scheduling of employees for the shifts their qualifications match.
+                It is also the case for hybrid shifts. Both employees and shifts can require mixed qualifications.
+                <br />
+                <br />
+                For example, employee "Jeff" is both doctor and OR-qualified. That would qualify him for the OR Shift,
+                which requires one doctor with OR qualifications, one anesthesiologist, and one surgeon. Employee "Hannah"
+                on the other hand, is both a doctor, OR-qualified, and a surgeon and is, therefore, eligible for two of the positions in that shift.
+            </MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Typo="Typo.h3" Class="text-b600">Solution</MudText>
+        </MudElement>
+        <MudElement HtmlTag="div" Class="mt-6">
+            <MudText Typo="Typo.body1">
+                If your model is solvable within the constraints (you will receive an error message if it isn't), a solution tree will appear.
+                This solution tree consists of a list of the weeks, days, time slots, and shifts. If you expand it fully, you will then be able
+                to see the names of the employees designated for a specific shift.
+                <br />
+                <br />
+                Alternatively, you can use the box to input an employee's name and filter their working days and shifts.
+            </MudText>
+        </MudElement>
+        <div class="text-lg text-b600 mt-8">
+            Read more on our
+            <a href="https://github.com/Jonathan-Schaefer-git/SchedulerApp/wiki" target="_blank" class="text-blue-600 underline">
+                Wiki
+            </a>
+        </div>
+    </div>
+</div>
