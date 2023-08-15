@@ -6,6 +6,7 @@
 @using SchedulerApp.Data.Scheduler
 @using SchedulerApp.Modules
 @using SchedulerApp.Shared
+@using SchedulerApp.Shared.Sections
 
 @using MudBlazor
 @using Newtonsoft.Json
@@ -88,7 +89,7 @@
     <div class="mb-8">
         <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
     </div>
-    <ExporterView Solution="solution" OnSolutionChanged="value => solution = value" FileName="@scheduleName" />
+    <ExporterView Problem="ProblemScope.Problem" Solution="solution" OnSolutionChanged="value => solution = value" FileName="@scheduleName" />
 </SchedulerSection>
 
 

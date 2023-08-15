@@ -35,13 +35,15 @@
     public EventCallback<Solution> OnSolutionChanged { get; set; }
 
     [Parameter]
-    public string FileName { get; set; } // = ScheduleExporter.FileName;
+    public string FileName { get; set; } = default!; // = ScheduleExporter.FileName;
 
+    [Parameter]
+    public Problem Problem { get; set; } = default!;
 
 
     private async Task DownloadFileStream(SupportedFileTypes FileExt)
     {
-        var stream = exporter.GetStreamByFileExt(Solution, FileExt);
+        var stream = exporter.GetStreamByFileExt(Solution, FileExt, Problem);
         using var streamref = new DotNetStreamReference(stream: stream);
         await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + FileExt, streamref);
     }
