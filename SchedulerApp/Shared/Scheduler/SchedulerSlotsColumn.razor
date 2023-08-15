@@ -5,11 +5,19 @@
 @using System.Collections.Generic
 @using SchedulerApp.Data.Scheduler
 
-<div style="m-4 p-3" aria-orientation="horizontal">
+<div class="m-4 p-3" aria-orientation="horizontal">
     <div style="min-height: 10rem; overflow-x:auto;" class="d-flex flex-column">
-        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Primary" OnClick="RemoveSelected">
-            Remove a @tableName
-        </MudButton>
+        @if(collection.Count == 0) {
+            <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Primary" Disabled="true" OnClick="RemoveSelected">
+                Remove a @tableName
+            </MudButton>
+        }
+        else {
+            <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Primary" Disabled="false" OnClick="RemoveSelected">
+                Remove a @tableName
+            </MudButton>
+        }
+
 
         <MudList>
             @if (collection != null && collection.Count > 0){
@@ -26,6 +34,7 @@
 </div>
 
 @code {
+    private bool DisabledRemoveButton = false;
 
     [Parameter]
     public string tableName {get; set;} = default!;
@@ -81,6 +90,7 @@
             await CollectionChanged.InvokeAsync((collection, tableName));
         }
     }
+
 
     private async Task InstanceUpdate(dynamic instance, int index)
     {
