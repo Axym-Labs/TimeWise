@@ -11,7 +11,7 @@
             @if (column == "Shift")
             {
                 <MudButton Style="@($"border-color: {Colors.LightBlue.Darken3}; color: #ffffff;")"  Class="rounded-lg w-full m-0" Variant="Variant.Outlined" OnClick="@TriggerSelected">
-                    @column @columnIndex
+                    @AssociatedInstance.Name @columnIndex
                 </MudButton>
                 <ShiftInfoInput OnShiftInfoChanged="AssociatedInstanceChanged" ShiftData="@AssociatedInstance" />
             }

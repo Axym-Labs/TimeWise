@@ -10,7 +10,7 @@ public class ShiftInfo {
         this.RequiredPersonnel = RequiredPersonnel;
         this.Strain = Strain;
     }
-    public string? Name { get; set; }
+    public string Name { get; set; } = "Shift";
     public double Length { get; set; }
     public List<RequiredPersonnel> RequiredPersonnel { get; set;} = new List<RequiredPersonnel>();
     public double Strain { get; set; }
