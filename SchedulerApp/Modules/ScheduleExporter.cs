@@ -6,6 +6,7 @@ using System;
 using System.Text;
 using System.IO;
 using Microsoft.Extensions.Primitives;
+using ClosedXML.Excel;
 
 public class ScheduleExporter
 {
@@ -17,14 +18,13 @@ public class ScheduleExporter
             default: throw new NotImplementedException("No implemented collection handler");
             case SupportedFileTypes.JSON: return GetJSONStream(Solution);
             case SupportedFileTypes.CSV: return GetCSVStream(Solution, problem);
-            case SupportedFileTypes.XLSX: return GetXLSXStream(Solution);
+            case SupportedFileTypes.XLSX: return GetXLSXStream(Solution, problem);
             case SupportedFileTypes.GSHEET: return GetGSHEETStream(Solution);
         }
     }
 
     public MemoryStream GetJSONStream(Solution Solution)
     {
-        //throw new NotImplementedException("Implement JSON exporter");
         return new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Solution)));
     }
 
@@ -57,10 +57,55 @@ public class ScheduleExporter
 
         return new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
     }
-    public MemoryStream GetXLSXStream(Solution Solution)
+    public MemoryStream GetXLSXStream(Solution Solution, Problem problem)
     {
-        throw new NotImplementedException("Implement XLSX exporter");
+        var result = Solution.Result;
+        using (var notebook = new XLWorkbook())
+        {
+            notebook.Author = "Jonathan Schäfer";
+            var ws = notebook.Worksheets.Add("Schedule");
+            ws.Cell("A1").Value = "Schedule";
+            ws.Cell("A2").Value = "Weeks";
+            ws.Cell("B2").Value = "Time Slots";
+            ws.Cell("C2").Value = "Shifts";
+            ws.Cell("D2").Value = "Day 1";
+            ws.Cell("E2").Value = "Day 2";
+            ws.Cell("F2").Value = "Day 3";
+            ws.Cell("G2").Value = "Day 4";
+            ws.Cell("H2").Value = "Day 5";
+            ws.Cell("I2").Value = "Day 6";
+            ws.Cell("J2").Value = "Day 7";
+
+            for (int weekI = 0; weekI < result.Count; weekI++)
+            {
+                ws.LastRowUsed(XLCellsUsedOptions.AllContents).FirstCell().CellBelow().Value = $"Week {weekI + 1}";
+
+                for (int dayI = 0; dayI < result[weekI].Count; dayI++)
+                {
+                    for (int timeSlotI = 0; timeSlotI < result[weekI][dayI].Count; timeSlotI++)
+                    {
+                        if(dayI == 0)
+                        {
+                            ws.Column(2).LastCellUsed().CellBelow().SetValue(timeSlotI + 1);
+                        }
+                        for (int shiftI = 0; shiftI < result[weekI][dayI][timeSlotI].Count; shiftI++)
+                        {
+                            if(dayI == 0)
+                                ws.Column(3).LastCellUsed().CellBelow().SetValue(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name);
+                            ws.Column(4 + dayI).LastCellUsed().CellBelow().SetValue($"{string.Join(", ", result[weekI][dayI][timeSlotI][shiftI])}");
+                        }
+                    }
+                }
+            }
+            using (var memStream  = new MemoryStream())
+            {
+                notebook.SaveAs(memStream);
+                return new MemoryStream(memStream.ToArray());
+            }
+        }
     }
+
+
     public MemoryStream GetGSHEETStream(Solution Solution)
     {
         throw new NotImplementedException("Implement GSHEET exporter");
