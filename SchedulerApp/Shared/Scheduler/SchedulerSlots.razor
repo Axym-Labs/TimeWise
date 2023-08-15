@@ -12,8 +12,10 @@
 
 <div>
     <div>
-         <MudSwitch Label="Duplicate 1st entry?" Color="Color.Info" @bind-Checked="UseFirstForNewDay" />
-        <MudSwitch Label="Duplicate 1st entry?" Color="Color.Info" @bind-Checked="UseFirstForNewWeek" />
+        <div>
+            <MudSwitch Label="Duplicate days of week?" Color="Color.Info" @bind-Checked="UseFirstForNewWeek" />
+            <MudSwitch Label="Duplicate time slots in day?" Color="Color.Info" @bind-Checked="UseFirstForNewDay" />
+        </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <SchedulerSlotsColumn SelectedIndex="@SelectedWeek" IndexChanged="OnIndexChanged" CollectionChanged="OnScheduleChanged" tableName="Week" collection="@weekCollection" InstanceType="typeof(Week)" UseFirstForNew="@UseFirstForNewWeek" />
@@ -89,13 +91,13 @@
 
         if (tableName != "Week")
         {
-            if (SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); return true; }
+            if (SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Warning); return true; }
             if (tableName != "Day")
             {
-                if (SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); return true; }
+                if (SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Warning); return true; }
                 if (tableName != "Time slot")
                 {
-                    if (SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); return true; }
+                    if (SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Warning); return true; }
                 }
             }
         }
