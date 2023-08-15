@@ -28,7 +28,7 @@
 }
 @if(DisplayConnectionError)
 {
-    <MudAlert Severity="Severity.Error">The connection to the API could not be established. You can only import Schedules, not generate them on this version of the page. If you want to generate a new schedule, try again later.</MudAlert>
+    <MudAlert Severity="Severity.Error">The connection to the API could not be established. You can only import Schedules, not generate them on this version of the page. If you want to generate a new schedule, try again later. If this error persists, <a href="/contact">contact us</a>.</MudAlert>
 }
 <SchedulerSection title="Optional: Import">
     <p class="mb-3">If you have a saved schedule as JSON, you can import it here to view/edit it, and export it afterwards.</p>
@@ -87,13 +87,18 @@
 
     private async Task FetchSolution()
     {
+        Snackbar.Add("Generating Solution. This may take up to 20 seconds.", Severity.Success);
+
         showSolutionLoadingCircle = true;
         solution = await sAPIs.GetSolution(ProblemScope.Problem);
         showSolutionLoadingCircle = false;
 
         if (solution == null)
         {
-            Snackbar.Add("Schedule count not be generated. Try completing and sanitizing your inputs.");
+            Snackbar.Add(@<div>Schedule could not be generated. Try completing and sanitizing your inputs. If the error persists, try again later or <a href="/contact">contact us</a>.</div>, Severity.Error);
+        } else
+        {
+            Snackbar.Add("Your schedule was generated.", Severity.Success);
         }
     }
 

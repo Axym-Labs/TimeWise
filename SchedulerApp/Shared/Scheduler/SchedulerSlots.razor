@@ -12,8 +12,10 @@
 
 <div>
     <div>
-        <MudSwitch Label="Duplicate 1st week entry?" Color="Color.Info" @bind-Checked="UseFirstForNewWeek" />
-        <MudSwitch Label="Duplicate 1st day entry?" Color="Color.Info" @bind-Checked="UseFirstForNewDay" />
+        <div class="md:flex justify-left">
+            <MudSwitch Label="Duplicate days of week?" Color="Color.Info" @bind-Checked="UseFirstForNewWeek" />
+            <MudSwitch Label="Duplicate time slots in day?" Color="Color.Info" @bind-Checked="UseFirstForNewDay" />
+        </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             @try
@@ -59,8 +61,8 @@
 </div>
 
 @code {
-    public bool UseFirstForNewDay = false;
-    public bool UseFirstForNewWeek = false;
+    public bool UseFirstForNewDay;
+    public bool UseFirstForNewWeek;
 
     private async Task OnScheduleChanged((List<dynamic> collection, string tableName) caller) 
     {
@@ -124,61 +126,18 @@
 
         if (tableName != "Week")
         {
-            if (SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Info); return true; }
+            if (SelectedWeek >= ProblemScope.Problem.Schedule.Weeks.Count) { Snackbar.Add("Add a week first", Severity.Warning); return true; }
             if (tableName != "Day")
             {
-                if (SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Info); return true; }
+                if (SelectedDay >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count) { Snackbar.Add("Add a day first", Severity.Warning); return true; }
                 if (tableName != "Time slot")
                 {
-                    if (SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Info); return true; }
+                    if (SelectedTimeSlot >= ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count) { Snackbar.Add("Add a time slot first", Severity.Warning); return true; }
                 }
             }
         }
         return false;
     }
-
-    private async Task CascadeMissing(string tableName)
-    {
-        if (tableName == "Day" && ProblemScope.Problem.Schedule.Weeks.Count == 0)
-        {
-            ProblemScope.Problem.Schedule.Weeks.Add(new Week());
-        } else if (tableName == "Time slot")
-        {
-            if (ProblemScope.Problem.Schedule.Weeks.Count == 0)
-            {
-                ProblemScope.Problem.Schedule.Weeks.Add(new Week());
-            }
-            if(ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count == 0)
-            {
-                ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Add(new Day());
-            }
-        } else if (tableName == "Shift")
-        {
-            if (ProblemScope.Problem.Schedule.Weeks.Count == 0)
-            {
-                ProblemScope.Problem.Schedule.Weeks.Add(new Week());
-            }
-            if (ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Count == 0)
-            {
-                ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days.Add(new Day());
-            }
-            if (ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots.Count == 0)
-            {
-                ProblemScope.Problem.Schedule.Weeks[SelectedWeek].Days[SelectedDay].TimeSlots[SelectedTimeSlot].Shifts.Add(new ShiftInfo());
-            }
-        } 
-        else
-        {
-            return;
-        }
-        await ProblemScopeChanged.InvokeAsync(ProblemScope);
-        return;
-    }
-
-    public delegate bool CheckExistingDelegate(string tableName);
-
-
-
 
     private int SelectedWeek = 0;
     private int SelectedDay = 0;
