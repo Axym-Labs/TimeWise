@@ -25,12 +25,15 @@ public class ScheduleExporter
 
     public MemoryStream GetJSONStream(Solution Solution)
     {
-        throw new NotImplementedException("Implement JSON exporter");
-        // return new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Solution)));
+        //throw new NotImplementedException("Implement JSON exporter");
+        return new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Solution)));
     }
 
     public MemoryStream GetCSVStream(Solution Solution)
     {
+        
+
+
         throw new NotImplementedException("Implement CSV exporter");
     }
     public MemoryStream GetXLSXStream(Solution Solution)
