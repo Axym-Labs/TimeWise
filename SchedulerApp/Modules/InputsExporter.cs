@@ -14,7 +14,7 @@ public enum SupportedFileTypes
 
 public class InputsExporter
 {
-    public const string FileName = "Schedule";
+    public const string FileName = "ScheduleInputs";
     public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, SupportedFileTypes FileExt)
     {
         switch (FileExt)

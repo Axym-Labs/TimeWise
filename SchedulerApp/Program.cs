@@ -15,7 +15,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<Constants>();
 builder.Services.AddSingleton<ContentStorage>();
 builder.Services.AddSingleton<InputsExporter>();
-builder.Services.AddSingleton<Exporter>();
+builder.Services.AddSingleton<ScheduleExporter>();
 builder.Services.AddSingleton<InputsImporter>();
 builder.Services.AddSingleton<SchedulingAPIService>();
 builder.Services.AddMudServices();

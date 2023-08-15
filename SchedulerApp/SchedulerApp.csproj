@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Shared\Scheduler\Exporter.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Shared\Scheduler\Exporter.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Csv" Version="2.0.93" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />

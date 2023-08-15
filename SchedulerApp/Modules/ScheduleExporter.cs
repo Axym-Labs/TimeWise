@@ -8,7 +8,7 @@ using System.IO;
 
 
 
-public class Exporter
+public class ScheduleExporter
 {
     public const string FileName = "Schedule";
     public MemoryStream GetStreamByFileExt(Solution Solution, SupportedFileTypes FileExt)

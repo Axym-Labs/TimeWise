@@ -11,13 +11,15 @@
 @inject InputsExporter exporter
 
 <div>
+    <p class="mb-3">If you have saved your inputs as JSON, you can import it here to start your configuration off with them.</p>
+
     <MudFileUpload T="IBrowserFile" Accept=".json" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
         <ButtonTemplate>
             <MudButton HtmlTag="label"
                        Variant="Variant.Filled"
                        Color="Color.Secondary"
                        Class="rounded-lg"
-                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                       StartIcon="@Icons.Material.Filled.Upload"
                        for="@context">
                 Import JSON Inputs
             </MudButton>

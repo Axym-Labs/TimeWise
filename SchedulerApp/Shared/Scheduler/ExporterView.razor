@@ -1,5 +1,49 @@
-﻿<h3>Component</h3>
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using SchedulerApp.Modules
+@using Data.Scheduler
+@using System.Text;
+@using System.Text.Json;
+
+@using MudBlazor
+@using Newtonsoft.Json
+
+@inject IJSRuntime JS
+@inject ScheduleExporter exporter
+
+<div>
+    <p class="m-3">
+        Download the generated schedule.
+    </p>
+    <div class="max-w-xl mb-8">
+        <MudTextField  @bind-Value="FileName" Variant="Variant.Outlined" Label="File name" Margin="Margin.Dense"/>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">JSON</MudButton>
+    
+    </div>
+</div>
 
 @code {
+    [Parameter]
+    public Solution Solution { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<Solution> OnSolutionChanged { get; set; }
+
+    [Parameter]
+    public string FileName { get; set; } // = ScheduleExporter.FileName;
+
+
+
+    private async Task DownloadFileStream(SupportedFileTypes FileExt)
+    {
+        var stream = exporter.GetStreamByFileExt(Solution, FileExt);
+        using var streamref = new DotNetStreamReference(stream: stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + FileExt, streamref);
+    }
 
 }

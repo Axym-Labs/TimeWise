@@ -11,5 +11,4 @@ public class InputsImporter
         try { return JsonConvert.DeserializeObject<Problem>(input); }
         catch { return null; }
     }
-
 }

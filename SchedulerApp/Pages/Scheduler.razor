@@ -14,7 +14,7 @@
 @inject SchedulingAPIService sAPIs
 @inject Constants constants
 @inject ContentStorage content
-@inject InputsExporter exporter
+@inject InputsExporter inputsExporter
 
 
 @if (showLoadingCircle)
@@ -26,12 +26,19 @@
         </div>
     </div>
 }
+
 @if(DisplayConnectionError)
 {
     <MudAlert Severity="Severity.Error">The connection to the API could not be established. You can only import Schedules, not generate them on this version of the page. If you want to generate a new schedule, try again later. If this error persists, <a href="/contact">contact us</a>.</MudAlert>
 }
-<SchedulerSection title="Optional: Import">
-    <p class="mb-3">If you have saved your inputs as JSON, you can import it here to start your configuration off with them.</p>
+
+
+
+<SchedulerSection title="Start">
+    <div class="mb-8">
+        <MudTextField @bind-Value="scheduleName" Variant="Variant.Outlined" Label="Schedule name" Margin="Margin.Dense" />
+    </div>
+    
     <InputsImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
 </SchedulerSection>
 
@@ -73,12 +80,17 @@
     </div>
 </SchedulerSection>
 
-<SchedulerSection title="Export Options">
-    <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
-
-
+<SchedulerSection title="Rate your experience until now">
     <FeedbackSection />
 </SchedulerSection>
+
+<SchedulerSection title="Export Options">
+    <div class="mb-8">
+        <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
+    </div>
+    <ExporterView Solution="solution" OnSolutionChanged="value => solution = value" FileName="@scheduleName" />
+</SchedulerSection>
+
 
 
 @code {
@@ -90,6 +102,8 @@
     private bool showSolutionLoadingCircle = false;
     private bool DisplayConnectionError = false;
     private string Version = string.Empty;
+
+    private string scheduleName = "Schedule";
 
     private async Task FetchSolution()
     {
@@ -105,6 +119,7 @@
         } else
         {
             Snackbar.Add("Your schedule was generated.", Severity.Success);
+            // update solution
         }
     }
 
