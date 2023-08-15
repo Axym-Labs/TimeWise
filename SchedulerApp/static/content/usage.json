@@ -1,20 +1,32 @@
 {
-  "totalUsers": 2,
-  "ratings": [
+  "TotalUsers": 5,
+  "Ratings": [
     1,
     1,
     1,
     1,
-    1
+    2
   ],
-  "ratingUsers": {
+  "RatingUsers": {
     "Jonathan Schäfer": {
-      "rating": 5,
-      "role": "Student"
+      "Rating": 5,
+      "Role": ""
     },
     "John Doe": {
-      "rating": 4,
-      "role": "CEO"
+      "Rating": 4,
+      "Role": "CEO"
+    },
+    "User #2": {
+      "Rating": 0,
+      "Role": ""
+    },
+    "User #4": {
+      "Rating": 0,
+      "Role": ""
+    },
+    "Ahhhhhhh": {
+      "Rating": 4,
+      "Role": ""
     }
   }
 }

@@ -41,9 +41,9 @@
                 </ChildContent>
                 <TooltipContent>
                     <div class="p-2">
-                        <p class="text-lg">personName - @ro.RatingUsers[personName].Role</p>
+                        <p class="text-lg">personName - @UserRatings.RatingUsers[personName].Role</p>
                         <br/>
-                        <MudRating ReadOnly="true" SelectedValue="@(@ro.RatingUsers[personName].Rating)" />
+                        <MudRating ReadOnly="true" SelectedValue="@(@UserRatings.RatingUsers[personName].Rating)" />
                     </div>
                 </TooltipContent>
             </MudTooltip>
@@ -58,24 +58,25 @@
     private List<string> ratingUsers = new();
     private float averageRating = 0.0f;
     private int numRatings = 0;
-    private RootObject ro = default!;
+
+    private UserRatings UserRatings { get; set; } = default!;
 
     private List<string> Emojis = new();
     private List<string> Colors = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        RootObject ro = usageFileLoader.LoadFile();
+        UserRatings = await usageFileLoader.LoadFileAsync();
 
-        ratingUsers = ro.RatingUsers.Keys.ToList<string>();
+        ratingUsers = UserRatings.RatingUsers.Keys.ToList<string>();
 
-        users = ro.TotalUsers;
-        numRatings = ro.Ratings.Sum();
+        users = UserRatings.TotalUsers;
+        numRatings = UserRatings.Ratings.Sum();
 
         float totalStars = 0.0f;
         foreach (int i in Enumerable.Range(0,5))
         {
-            totalStars += ro.Ratings[i] * (i + 1);
+            totalStars += UserRatings.Ratings[i] * (i + 1);
         }
         averageRating = totalStars / numRatings;
 

@@ -19,7 +19,7 @@
         <MudTextField @bind-Value="personName" Variant="Variant.Outlined" Label="Your name" Margin="Margin.Dense" OnBlur="updateUser" Disabled="selectedStarVal != 0" />
     </div>
     <div>
-        <MudSelect T="string" Label="Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="personRole" OnClose="updateUser">
+        <MudSelect Disabled="selectedStarVal != 0" T="string" Label="Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="personRole" OnClose="updateUser">
             <MudSelectItem Value="@("Founder")" />
             <MudSelectItem Value="@("Manager")" />
             <MudSelectItem Value="@("Project Manager")" />
@@ -46,19 +46,19 @@
         activeStarVal = val;
     }
 
-    private void RatingChanged(int val)
+    private async Task RatingChanged(int val)
     {
         selectedStarVal = val;
         if (selectedStarVal != previousStarVal)
         {
-            updateRatings(val);
+            await updateRatings(val);
         }
         previousStarVal = val;
     }
 
-    private void updateRatings(int rating)
+    private async Task updateRatings(int rating)
     {
-        RootObject ro = usageFileLoader.LoadFile();
+        UserRatings ro = await usageFileLoader.LoadFileAsync();
 
         if (previousStarVal != 0)
             ro.Ratings[previousStarVal]--;
@@ -69,26 +69,26 @@
             ro.RatingUsers[personName].Rating = rating;
         } catch
         {
-            addUser();
+            await addUser();
         }
 
-        usageFileLoader.SaveFile(ro);
+        await usageFileLoader.SaveFileAsync(ro);
     }
 
-    private async void incrementUserCount()
+    private async Task incrementUserCount()
     {
         if (await JS.InvokeAsync<string>("sessionStorageInterop.getItem", "incrementedUserCount") == "true") return;
 
-        RootObject ro = usageFileLoader.LoadFile();
+        UserRatings ro = await usageFileLoader.LoadFileAsync();
         ro.TotalUsers++;
-        usageFileLoader.SaveFile(ro);
+        await usageFileLoader.SaveFileAsync(ro);
 
         await JS.InvokeVoidAsync("sessionStorageInterop.setItem", "incrementedUserCount", "true");
     }
 
-    private async void updateUser()
+    private async Task updateUser()
     {
-        RootObject ro = usageFileLoader.LoadFile();
+        UserRatings ro = await usageFileLoader.LoadFileAsync();
         if (personName.Trim() == "") personName = "User #" + ro.TotalUsers.ToString();
 
         try
@@ -96,22 +96,22 @@
             if (previousPersonName.Trim() != "") ro.RatingUsers.Remove(previousPersonName);
             ro.RatingUsers[personName].Rating = selectedStarVal;
             ro.RatingUsers[personName].Role = selectedRole;
-            usageFileLoader.SaveFile(ro);
+            await usageFileLoader.SaveFileAsync(ro);
         } catch
         {
-            addUser();
+            await addUser();
         }
 
         previousPersonName = personName;
     }
 
-    private async void addUser()
+    private async Task addUser()
     {
-        RootObject ro = usageFileLoader.LoadFile();
+        UserRatings ro = await usageFileLoader.LoadFileAsync();
         ro.RatingUsers[personName] = new RatingUser();
         ro.RatingUsers[personName].Rating = selectedStarVal;
         ro.RatingUsers[personName].Role = selectedRole;
-        usageFileLoader.SaveFile(ro);
+        await usageFileLoader.SaveFileAsync(ro);
     }
 
     private string LabelText => (activeStarVal ?? selectedStarVal) switch
@@ -124,11 +124,11 @@
         _ => "Rate our product!"
     };
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        RootObject ro = usageFileLoader.LoadFile();
+        UserRatings ro = await usageFileLoader.LoadFileAsync();
         personName = "User #" + ro.TotalUsers.ToString();
-        incrementUserCount();
+        await incrementUserCount();
 
     }
 }
