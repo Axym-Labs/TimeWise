@@ -58,22 +58,22 @@
     
 <SchedulerSection title="Solution View">
     <div class="d-flex flex-row mb-8">
-        <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full" Variant="Variant.Filled">
             @if (showSolutionLoadingCircle)
             {
-                <MudProgressCircular Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
+                <MudProgressLinear Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
             } else
             {
-                <p>Generate Solution</p>
+                <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full rounded-lg" Variant="Variant.Filled" Disabled="!ValidInputs()">
+                    <p>Generate Solution</p>
+                </MudButton>
             }
-        </MudButton>
     </div>
     <div>
         <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
     </div>
 </SchedulerSection>
 
-<SchedulerSection title="Export Schedule">
+<SchedulerSection title="Export Inputs">
     <ExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
 </SchedulerSection>
 
@@ -119,6 +119,11 @@
         }
         
         dynamic schedulingPage = content.files["schedulingPage"];
+    }
+
+    private bool ValidInputs()
+    {
+        return ProblemScope.Problem.Workers.Count > 0;
     }
 
 }

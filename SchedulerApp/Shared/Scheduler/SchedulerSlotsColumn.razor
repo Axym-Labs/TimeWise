@@ -5,18 +5,11 @@
 @using System.Collections.Generic
 @using SchedulerApp.Data.Scheduler
 
-<div class="m-4 p-3" aria-orientation="horizontal">
+<div class="" aria-orientation="horizontal">
     <div style="min-height: 10rem; overflow-x:auto;" class="d-flex flex-column">
-        @if(collection.Count == 0) {
-            <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Primary" Disabled="true" OnClick="RemoveSelected">
-                Remove a @tableName
-            </MudButton>
-        }
-        else {
-            <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Primary" Disabled="false" OnClick="RemoveSelected">
-                Remove a @tableName
-            </MudButton>
-        }
+        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected">
+            Remove this @tableName
+        </MudButton>
 
 
         <MudList>
@@ -27,15 +20,13 @@
             }
         </MudList>
 
-        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNew">
+        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddNew">
             Add a @tableName
         </MudButton>
     </div>
 </div>
 
 @code {
-    private bool DisabledRemoveButton = false;
-
     [Parameter]
     public string tableName {get; set;} = default!;
 
