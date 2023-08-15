@@ -10,14 +10,14 @@
         {
             @if (column == "Shift")
             {
-                <MudButton Style="@($"border-color:{Colors.LightBlue.Darken3}; color: #ffffff;")"  Class="rounded-lg w-full m-0" Variant="Variant.Outlined" OnClick="@TriggerSelected">
-                    @column @columnIndex
+                <MudButton Style="@($"border-color: {Colors.LightBlue.Darken3}; color: #ffffff;")"  Class="rounded-lg w-full m-0" Variant="Variant.Outlined" OnClick="@TriggerSelected">
+                    @AssociatedInstance.Name @columnIndex
                 </MudButton>
                 <ShiftInfoInput OnShiftInfoChanged="AssociatedInstanceChanged" ShiftData="@AssociatedInstance" />
             }
             else
             {
-                <MudButton Style="@($"border-color:{Colors.LightBlue.Darken3}; color: #ffffff;")" Class="rounded-lg w-full m-0" Variant="Variant.Outlined" OnClick="@TriggerSelected">
+                <MudButton Style="@($"border-color: {Colors.LightBlue.Darken3}; color: #ffffff;")" Class="rounded-lg w-full m-0" Variant="Variant.Outlined" OnClick="@TriggerSelected">
                     @column @columnIndex
                 </MudButton>
             }

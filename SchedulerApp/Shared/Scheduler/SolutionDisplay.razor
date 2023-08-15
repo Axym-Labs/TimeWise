@@ -28,7 +28,7 @@
                                     <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())" Expanded="@expandTree">
                                         @foreach (var shiftI in Enumerable.Range(0, Solution.Result[weekI][dayI][timeSlotI].Count))
                                     {
-                                        <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())" Expanded="@expandTree">
+                                        <MudTreeViewItem Value="@Problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name" Expanded="@expandTree">
                                             @foreach (var employeeName in Solution.Result[weekI][dayI][timeSlotI][shiftI])
                                         {
                                             <MudTreeViewItem Value="@employeeName" />
@@ -59,7 +59,7 @@
                                     <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())" Expanded="@expandTree">
                                         @foreach (var shiftI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI && x.Item3 == timeSlotI).Select(x => x.Item4).Distinct())
                                     {
-                                        <MudTreeViewItem Value="@("Shift " + (shiftI + 1).ToString())" Expanded="@expandTree" />
+                                        <MudTreeViewItem Value="@Problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name" Expanded="@expandTree" />
                                     }
                                 </MudTreeViewItem>
                                 }
