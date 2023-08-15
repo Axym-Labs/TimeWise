@@ -1,18 +1,118 @@
 ﻿@namespace SchedulerApp.Shared.Sections
 
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@using SchedulerApp.Data.Scheduler;
+
+@inject IJSRuntime JS
 
 
-<div class="d-flex flex-column align-center">
-    <MudRating @bind-SelectedValue="selectedStarVal" HoveredValueChanged="HandleHoveredValueChanged" />
-    <MudText Typo="Typo.subtitle1" Class="blue-600 mt-2">@LabelText</MudText>
+<div class="grid md:grid-cols-3">
+    <div class="d-flex flex-column align-center">
+        <MudRating HoveredValueChanged="HandleHoveredValueChanged" SelectedValueChanged="RatingChanged" />
+        <MudText Typo="Typo.subtitle1" Class="blue-600 mt-2">@LabelText</MudText>
+    </div>
+    <div>
+        
+    </div>
+    <div>
+        <MudTextField @bind-Value="personName" Variant="Variant.Outlined" Label="Your name" Margin="Margin.Dense" OnBlur="updateUser" Disabled="selectedStarVal != 0" />
+    </div>
+    <div>
+        <MudSelect T="string" Label="Role" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="personRole" OnClose="updateUser">
+            <MudSelectItem Value="@("Founder")" />
+            <MudSelectItem Value="@("Manager")" />
+            <MudSelectItem Value="@("Project Manager")" />
+            <MudSelectItem Value="@("Teacher/Professor")" />
+            <MudSelectItem Value="@("Student")" />
+        </MudSelect>
+    </div>
 </div>
 
 
 @code {
+    private int previousStarVal = 0;
     private int selectedStarVal = 0;
     private int? activeStarVal;
 
-    private void HandleHoveredValueChanged(int? val) => activeStarVal = val;
+    private string selectedRole = "";
+
+    private string previousPersonName = "";
+    private string personName = "";
+    private string personRole = "Unknown";
+
+    private void HandleHoveredValueChanged(int? val)
+    {
+        activeStarVal = val;
+    }
+
+    private void RatingChanged(int val)
+    {
+        selectedStarVal = val;
+        if (selectedStarVal != previousStarVal)
+        {
+            updateRatings(val);
+        }
+        previousStarVal = val;
+    }
+
+    private void updateRatings(int rating)
+    {
+        RootObject ro = usageFileLoader.LoadFile();
+
+        if (previousStarVal != 0)
+            ro.Ratings[previousStarVal]--;
+        ro.Ratings[rating]++;
+
+        try
+        {
+            ro.RatingUsers[personName].Rating = rating;
+        } catch
+        {
+            addUser();
+        }
+
+        usageFileLoader.SaveFile(ro);
+    }
+
+    private async void incrementUserCount()
+    {
+        if (await JS.InvokeAsync<string>("sessionStorageInterop.getItem", "incrementedUserCount") == "true") return;
+
+        RootObject ro = usageFileLoader.LoadFile();
+        ro.TotalUsers++;
+        usageFileLoader.SaveFile(ro);
+
+        await JS.InvokeVoidAsync("sessionStorageInterop.setItem", "incrementedUserCount", "true");
+    }
+
+    private async void updateUser()
+    {
+        RootObject ro = usageFileLoader.LoadFile();
+        if (personName.Trim() == "") personName = "User #" + ro.TotalUsers.ToString();
+
+        try
+        {
+            if (previousPersonName.Trim() != "") ro.RatingUsers.Remove(previousPersonName);
+            ro.RatingUsers[personName].Rating = selectedStarVal;
+            ro.RatingUsers[personName].Role = selectedRole;
+            usageFileLoader.SaveFile(ro);
+        } catch
+        {
+            addUser();
+        }
+
+        previousPersonName = personName;
+    }
+
+    private async void addUser()
+    {
+        RootObject ro = usageFileLoader.LoadFile();
+        ro.RatingUsers[personName] = new RatingUser();
+        ro.RatingUsers[personName].Rating = selectedStarVal;
+        ro.RatingUsers[personName].Role = selectedRole;
+        usageFileLoader.SaveFile(ro);
+    }
 
     private string LabelText => (activeStarVal ?? selectedStarVal) switch
     {
@@ -23,4 +123,12 @@
         5 => "Awesome!",
         _ => "Rate our product!"
     };
+
+    protected override void OnInitialized()
+    {
+        RootObject ro = usageFileLoader.LoadFile();
+        personName = "User #" + ro.TotalUsers.ToString();
+        incrementUserCount();
+
+    }
 }

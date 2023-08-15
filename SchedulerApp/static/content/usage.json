@@ -1,18 +1,20 @@
 {
-  "totalUsers": 0,
-  "ratings": {
-    "1": 0,
-    "2": 0,
-    "3": 0,
-    "4": 0,
-    "5": 1
-  },
-  "users": [
-    {
-      "name": "Jonathan Sch‰fer",
+  "totalUsers": 2,
+  "ratings": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "ratingUsers": {
+    "Jonathan Sch√§fer": {
       "rating": 5,
-      "role": "Student",
-      "feedback":  "Cool App"
+      "role": "Student"
+    },
+    "John Doe": {
+      "rating": 4,
+      "role": "CEO"
     }
-  ]
+  }
 }
