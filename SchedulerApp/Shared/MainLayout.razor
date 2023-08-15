@@ -4,6 +4,7 @@
 <MudThemeProvider IsDarkMode="@(true)" Theme="CustomDarkTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
+
 <PageTitle>SchedulerApp</PageTitle>
 
 
@@ -26,11 +27,21 @@
             Palette = new PaletteLight()
             {
                 Primary = Colors.Blue.Darken2,
-                Secondary = Colors.Green.Accent4
+                Secondary = Colors.Green.Accent4,
+                Tertiary = Colors.Grey.Default
             },
             PaletteDark = new PaletteDark()
             {
-                Primary = Colors.Blue.Darken2
+                Primary = Colors.Blue.Darken2,
+                Secondary = Colors.Green.Accent4,
+                Tertiary = Colors.Grey.Default
+            },
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily = new[] { "Inter", "Roboto", "Helvetica", "Arial", "sans-serif" }
+                }
             }
         };
 
