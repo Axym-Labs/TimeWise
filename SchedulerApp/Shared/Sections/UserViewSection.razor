@@ -1,5 +1,115 @@
-﻿<h3>UserViewSection</h3>
+﻿@using MudBlazor
+@using SchedulerApp.Shared
+@using SchedulerApp.Modules
+@using System.Linq;
+@using Newtonsoft.Json.Linq
+@using SchedulerApp.Data.Scheduler;
+@inject Constants constants
+@inject ContentStorage content
+
+
+
+<div class="flex justify-center flex-col items-center mb-10">
+    <div class="text-4xl md:text-6xl text-b700">
+        @(users) Users
+    </div>
+    <br />
+     <MudRating ReadOnly="true" Size="Size.Large" SelectedValue="@((int)Math.Round(averageRating, MidpointRounding.AwayFromZero))" />
+    <div class="text-gray-300 mt-2">
+        @(averageRating) stars based on @numRatings reviews
+    </div>
+</div>
+
+<div class="grid grid-cols-8 md:grid-cols-16">
+
+    @{
+        int i = 0; // Initialize the index for iterating through ratingUsers
+    }
+
+    @foreach (var personName in ratingUsers)
+    {
+        
+        if (i > 100) break;
+
+        var color = Colors[i];
+        var emoji = Emojis[i];
+
+        <div class="m-3">
+            <MudTooltip Arrow="true" Class="rounded-lg shadow-xl">
+                <ChildContent>
+                    <MudAvatar Size="Size.Large" Style="@($"background-color:{color};")">@emoji</MudAvatar>
+                </ChildContent>
+                <TooltipContent>
+                    <div class="p-2">
+                        <p class="text-lg">personName - @ro.RatingUsers[personName].Role</p>
+                        <br/>
+                        <MudRating ReadOnly="true" SelectedValue="@(@ro.RatingUsers[personName].Rating)" />
+                    </div>
+                </TooltipContent>
+            </MudTooltip>
+        </div>
+
+        i++;
+    }
+</div>
 
 @code {
+    private int users = 0;
+    private List<string> ratingUsers = new();
+    private float averageRating = 0.0f;
+    private int numRatings = 0;
+    private RootObject ro = default!;
 
+    private List<string> Emojis = new();
+    private List<string> Colors = new();
+
+    protected override void OnInitialized()
+    {
+        RootObject ro = usageFileLoader.LoadFile();
+
+        ratingUsers = ro.RatingUsers.Keys.ToList<string>();
+
+        users = ro.TotalUsers;
+        numRatings = ro.Ratings.Sum();
+
+        float totalStars = 0.0f;
+        foreach (int i in Enumerable.Range(0,5))
+        {
+            totalStars += ro.Ratings[i] * (i + 1);
+        }
+        averageRating = totalStars / numRatings;
+
+        getRandomColors();
+        getRandomEmojis();
+    }
+
+    private void getRandomColors()
+    {
+        Random random = new Random();
+
+        foreach (int i in Enumerable.Range(0,100))
+        {
+            byte r = (byte)random.Next(256);
+            byte g = (byte)random.Next(256);
+            // byte b = (byte)random.Next(256);
+            Colors.Add($"rgb({r},{g},255)");
+        }
+    }
+
+    private void getRandomEmojis()
+    {
+        Random random = new Random();
+        string[] faceEmojis = {
+            "😀", "😃", "😄", "😁", "😆",
+            "😅", "😂", "🤣", "😊", "😇",
+            "😍", "😋", "😎", "😌", "😏",
+            "🥰", "😘", "😚", "😜", "😝", "💀", "🥸"
+        // Add more emojis here if you want
+    };
+        foreach (int i in Enumerable.Range(0, 100))
+        {
+            int randomIndex = random.Next(faceEmojis.Length);
+            Emojis.Add(faceEmojis[randomIndex]);
+        }
+    }
 }
