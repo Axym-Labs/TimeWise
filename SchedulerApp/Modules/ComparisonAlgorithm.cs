@@ -2,13 +2,14 @@
 
 using DocumentFormat.OpenXml.Spreadsheet;
 using SchedulerApp.Data.Scheduler;
-public class CompasionAlgorithm
+public class ComparisonAlgorithm
 {
     private class EmployeeWrapper
     {
         public Employee Employee { get; set; }
         public double SortingValue { get; set; }
         public double HoursWorked { get; set; }
+        public bool WorkingTimeOff { get; set; }
 
         public EmployeeWrapper(Employee employee)
         {
@@ -43,11 +44,15 @@ public class CompasionAlgorithm
                         {
                             if (employee.HoursWorked < problem.MaxHoursPerWeek)
                             {
-                                var requiredPersonnel = problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel;
-                                if (employee.Employee.Occupations.All(emp => requiredPersonnel.Select(shift => shift.RequiredQualifications.Select(quali => quali.Contains(emp)))))
+                                if (employee.Employee.Occupations.All(quali => problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.All(shiftQual => shiftQual.RequiredQualifications.Contains(quali))))
                                 {
-                                    employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
-                                    shiftResult.Add(employee.Employee.Name);
+                                    if (!employee.WorkingTimeOff)
+                                    {
+                                        employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
+                                        employee.SortingValue += 1;
+                                        employee.WorkingTimeOff = true;
+                                        shiftResult.Add(employee.Employee.Name);
+                                    }
                                 }
                             }
                         }
@@ -59,6 +64,7 @@ public class CompasionAlgorithm
             }
             result.Add(weekResult);
         }
+
         solution.Result = result;
         solution.Status = true;
         var (cost, strain) = CalculateObjectiveValues(solution, problem);
@@ -101,6 +107,3 @@ public class CompasionAlgorithm
         return (costList.Sum(), strainList.Sum());
     }
 }
-
-
-
