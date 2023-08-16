@@ -6,6 +6,8 @@ using System.Text;
 using System.IO;
 using ClosedXML.Excel;
 using SchedulerApp.Modules.Helpers;
+using DocumentFormat.OpenXml.Bibliography;
+using SchedulerApp.Shared.Sections;
 
 public class ScheduleExporter
 {
@@ -17,7 +19,7 @@ public class ScheduleExporter
             default: throw new NotImplementedException("No implemented collection handler");
             case SupportedFileTypes.JSON: return GetJSONStream(Solution);
             case SupportedFileTypes.CSV: return GetCSVStream(Solution, problem);
-            case SupportedFileTypes.XLSX: return GetXLSXStream(Solution, problem);
+            case SupportedFileTypes.XLSX: return GetXLSXByEmployee(Solution, problem);
             case SupportedFileTypes.GSHEET: return GetGSHEETStream(Solution);
         }
     }
@@ -121,21 +123,16 @@ public class ScheduleExporter
         {
             ws.LastRowUsed().FirstCell().CellBelow().SetValue(employee.Name);
             var indicesCollection = StringHelper.FindStringIndices(solution, employee.Name);
-            foreach (var weekI in indicesCollection.Select(x => x.Item1).Distinct())
+
+            foreach(var entry in indicesCollection)
             {
-                ws.LastRowUsed().FirstCell().CellBelow().SetValue($"Week {weekI + 1}");
-                foreach (var dayI in indicesCollection.Where(x => x.Item1 == weekI).Select(x => x.Item2).Distinct())
-                {
-                    ws.LastRowUsed().LastCellUsed().CellRight().SetValue($"Day {dayI + 1}");
-                    foreach (var timeSlotI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI).Select(x => x.Item3).Distinct())
-                    {
-                        ws.LastRowUsed().LastCellUsed().CellRight().SetValue($"Time Slot {timeSlotI + 1}");
-                        foreach (var shiftI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI && x.Item3 == timeSlotI).Select(x => x.Item4).Distinct())
-                        {
-                            ws.LastRowUsed().LastCellUsed().CellRight().SetValue(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name);
-                        }
-                    }
-                }
+                ws.LastRowUsed()
+                    .RowBelow().FirstCell().CellRight()
+                    .SetValue($"Week {entry.Item1 + 1}")
+                    .CellRight().SetValue($"Day {entry.Item2 + 1}")
+                    .CellRight().SetValue($"Time Slot {entry.Item3 + 1}")
+                    .CellRight().SetValue(problem.Schedule.Weeks[entry.Item1].Days[entry.Item2].TimeSlots[entry.Item3].Shifts[entry.Item4].Name);
+
             }
         }
 
