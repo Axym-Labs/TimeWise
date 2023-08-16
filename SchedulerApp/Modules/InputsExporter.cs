@@ -9,7 +9,7 @@ using System.IO;
 
 public enum SupportedFileTypes
 {
-    JSON, CSV, XLSX, GSHEET
+    JSON, CSV, XLSX
 }
 
 public class InputsExporter
@@ -23,7 +23,7 @@ public class InputsExporter
             case SupportedFileTypes.JSON: return GetJSONStream(ProblemScope);
             case SupportedFileTypes.CSV: return GetCSVStream(ProblemScope);
             case SupportedFileTypes.XLSX: return GetXLSXStream(ProblemScope);
-            case SupportedFileTypes.GSHEET: return GetGSHEETStream(ProblemScope);
+            //case SupportedFileTypes.GSHEET: return GetGSHEETStream(ProblemScope);
         }
     }
 

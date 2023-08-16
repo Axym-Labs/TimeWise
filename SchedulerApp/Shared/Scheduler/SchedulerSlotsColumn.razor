@@ -6,8 +6,8 @@
 @using SchedulerApp.Data.Scheduler
 
 <div class="" aria-orientation="horizontal">
-    <div style="min-height: 10rem; overflow-x:auto;" class="d-flex flex-column">
-        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected">
+    <div style="min-height: 10rem; overflow-x:auto;" class="flex flex-column">
+        <MudButton Class="bg-btnPrimary rounded-lg w-full text-sm md:text-base" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected">
             Remove this @tableName
         </MudButton>
 

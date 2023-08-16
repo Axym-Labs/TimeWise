@@ -15,10 +15,10 @@
         <MudNumericField T="double" @bind-Value="ShiftData.Length" Label="Length (h)" Variant="Variant.Filled" Min="0" Max="24"/>
     </div>
     <div>
-        <MudNumericField T="double" @bind-Value="ShiftData.Strain" Label="Strain (Number)" Variant="Variant.Filled" Min="0" Max="1" Step="0.1"/>
+        <MudNumericField T="double" @bind-Value="ShiftData.Strain" Label="Strain (Number)" Variant="Variant.Filled" Min="0" Step="1"/>
     </div>
     <div>
-        <label>Required Personnel:</label>
+        <p class="m-3 text-b600">Required Personnel:</p>
         @foreach(var personnel in ShiftData.RequiredPersonnel)
         {
             <div class="d-flex flex-row" style="height:auto">

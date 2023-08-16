@@ -28,71 +28,76 @@
     </div>
 }
 
-@if(DisplayConnectionError)
-{
-    <MudAlert Severity="Severity.Error">The connection to the API could not be established. You can only import Schedules, not generate them on this version of the page. If you want to generate a new schedule, try again later. If this error persists, <a href="/contact">contact us</a>.</MudAlert>
-}
+<div class="w-screen justify-center px-2 md:px-4">
+    <div class="max-w-7xl">
+        @if(DisplayConnectionError)
+        {
+            <div class="flex justify-center">
+                <MudAlert Severity="Severity.Error" Class="max-w-2xl text-lg">The connection to the API could not be established. You can only import and view your inputs. If you want to generate a new schedule, try again later. If this error persists, <a href="/contact" class="underline">contact us</a>.</MudAlert>
+            </div>
+        }
 
 
 
-<SchedulerSection title="Start">
-    <div class="mb-8">
-        <MudTextField @bind-Value="scheduleName" Variant="Variant.Outlined" Label="Schedule name" Margin="Margin.Dense" />
-    </div>
+        <SchedulerSection title="Start">
+            <div class="mb-8">
+                <MudTextField @bind-Value="scheduleName" Variant="Variant.Outlined" Label="Schedule name" Margin="Margin.Dense" />
+            </div>
     
-    <InputsImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
-</SchedulerSection>
+            <InputsImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
+        </SchedulerSection>
 
-<SchedulerSection title="Add employees">
-    <EmployeePlanner Employees="ProblemScope.Problem.Workers" OnEmployeesChanged="employees => ProblemScope.Problem.Workers = employees" />
-</SchedulerSection>
+        <SchedulerSection title="Add employees">
+            <EmployeePlanner Employees="ProblemScope.Problem.Workers" OnEmployeesChanged="employees => ProblemScope.Problem.Workers = employees" />
+        </SchedulerSection>
 
-<SchedulerSection title="Customize scheduling options">
-    <div class="mb-4">
-        <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
-    </div>
+        <SchedulerSection title="Customize scheduling options">
+            <div class="mb-4">
+                <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
+            </div>
 
-@*    <MudNumericField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
-*@    
+        @*    <MudNumericField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
+        *@    
 
-    <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
-        Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
-    </MudSlider>
-</SchedulerSection>
+            <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
+                Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
+            </MudSlider>
+        </SchedulerSection>
 
-<SchedulerSection title="Add Slots">
-    <SchedulerSlots ProblemScope="ProblemScope" ProblemScopeChanged="value => ProblemScope = value"/>
-</SchedulerSection>
+        <SchedulerSection title="Add Slots">
+            <SchedulerSlots ProblemScope="ProblemScope" ProblemScopeChanged="value => ProblemScope = value"/>
+        </SchedulerSection>
     
-<SchedulerSection title="Solution View">
-    <div class="d-flex flex-row mb-8">
-            @if (showSolutionLoadingCircle)
-            {
-                <MudProgressLinear Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
-            } else
-            {
-                <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full rounded-lg" Variant="Variant.Filled" Disabled="!ValidInputs()">
-                    <p>Generate Solution</p>
-                </MudButton>
-            }
+        <SchedulerSection title="Schedule View">
+            <div class="d-flex flex-row mb-8">
+                    @if (showSolutionLoadingCircle)
+                    {
+                        <MudProgressLinear Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
+                    } else
+                    {
+                        <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full rounded-lg" Variant="Variant.Filled" Disabled="!ValidInputs()">
+                            <p>Generate Solution</p>
+                        </MudButton>
+                    }
+            </div>
+            <div>
+                <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
+            </div>
+        </SchedulerSection>
+
+        <SchedulerSection title="Rate your experience until now">
+            <FeedbackSection />
+        </SchedulerSection>
+
+        <SchedulerSection title="Export Options">
+            <div class="mb-8">
+                <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
+            </div>
+            <ExporterView Problem="ProblemScope.Problem" Solution="solution" OnSolutionChanged="value => solution = value" FileName="@scheduleName" />
+        </SchedulerSection>
+
     </div>
-    <div>
-        <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
-    </div>
-</SchedulerSection>
-
-<SchedulerSection title="Rate your experience until now">
-    <FeedbackSection />
-</SchedulerSection>
-
-<SchedulerSection title="Export Options">
-    <div class="mb-8">
-        <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
-    </div>
-    <ExporterView Problem="ProblemScope.Problem" Solution="solution" OnSolutionChanged="value => solution = value" FileName="@scheduleName" />
-</SchedulerSection>
-
-
+</div>
 
 @code {
     private ProblemScope ProblemScope = new ProblemScope();

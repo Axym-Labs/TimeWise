@@ -17,7 +17,7 @@
             <MudSwitch Label="Duplicate time slots in day?" Color="Color.Info" @bind-Checked="UseFirstForNewDay" UnCheckedColor="Color.Tertiary" />
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid md:grid-cols-4 gap-2 md:gap-4">
             @try
             {
                 var weeksCollection = ProblemScope.Problem.Schedule.Weeks.Cast<dynamic>().ToList();
@@ -63,6 +63,18 @@
 @code {
     public bool UseFirstForNewDay;
     public bool UseFirstForNewWeek;
+
+    private int SelectedWeek = 0;
+    private int SelectedDay = 0;
+    private int SelectedTimeSlot = 0;
+    private int SelectedShift = 0;
+
+
+    [Parameter]
+    public EventCallback<ProblemScope> ProblemScopeChanged { get; set; }
+
+    [Parameter]
+    public ProblemScope ProblemScope { get; set; } = default!;
 
     private async Task OnScheduleChanged((List<dynamic> collection, string tableName) caller) 
     {
@@ -137,18 +149,6 @@
         }
         return false;
     }
-
-    private int SelectedWeek = 0;
-    private int SelectedDay = 0;
-    private int SelectedTimeSlot = 0;
-    private int SelectedShift = 0;
-
-
-    [Parameter]
-    public EventCallback<ProblemScope> ProblemScopeChanged { get; set; }
-
-    [Parameter]
-    public ProblemScope ProblemScope { get; set; } = default!;
 
     override protected void OnInitialized()
     {

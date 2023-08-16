@@ -1,27 +1,16 @@
 ﻿@namespace SchedulerApp.Shared.Sections
 
+@using MudBlazor
 
 <article>
 <div class="w-screen bg-neutral-200 flex justify-center py-20 text-neutral-900">
     <div class="max-w-3xl" id="Introduction">
         <section>
             <header>
-                <MudElement HtmlTag="div">
-                    <MudText Typo="Typo.h3" Class="text-b600">What is SchedulerApp</MudText>
+                <MudElement HtmlTag="div" Class="mt-6">
+                    <MudText Typo="Typo.h3" Class="text-b600">How it works</MudText>
                 </MudElement>
             </header>
-            <MudElement HtmlTag="div" Class="mt-6">
-                <MudText Class="text-b500 text-lg">
-                    It's an open-source, free alternative to conventional scheduler-programs.
-                    This scheduler is based on <a class="underline" href="https://en.wikipedia.org/wiki/Integer_programming" target="_blank">ILP (integer linear programming)</a>, allows for the optimal distribution of shifts among workers, and guarantees an optimal solution (within constraints).
-                    It allows for complete control of the process and has adaptable constraints and objectives, as well as a simple UI to allow for fast, replicable results.
-                </MudText>
-            </MudElement>
-        </section>
-        <section>
-            <MudElement HtmlTag="div" Class="mt-6">
-                <MudText Typo="Typo.h3" Class="text-b600">How it works</MudText>
-            </MudElement>
             <MudElement HtmlTag="div" Class="mt-6">
                 <MudText Typo="Typo.body1">
                     The scheduler follows a simple structure where each week has days, every day has time slots, and every time slot has shifts.

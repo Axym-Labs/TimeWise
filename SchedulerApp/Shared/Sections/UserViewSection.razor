@@ -1,4 +1,6 @@
-﻿@using MudBlazor
+﻿@namespace SchedulerApp.Shared.Sections
+
+@using MudBlazor
 @using SchedulerApp.Shared
 @using SchedulerApp.Modules
 @using System.Linq;
@@ -8,49 +10,57 @@
 @inject ContentStorage content
 
 
+<div class="flex justify-center">
+    <div class="my-20 max-w-3xl">
 
-<div class="flex justify-center flex-col items-center mb-10">
-    <div class="text-4xl md:text-6xl text-b700">
-        @(users) Users
-    </div>
-    <br />
-     <MudRating ReadOnly="true" Size="Size.Large" SelectedValue="@((int)Math.Round(averageRating, MidpointRounding.AwayFromZero))" />
-    <div class="text-gray-300 mt-2">
-        @(averageRating) stars based on @numRatings reviews
-    </div>
-</div>
-
-<div class="grid grid-cols-8 md:grid-cols-16">
-
-    @{
-        int i = 0; // Initialize the index for iterating through ratingUsers
-    }
-
-    @foreach (var personName in ratingUsers)
-    {
-        
-        if (i > 100) break;
-
-        var color = Colors[i];
-        var emoji = Emojis[i];
-
-        <div class="m-3">
-            <MudTooltip Arrow="true" Class="rounded-lg shadow-xl">
-                <ChildContent>
-                    <MudAvatar Size="Size.Large" Style="@($"background-color:{color};")">@emoji</MudAvatar>
-                </ChildContent>
-                <TooltipContent>
-                    <div class="p-2">
-                        <p class="text-lg">personName - @UserRatings.RatingUsers[personName].Role</p>
-                        <br/>
-                        <MudRating ReadOnly="true" SelectedValue="@(@UserRatings.RatingUsers[personName].Rating)" />
-                    </div>
-                </TooltipContent>
-            </MudTooltip>
+        <div class="flex justify-center flex-col items-center mb-10">
+            <div class="text-4xl md:text-6xl text-b700">
+                @(users) Users
+            </div>
+            <br />
+             <MudRating ReadOnly="true" Size="Size.Large" SelectedValue="@((int)Math.Round(averageRating, MidpointRounding.AwayFromZero))" />
+            <div class="text-gray-300 mt-2">
+                @(averageRating.ToString($"F2")) stars based on @numRatings reviews
+            </div>
         </div>
 
-        i++;
-    }
+        <div class="grid grid-cols-8 md:grid-cols-16">
+
+            @{
+                int i = 0; // Initialize the index for iterating through ratingUsers
+            }
+
+            @foreach (var personName in ratingUsers)
+            {
+        
+                if (i > 100) break;
+
+                var color = Colors[i];
+                var emoji = Emojis[i];
+
+                <div class="m-3">
+                    <MudTooltip Arrow="true" Class="rounded-lg shadow-lg" Color="Color.Secondary">
+                        <ChildContent>
+                            <MudAvatar Size="Size.Large" Style="@($"background-color:{color};")">@emoji</MudAvatar>
+                        </ChildContent>
+                        <TooltipContent>
+                            <div class="p-2">
+                                <p class="text-lg">@personName - @UserRatings.RatingUsers[personName].Role</p>
+                                <br/>
+                                <MudRating ReadOnly="true" SelectedValue="@(@UserRatings.RatingUsers[personName].Rating)" />
+                                <br/>
+                                <br/>
+                                <p class="">@UserRatings.RatingUsers[personName].Feedback</p>
+                            </div>
+                        </TooltipContent>
+                    </MudTooltip>
+                </div>
+
+                i++;
+            }
+        </div>
+
+    </div>
 </div>
 
 @code {
@@ -104,7 +114,7 @@
             "😀", "😃", "😄", "😁", "😆",
             "😅", "😂", "🤣", "😊", "😇",
             "😍", "😋", "😎", "😌", "😏",
-            "🥰", "😘", "😚", "😜", "😝", "💀", "🥸"
+            "🥰", "😘", "😚", "😜", "😝", "💀"
         // Add more emojis here if you want
     };
         foreach (int i in Enumerable.Range(0, 100))
