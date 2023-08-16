@@ -104,7 +104,15 @@ public class ScheduleExporter
             }
         }
     }
+    public MemoryStream GetXLSXByEmployee(Solution solution)
+    {
+        var result = solution.Result;
+        using var nb = new XLWorkbook();
+        nb.Author = "Jonathan Schäfer";
+        var ws = nb.Worksheets.Add("Schedule by Employee");
 
+        return new MemoryStream();
+    }
 
     public MemoryStream GetGSHEETStream(Solution Solution)
     {

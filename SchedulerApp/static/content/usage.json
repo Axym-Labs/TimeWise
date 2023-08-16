@@ -1,5 +1,5 @@
 {
-  "TotalUsers": 5,
+  "TotalUsers": 9,
   "Ratings": [
     1,
     1,
@@ -26,6 +26,10 @@
     },
     "Ahhhhhhh": {
       "Rating": 4,
+      "Role": ""
+    },
+    "User #7": {
+      "Rating": 0,
       "Role": ""
     }
   }
