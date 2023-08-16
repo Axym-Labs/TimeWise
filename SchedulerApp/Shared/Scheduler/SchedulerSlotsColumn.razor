@@ -7,8 +7,8 @@
 
 <div class="" aria-orientation="horizontal">
     <div style="min-height: 10rem; overflow-x:auto;" class="flex flex-column">
-        <MudButton Class="bg-btnPrimary rounded-lg w-full text-sm md:text-base" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected">
-            Remove this @tableName
+        <MudButton Class="bg-btnPrimary rounded-lg w-full text-sm md:text-base" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected" StartIcon="@Icons.Material.Filled.Remove">
+            Selected @tableName
         </MudButton>
 
 
@@ -20,8 +20,8 @@
             }
         </MudList>
 
-        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddNew">
-            Add a @tableName
+        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddNew" StartIcon="@Icons.Material.Filled.Add">
+            @tableName
         </MudButton>
     </div>
 </div>
