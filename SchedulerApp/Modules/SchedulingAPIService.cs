@@ -7,8 +7,11 @@ using Newtonsoft.Json;
 
 public class SchedulingAPIService
 {
+#if DEBUG
+    private readonly RestClient _client = new(new RestClientOptions(Constants.apiTestEndpoint) { MaxTimeout = 20 * 1000 });
+#else
     private readonly RestClient _client = new(new RestClientOptions(Constants.apiEndpoint) { MaxTimeout = 20 * 1000 });
-
+#endif
     public async Task<string?> GetAPIVersion()
     {
         try{
