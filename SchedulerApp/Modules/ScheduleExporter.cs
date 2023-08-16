@@ -1,12 +1,13 @@
 ﻿namespace SchedulerApp.Modules;
 using SchedulerApp.Data.Scheduler;
 using Newtonsoft.Json;
-using Csv;
 using System;
 using System.Text;
 using System.IO;
-using Microsoft.Extensions.Primitives;
 using ClosedXML.Excel;
+using SchedulerApp.Modules.Helpers;
+using DocumentFormat.OpenXml.Bibliography;
+using SchedulerApp.Shared.Sections;
 
 public class ScheduleExporter
 {
@@ -18,7 +19,7 @@ public class ScheduleExporter
             default: throw new NotImplementedException("No implemented collection handler");
             case SupportedFileTypes.JSON: return GetJSONStream(Solution);
             case SupportedFileTypes.CSV: return GetCSVStream(Solution, problem);
-            case SupportedFileTypes.XLSX: return GetXLSXStream(Solution, problem);
+            case SupportedFileTypes.XLSX: return GetXLSXByEmployee(Solution, problem);
             case SupportedFileTypes.GSHEET: return GetGSHEETStream(Solution);
         }
     }
@@ -104,14 +105,43 @@ public class ScheduleExporter
             }
         }
     }
-    public MemoryStream GetXLSXByEmployee(Solution solution)
+
+
+    public MemoryStream GetXLSXByEmployee(Solution solution, Problem problem)
     {
         var result = solution.Result;
         using var nb = new XLWorkbook();
         nb.Author = "Jonathan Schäfer";
         var ws = nb.Worksheets.Add("Schedule by Employee");
+        ws.FirstCell().SetValue("Employees")
+            .CellRight().SetValue("Weeks")
+            .CellRight().SetValue("Days")
+            .CellRight().SetValue("Time Slots")
+            .CellRight().SetValue("Shifts");
 
-        return new MemoryStream();
+        foreach(var employee in problem.Workers)
+        {
+            ws.LastRowUsed().FirstCell().CellBelow().SetValue(employee.Name);
+            var indicesCollection = StringHelper.FindStringIndices(solution, employee.Name);
+
+            foreach(var entry in indicesCollection)
+            {
+                ws.LastRowUsed()
+                    .RowBelow().FirstCell().CellRight()
+                    .SetValue($"Week {entry.Item1 + 1}")
+                    .CellRight().SetValue($"Day {entry.Item2 + 1}")
+                    .CellRight().SetValue($"Time Slot {entry.Item3 + 1}")
+                    .CellRight().SetValue(problem.Schedule.Weeks[entry.Item1].Days[entry.Item2].TimeSlots[entry.Item3].Shifts[entry.Item4].Name);
+
+            }
+        }
+
+        using (var memStream = new MemoryStream())
+        {
+            nb.SaveAs(memStream);
+            File.WriteAllBytes("C:\\Users\\jona4\\Desktop\\test.xlsx", memStream.ToArray());
+            return new MemoryStream(memStream.ToArray());
+        }
     }
 
     public MemoryStream GetGSHEETStream(Solution Solution)

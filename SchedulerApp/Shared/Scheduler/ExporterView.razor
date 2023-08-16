@@ -19,10 +19,10 @@
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">JSON</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">JSON</MudButton>
     
     </div>
 </div>
