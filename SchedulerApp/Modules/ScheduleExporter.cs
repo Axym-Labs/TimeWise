@@ -1,12 +1,11 @@
 ﻿namespace SchedulerApp.Modules;
 using SchedulerApp.Data.Scheduler;
 using Newtonsoft.Json;
-using Csv;
 using System;
 using System.Text;
 using System.IO;
-using Microsoft.Extensions.Primitives;
 using ClosedXML.Excel;
+using SchedulerApp.Modules.Helpers;
 
 public class ScheduleExporter
 {
@@ -104,14 +103,48 @@ public class ScheduleExporter
             }
         }
     }
-    public MemoryStream GetXLSXByEmployee(Solution solution)
+
+
+    public MemoryStream GetXLSXByEmployee(Solution solution, Problem problem)
     {
         var result = solution.Result;
         using var nb = new XLWorkbook();
         nb.Author = "Jonathan Schäfer";
         var ws = nb.Worksheets.Add("Schedule by Employee");
+        ws.FirstCell().SetValue("Employees")
+            .CellRight().SetValue("Weeks")
+            .CellRight().SetValue("Days")
+            .CellRight().SetValue("Time Slots")
+            .CellRight().SetValue("Shifts");
 
-        return new MemoryStream();
+        foreach(var employee in problem.Workers)
+        {
+            ws.LastRowUsed().FirstCell().CellBelow().SetValue(employee.Name);
+            var indicesCollection = StringHelper.FindStringIndices(solution, employee.Name);
+            foreach (var weekI in indicesCollection.Select(x => x.Item1).Distinct())
+            {
+                ws.LastRowUsed().FirstCell().CellBelow().SetValue($"Week {weekI + 1}");
+                foreach (var dayI in indicesCollection.Where(x => x.Item1 == weekI).Select(x => x.Item2).Distinct())
+                {
+                    ws.LastRowUsed().LastCellUsed().CellRight().SetValue($"Day {dayI + 1}");
+                    foreach (var timeSlotI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI).Select(x => x.Item3).Distinct())
+                    {
+                        ws.LastRowUsed().LastCellUsed().CellRight().SetValue($"Time Slot {timeSlotI + 1}");
+                        foreach (var shiftI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI && x.Item3 == timeSlotI).Select(x => x.Item4).Distinct())
+                        {
+                            ws.LastRowUsed().LastCellUsed().CellRight().SetValue(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name);
+                        }
+                    }
+                }
+            }
+        }
+
+        using (var memStream = new MemoryStream())
+        {
+            nb.SaveAs(memStream);
+            File.WriteAllBytes("C:\\Users\\jona4\\Desktop\\test.xlsx", memStream.ToArray());
+            return new MemoryStream(memStream.ToArray());
+        }
     }
 
     public MemoryStream GetGSHEETStream(Solution Solution)
