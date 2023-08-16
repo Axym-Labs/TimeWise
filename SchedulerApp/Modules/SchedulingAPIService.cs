@@ -20,8 +20,6 @@ public class SchedulingAPIService
         }
     }
 
-
-
     public async Task<Solution?> GetSolution(Problem problem)
     {
         try
