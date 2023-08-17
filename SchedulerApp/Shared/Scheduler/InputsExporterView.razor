@@ -15,7 +15,7 @@
         Download your inputs to regenerate the schedule later on (by importing it).
     </p>
     <div class="m-3">
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes2.JSON)">
             Download JSON Inputs
         </MudButton>
     </div>
@@ -30,7 +30,7 @@
 
 
 
-    private async Task DownloadFileStream(SupportedFileTypes FileExt)
+    private async Task DownloadFileStream(SupportedFileTypes2 FileExt)
     {
         var stream = inputsExporter.GetStreamByFileExt(ProblemScope, FileExt);
         using var streamref = new DotNetStreamReference(stream: stream);

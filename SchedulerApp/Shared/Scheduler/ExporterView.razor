@@ -12,7 +12,7 @@
 
 <div>
     <p class="m-3 mb-5">
-        Download the generated schedule.
+        Download the generated schedule. Select the 'Program' option if you intend to load this file into a custom program you've developed.
     </p>
     <div class="m-5">
         <MudSwitch Label="Split into separate files by employee" Color="Color.Primary" @bind-Checked="splitByEmployee" UnCheckedColor="Color.Tertiary" Disabled="InvalidOptionCombination()" />
@@ -24,7 +24,8 @@
         <div class="max-w-xl">
             <MudSelect T="string" Label="File type" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="selectedFileExtStr" Margin="Margin.Dense">
                     <MudSelectItem Value="@("XLSX")" />
-                    <MudSelectItem Value="@("CSV")" />
+                    <MudSelectItem Value="@("CSV (Human)")" />
+                    <MudSelectItem Value="@("CSV (Program)")" />
                     @if (!splitByEmployee) {
                         <MudSelectItem Value="@("JSON")" />
                     }
@@ -59,10 +60,10 @@
 
     private string selectedFileExtStr = "XLSX";
 
-    private bool splitByEmployee = false;
+    private bool splitByEmployee = true;
     
     private bool InvalidOptionCombination() {
-        return selectedFileExtStr != "XLSX" && selectedFileExtStr != "CSV";
+        return selectedFileExtStr != "XLSX" && selectedFileExtStr != "CSV (Human)" && selectedFileExtStr != "CSV (Program)";
     }
 
     private SupportedFileTypes getFileExt() {
@@ -70,7 +71,8 @@
             default:
                 throw new NotImplementedException("Unknown file extension.");
             case "JSON": return SupportedFileTypes.JSON;
-            case "CSV": return SupportedFileTypes.CSV;
+            case "CSV (Human)": return SupportedFileTypes.CSV_H;
+            case "CSV (Program)": return SupportedFileTypes.CSV_P;
             case "XLSX": return SupportedFileTypes.XLSX;
         }
     }
@@ -91,7 +93,7 @@
 
         foreach (var stream in streams) {
             using var streamref = new DotNetStreamReference(stream: stream);
-            await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + FileExt.ToString().ToLower(), streamref);
+            await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + exporter.FileTypeToExtStr(FileExt).ToLower(), streamref);
         }
     }
 
@@ -99,6 +101,6 @@
     {
         var stream = exporter.GetStreamByFileExt(Solution, FileExt, Problem);
         using var streamref = new DotNetStreamReference(stream: stream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + FileExt.ToString().ToLower(), streamref);
+        await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + exporter.FileTypeToExtStr(FileExt).ToLower(), streamref);
     }
 }

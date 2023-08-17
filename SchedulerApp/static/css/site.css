@@ -69,3 +69,12 @@ a:hover {
 :focus {
     outline: none;
 }
+
+.mud-treeview-item {
+    width: min-content;
+    float: left;
+}
+
+.mud-treeview-item-label {
+    white-space: nowrap;
+}

@@ -5,7 +5,7 @@
   "navbar": {
     "links": [
       [ "Scheduler", "/scheduler" ],
-      [ "How it works", "/#Introduction" ],
+      [ "How it works", "/#howitworks" ],
       [ "Github Repo", "https://github.com/Jonathan-Schaefer-git/SchedulerApp" ],
       [ "Contact", "mailto:jonathan.schaefer_@outlook.de" ]
     ],
@@ -15,7 +15,7 @@
   "footer": {
     "links": [
       [ "Scheduler", "/scheduler" ],
-      [ "How it works", "/#Introduction" ],
+      [ "How it works", "/#howitworks" ],
       [ "Github Repo", "https://github.com/Jonathan-Schaefer-git/SchedulerApp" ],
       [ "Wiki", "https://github.com/Jonathan-Schaefer-git/SchedulerApp" ],
       [ "Contact", "mailto:jonathan.schaefer_@outlook.de" ]
