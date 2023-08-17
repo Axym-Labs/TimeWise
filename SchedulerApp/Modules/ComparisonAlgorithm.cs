@@ -9,7 +9,7 @@ public class ComparisonAlgorithm
         public Employee Employee { get; set; }
         public double SortingValue { get; set; }
         public double HoursWorked { get; set; }
-        public bool WorkingTimeOff { get; set; }
+        public bool IsAvailable { get; set; }
 
         public EmployeeWrapper(Employee employee)
         {
@@ -20,6 +20,7 @@ public class ComparisonAlgorithm
     {
         var schedule = problem.Schedule;
         var workers = problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList();
+
         var solution = new Solution();
 
         List<List<List<List<List<string>>>>> result = new List<List<List<List<List<string>>>>>();
@@ -39,25 +40,29 @@ public class ComparisonAlgorithm
                     foreach (var shiftI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts.Count))
                     {
                         List<string> shiftResult = new List<string>();
-
-                        foreach (var employee in workers)
+                        foreach(var requirement in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Select(x => x.Count).Sum()))
                         {
-                            if (employee.HoursWorked < problem.MaxHoursPerWeek)
+                            workers.OrderBy(emp => emp.SortingValue);
+                            foreach (var employee in workers)
                             {
-                                if (employee.Employee.Occupations.All(quali => problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.All(shiftQual => shiftQual.RequiredQualifications.Contains(quali))))
+                                if (employee.HoursWorked <= problem.MaxHoursPerWeek)
                                 {
-                                    if (!employee.WorkingTimeOff)
+                                    if (employee.Employee.Occupations.All(quali => problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.All(shiftQual => shiftQual.RequiredQualifications.Contains(quali))))
                                     {
-                                        employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
-                                        employee.SortingValue += 1;
-                                        employee.WorkingTimeOff = true;
-                                        shiftResult.Add(employee.Employee.Name);
+                                        if (employee.IsAvailable)
+                                        {
+                                            employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
+                                            employee.SortingValue += 1;
+                                            employee.IsAvailable = false;
+                                            shiftResult.Add(employee.Employee.Name);
+                                        }
                                     }
                                 }
                             }
                         }
                         slotResult.Add(shiftResult);
                     }
+                    workers.Select(emp => emp.IsAvailable = true);
                     dayResult.Add(slotResult);
                 }
                 weekResult.Add(dayResult);
