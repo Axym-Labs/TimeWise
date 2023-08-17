@@ -9,7 +9,7 @@ public class ComparisonAlgorithm
         public Employee Employee { get; set; }
         public double SortingValue { get; set; }
         public double HoursWorked { get; set; }
-        public bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; } = true;
 
         public EmployeeWrapper(Employee employee)
         {
@@ -40,14 +40,14 @@ public class ComparisonAlgorithm
                     foreach (var shiftI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts.Count))
                     {
                         List<string> shiftResult = new List<string>();
-                        foreach(var requirement in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Select(x => x.Count).Sum()))
+                        foreach(var requirementI in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Count))
                         {
                             workers.OrderBy(emp => emp.SortingValue);
                             foreach (var employee in workers)
                             {
                                 if (employee.HoursWorked <= problem.MaxHoursPerWeek)
                                 {
-                                    if (employee.Employee.Occupations.All(quali => problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.All(shiftQual => shiftQual.RequiredQualifications.Contains(quali))))
+                                    if (employee.Employee.Occupations.SequenceEqual(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].RequiredQualifications))
                                     {
                                         if (employee.IsAvailable)
                                         {
@@ -55,6 +55,7 @@ public class ComparisonAlgorithm
                                             employee.SortingValue += 1;
                                             employee.IsAvailable = false;
                                             shiftResult.Add(employee.Employee.Name);
+                                            break;
                                         }
                                     }
                                 }
@@ -62,11 +63,12 @@ public class ComparisonAlgorithm
                         }
                         slotResult.Add(shiftResult);
                     }
-                    workers.Select(emp => emp.IsAvailable = true);
                     dayResult.Add(slotResult);
                 }
                 weekResult.Add(dayResult);
+                workers.Select(emp => emp.IsAvailable = true);
             }
+            workers.Select(emp => emp.HoursWorked = 0);
             result.Add(weekResult);
         }
 
