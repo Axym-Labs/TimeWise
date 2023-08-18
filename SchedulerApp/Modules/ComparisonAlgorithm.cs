@@ -42,20 +42,23 @@ public class ComparisonAlgorithm
                         List<string> shiftResult = new List<string>();
                         foreach(var requirementI in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Count))
                         {
-                            workers.OrderBy(emp => emp.SortingValue);
-                            foreach (var employee in workers)
+                            foreach(var count in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].Count))
                             {
-                                if (employee.HoursWorked <= problem.MaxHoursPerWeek)
+                                workers.OrderBy(emp => emp.SortingValue);
+                                foreach (var employee in workers)
                                 {
-                                    if (employee.Employee.Occupations.SequenceEqual(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].RequiredQualifications))
+                                    if (employee.HoursWorked <= problem.MaxHoursPerWeek)
                                     {
-                                        if (employee.IsAvailable)
+                                        if (employee.Employee.Occupations.SequenceEqual(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].RequiredQualifications))
                                         {
-                                            employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
-                                            employee.SortingValue += 1;
-                                            employee.IsAvailable = false;
-                                            shiftResult.Add(employee.Employee.Name);
-                                            break;
+                                            if (employee.IsAvailable)
+                                            {
+                                                employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
+                                                employee.SortingValue += 1;
+                                                employee.IsAvailable = false;
+                                                shiftResult.Add(employee.Employee.Name);
+                                                break;
+                                            }
                                         }
                                     }
                                 }
