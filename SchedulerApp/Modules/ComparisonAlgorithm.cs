@@ -66,9 +66,9 @@ public class ComparisonAlgorithm
                     dayResult.Add(slotResult);
                 }
                 weekResult.Add(dayResult);
-                workers.Select(emp => emp.IsAvailable = true);
+                workers.ForEach(emp => emp.IsAvailable = true);
             }
-            workers.Select(emp => emp.HoursWorked = 0);
+            workers.ForEach(emp => emp.HoursWorked = 0);
             result.Add(weekResult);
         }
 
