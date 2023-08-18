@@ -7,8 +7,8 @@
 
 @if (EmployeeData != null)
 {
-    <MudPaper Class="rounded-lg m-4 p-1.5">
-        <div class="d-flex flex-row">
+    <MudPaper Class="rounded-lg md:m-4 p-1.5">
+        <div class="md:flex flex-row">
             <MudTextField Class="mx-2 my-2" @bind-Value="EmployeeData.Name" Label="Full name" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
 
             <MudTextField Class="mx-2 my-2" Margin="Margin.Dense" @bind-Value:get="StringHelper.JoinList(EmployeeData.Occupations)" @bind-Value:set="value => EmployeeData.Occupations = StringHelper.FormatSplitString(value)" Label="Occupations (seperate using comma)" Variant="Variant.Outlined" HelperTextOnFocus="true"></MudTextField>

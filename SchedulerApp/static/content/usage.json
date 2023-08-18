@@ -1,40 +1,32 @@
 {
-  "TotalUsers": 46,
+  "TotalUsers": 27,
   "Ratings": [
-    1,
-    1,
-    1,
-    1,
-    2
+    0,
+    0,
+    0,
+    3,
+    1
   ],
   "RatingUsers": {
     "Jonathan Schäfer": {
       "Rating": 5,
-      "Role": ""
+      "Role": "Student",
+      "Feedback": "Hi"
     },
     "John Doe": {
       "Rating": 4,
-      "Role": "CEO"
+      "Role": "Project Manager",
+      "Feedback": "Thank you"
     },
-    "User #2": {
-      "Rating": 0,
-      "Role": ""
+    "User #14": {
+      "Rating": 5,
+      "Role": "Manager",
+      "Feedback": "I like that it's open source"
     },
-    "User #4": {
-      "Rating": 0,
-      "Role": ""
-    },
-    "Ahhhhhhh": {
-      "Rating": 4,
-      "Role": ""
-    },
-    "User #7": {
-      "Rating": 0,
-      "Role": ""
-    },
-    "User #30": {
-      "Rating": 0,
-      "Role": ""
+    "User #15": {
+      "Rating": 5,
+      "Role": "Manager",
+      "Feedback": "Nice App"
     }
   }
 }

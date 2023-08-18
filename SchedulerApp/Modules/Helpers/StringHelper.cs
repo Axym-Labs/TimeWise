@@ -11,7 +11,7 @@ public static class StringHelper
     {
         return str.Split(',').Select(s => s.TrimStart()).ToList();
     }
-    public static List<Tuple<int, int, int, int, int>> FindStringIndices(Solution solution, string targetString)
+    public static List<Tuple<int, int, int, int, int>> FindStringIndices(Solution solution, string targetString, bool allOnEmptyTarget = false)
     {
         List<Tuple<int, int, int, int, int>> indices = new List<Tuple<int, int, int, int, int>>();
 
@@ -25,7 +25,7 @@ public static class StringHelper
                     {
                         for (int m = 0; m < solution.Result[i][j][k][l].Count; m++)
                         {
-                            if (solution.Result[i][j][k][l][m] == targetString)
+                            if (solution.Result[i][j][k][l][m] == targetString || (targetString == string.Empty && allOnEmptyTarget))
                             {
                                 indices.Add(Tuple.Create(i, j, k, l, m));
                             }

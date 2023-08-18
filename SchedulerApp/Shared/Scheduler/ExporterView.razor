@@ -11,20 +11,38 @@
 @inject ScheduleExporter exporter
 
 <div>
-    <p class="m-3">
-        Download the generated schedule.
+    <p class="m-3 mb-5">
+        Download the generated schedule. Select the 'Program' option if you intend to load this file into a custom program you've developed.
     </p>
-    <div class="max-w-xl mb-8">
-        <MudTextField  @bind-Value="FileName" Variant="Variant.Outlined" Label="File name" Margin="Margin.Dense"/>
+    <div class="m-5">
+        <MudSwitch Label="Split into separate files by employee" Color="Color.Primary" @bind-Checked="splitByEmployee" UnCheckedColor="Color.Tertiary" Disabled="InvalidOptionCombination()" />
+    </div>
+    <div class="grid md:grid-cols-3 gap-4">
+        <div class="max-w-xl">
+            <MudTextField  @bind-Value="FileName" Variant="Variant.Outlined" Label="File name" Margin="Margin.Dense"/>
+        </div>
+        <div class="max-w-xl">
+            <MudSelect T="string" Label="File type" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="selectedFileExtStr" Margin="Margin.Dense">
+                    <MudSelectItem Value="@("XLSX")" />
+                    <MudSelectItem Value="@("CSV (Human)")" />
+                    <MudSelectItem Value="@("CSV (Program)")" />
+                    @if (!splitByEmployee) {
+                        <MudSelectItem Value="@("JSON")" />
+                    }
+                </MudSelect>
+        </div>
+        <div class="flex items-center">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="rounded-lg w-full" Disabled="Solution == null" OnClick="_ => HandleDownloadFileStream(getFileExt())" StartIcon="@Icons.Material.Filled.Download">
+                Download
+            </MudButton>
+        </div>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    @*<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" Disabled="Solution == null ? true : false" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)">JSON</MudButton>
-    
-    </div>
+    </div>*@
 </div>
 
 @code {
@@ -40,12 +58,49 @@
     [Parameter]
     public Problem Problem { get; set; } = default!;
 
+    private string selectedFileExtStr = "XLSX";
+
+    private bool splitByEmployee = true;
+    
+    private bool InvalidOptionCombination() {
+        return selectedFileExtStr != "XLSX" && selectedFileExtStr != "CSV (Human)" && selectedFileExtStr != "CSV (Program)";
+    }
+
+    private SupportedFileTypes getFileExt() {
+        switch (selectedFileExtStr) {
+            default:
+                throw new NotImplementedException("Unknown file extension.");
+            case "JSON": return SupportedFileTypes.JSON;
+            case "CSV (Human)": return SupportedFileTypes.CSV_H;
+            case "CSV (Program)": return SupportedFileTypes.CSV_P;
+            case "XLSX": return SupportedFileTypes.XLSX;
+        }
+    }
+
+    private async Task HandleDownloadFileStream(SupportedFileTypes FileExt) 
+    {
+        if (!splitByEmployee) {
+            await DownloadFileStream(FileExt);
+        }
+        else {
+            await DownloadMultipleFileStreams(FileExt);
+        }
+    }
+
+    private async Task DownloadMultipleFileStreams(SupportedFileTypes FileExt) 
+    {
+        var streams = exporter.GetMultipleStreamsByFileExt(Solution, FileExt, Problem);
+
+        foreach (var stream in streams) {
+            using var streamref = new DotNetStreamReference(stream: stream);
+            await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + exporter.FileTypeToExtStr(FileExt).ToLower(), streamref);
+        }
+    }
 
     private async Task DownloadFileStream(SupportedFileTypes FileExt)
     {
         var stream = exporter.GetStreamByFileExt(Solution, FileExt, Problem);
         using var streamref = new DotNetStreamReference(stream: stream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + FileExt, streamref);
+        await JS.InvokeVoidAsync("downloadFileFromStream", FileName + "." + exporter.FileTypeToExtStr(FileExt).ToLower(), streamref);
     }
-
 }

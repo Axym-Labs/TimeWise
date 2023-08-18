@@ -6,6 +6,7 @@ public class RatingUser
 {
     public int Rating { get; set; }
     public string Role { get; set; } = string.Empty;
+    public string Feedback { get; set; } = string.Empty;
 }
 
 public class UserRatings

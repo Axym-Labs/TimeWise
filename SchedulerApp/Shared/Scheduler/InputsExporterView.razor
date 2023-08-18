@@ -14,14 +14,10 @@
     <p class="m-3">
         Download your inputs to regenerate the schedule later on (by importing it).
     </p>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.JSON)" StartIcon="@Icons.Material.Filled.Download">
+    <div class="m-3">
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes2.JSON)">
             Download JSON Inputs
         </MudButton>
-        @*<MudButton Variant="Variant.Filled" Color="Color.Secondary" Disabled="true" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.CSV)">CSV</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Disabled="true" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.XLSX)">XLSX</MudButton>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Disabled="true" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes.GSHEET)">GSHEET</MudButton>
-    *@
     </div>
 </div>
 
@@ -34,7 +30,7 @@
 
 
 
-    private async Task DownloadFileStream(SupportedFileTypes FileExt)
+    private async Task DownloadFileStream(SupportedFileTypes2 FileExt)
     {
         var stream = inputsExporter.GetStreamByFileExt(ProblemScope, FileExt);
         using var streamref = new DotNetStreamReference(stream: stream);
