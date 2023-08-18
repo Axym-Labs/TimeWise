@@ -72,7 +72,7 @@
             <div class="d-flex flex-row mb-8">
                     @if (showSolutionLoadingCircle)
                     {
-                        <MudProgressLinear Color="Color.Primary" Style="height: 100%;" Indeterminate="true" Class="ml-5"/>
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="ml-5"/>
                     } else
                     {
                         <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full rounded-lg" Variant="Variant.Filled" Disabled="!ValidInputs()">
@@ -81,7 +81,7 @@
                     }
             </div>
             <div>
-                <SolutionDisplay Solution="solution" Problem="ProblemScope.Problem"/>
+                <SolutionDisplay Solution="solution" AlternativeSolution="alternativeSolution" Problem="ProblemScope.Problem" />
             </div>
         </SchedulerSection>
 
@@ -103,7 +103,7 @@
     private ProblemScope ProblemScope = new ProblemScope();
 
     private Solution? solution = null;
-
+    private Solution? alternativeSolution = null;
     private bool showLoadingCircle = true;
     private bool showSolutionLoadingCircle = false;
     private bool DisplayConnectionError = false;
@@ -116,9 +116,11 @@
         Snackbar.Add("Generating Solution. This may take up to 20 seconds.", Severity.Success);
 
         showSolutionLoadingCircle = true;
-        solution = await sAPIs.GetSolution(ProblemScope.Problem);
+        var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
         showSolutionLoadingCircle = false;
+        alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
 
+        solution = await solutionTask;
         if (solution == null)
         {
             Snackbar.Add(@<div>Schedule could not be generated. Try completing and sanitizing your inputs. If the error persists, try again later or <a href="/contact">contact us</a>.</div>, Severity.Error);

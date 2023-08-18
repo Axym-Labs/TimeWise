@@ -11,6 +11,25 @@
         @if (Solution.Status)
         {
         <div class="min-h-20">
+            <div class="d-flex flex-column">
+                <div class ="d-flex flex-row">
+                    <MudText>Objective Personnel costs:</MudText>
+                    @if (Solution.ObjectiveCost < AlternativeSolution.ObjectiveCost)
+                    {
+                        <MudText Color="Color.Success">@(Solution.ObjectiveCost.ToString())</MudText>
+                        <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Large" Color="Color.Success"></MudIcon>
+                        <MudText Color="Color.Success">@()%</MudText>
+                    }
+                    else
+                    {
+                        
+                    }
+                </div>
+                <div class="d-flex flex-row">
+                    <MudText>Objective Personnel strain:</MudText>
+                </div>
+            </div>
+
             <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Search by Employee" SearchFunc="SearchEmployee" Class="px-3 mb-8" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
             <MudCheckBox T="bool" @bind-Checked="expandTree">Tree fully expanded</MudCheckBox>
 
@@ -89,6 +108,9 @@
 
     [Parameter]
     public Solution Solution { get; set; } = default!;
+
+    [Parameter]
+    public Solution AlternativeSolution { get; set; } = default!;
 
     private bool expandTree = false;
 
