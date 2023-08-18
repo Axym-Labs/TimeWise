@@ -81,7 +81,7 @@ public class ComparisonAlgorithm
         return solution;
     }
 
-    private static (double cost,double strain) CalculateObjectiveValues(Solution solution, Problem problem)
+    public static (double cost,double strain) CalculateObjectiveValues(Solution solution, Problem problem)
     {
         var workSchedule = solution.Result;
         var strainList = new List<double>();
