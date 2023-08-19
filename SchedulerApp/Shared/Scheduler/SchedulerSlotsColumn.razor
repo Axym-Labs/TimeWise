@@ -5,9 +5,13 @@
 @using System.Collections.Generic
 @using SchedulerApp.Data.Scheduler
 
-<div style="width: fit-content;" aria-orientation="horizontal">
-    <div style="height: 10rem; overflow-x:auto;" class="d-flex flex-column">
-        <MudButton Class="bg-btnPrimary rounded-lg px-5 w-full" Variant="Variant.Filled" Color="Color.Primary" OnClick="RemoveSelected">Remove a @tableName</MudButton>
+<div class="" aria-orientation="horizontal">
+    <div style="min-height: 10rem; overflow-x:auto;" class="flex flex-column">
+        <MudButton Class="bg-btnPrimary rounded-lg w-full text-sm md:text-base" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected" StartIcon="@Icons.Material.Filled.Remove">
+            Selected @tableName
+        </MudButton>
+
+
         <MudList>
             @if (collection != null && collection.Count > 0){
                 @for(int i = 1; i < collection.Count + 1; i++) {
@@ -16,19 +20,13 @@
             }
         </MudList>
 
-        <MudButton Class="bg-btnPrimary rounded-lg px-5 w-full" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNew">
-            Add a @tableName
+        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddNew" StartIcon="@Icons.Material.Filled.Add">
+            @tableName
         </MudButton>
     </div>
-
-    @if(tableName == "Week" || tableName == "Day")
-    {
-        <MudSwitch Label="Duplicate 1st entry?" Color="Color.Info" @bind-Checked="UseFirstForNew"/>
-    }
 </div>
 
 @code {
-
     [Parameter]
     public string tableName {get; set;} = default!;
 
@@ -52,7 +50,8 @@
         await IndexChanged.InvokeAsync((SelectedIndex,tableName));
     }
 
-    private bool UseFirstForNew { get; set; } = false;
+    [Parameter]
+    public bool UseFirstForNew { get; set; } = false;
 
     private async Task AddNew(EventArgs args){
         if(collection is not null){
@@ -83,9 +82,11 @@
         }
     }
 
+
     private async Task InstanceUpdate(dynamic instance, int index)
     {
         collection[index - 2] = instance;
         await CollectionChanged.InvokeAsync((collection, tableName));
     }
+
 }

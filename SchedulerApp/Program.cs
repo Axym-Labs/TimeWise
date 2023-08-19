@@ -14,8 +14,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<Constants>();
 builder.Services.AddSingleton<ContentStorage>();
-builder.Services.AddSingleton<Exporter>();
-builder.Services.AddSingleton<Importer>();
+builder.Services.AddSingleton<InputsExporter>();
+builder.Services.AddSingleton<ScheduleExporter>();
+builder.Services.AddSingleton<InputsImporter>();
 builder.Services.AddSingleton<SchedulingAPIService>();
 builder.Services.AddMudServices();
 
@@ -45,6 +46,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseStaticFiles(
+    new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "static")),
+        RequestPath = "/static"
+    });
+
 app.UseRouting();
 
 app.MapBlazorHub();

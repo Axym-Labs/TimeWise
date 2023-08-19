@@ -1,4 +1,11 @@
+using System.Collections.Generic;
+
 namespace SchedulerApp.Data.Scheduler;
 
-public record Solution(bool Status,
-                       List<List<List<List<List<string>>>>> Result);
+public class Solution
+{
+    public bool Status { get; set; } = false;
+    public List<List<List<List<List<string>>>>> Result { get; set; } = new List<List<List<List<List<string>>>>>();
+    public double ObjectiveCost { get; set; }
+    public double ObjectiveStrain { get; set; }
+}

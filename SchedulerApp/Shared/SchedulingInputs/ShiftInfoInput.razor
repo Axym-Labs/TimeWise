@@ -1,4 +1,4 @@
-@namespace SchedulerApp.Shared.SchedulingInputs
+﻿@namespace SchedulerApp.Shared.SchedulingInputs
 @using SchedulerApp.Data.Scheduler
 @using SchedulerApp.Shared
 @using SchedulerApp.Modules.Helpers
@@ -12,23 +12,25 @@
         <MudTextField @bind-Value="ShiftData.Name" Label="Name" Variant="Variant.Filled" />
     </div>
     <div>
-        <MudTextField T="double" @bind-Value="ShiftData.Length" Label="Length" Variant="Variant.Filled" />
+        <MudNumericField T="double" @bind-Value="ShiftData.Length" Label="Length (h)" Variant="Variant.Filled" Min="0" Max="24"/>
     </div>
     <div>
-        <MudTextField T="double" @bind-Value="ShiftData.Strain" Label="Strain" Variant="Variant.Filled" />
+        <MudNumericField T="double" @bind-Value="ShiftData.Strain" Label="Strain (Number)" Variant="Variant.Filled" Min="0" Step="1"/>
     </div>
     <div>
-        <label>Required Personnel:</label>
+        <p class="m-3 text-b600">Required Personnel:</p>
         @foreach(var personnel in ShiftData.RequiredPersonnel)
         {
             <div class="d-flex flex-row" style="height:auto">
-                <MudTextField Class="" T="int" @bind-Value:get="personnel.Count" @bind-Value:set="value => personnel.Count = value" Label="Count" Variant="Variant.Filled" Margin="Margin.Dense"/>
-                <MudTextField Class="" T="string" Label="Roles" Variant="Variant.Filled" Margin="Margin.Dense" type="text" @bind-Value:get="StringHelper.JoinList(personnel.RequiredQualifications)" @bind-Value:set="value => personnel.RequiredQualifications = StringHelper.FormatSplitString(value)" />
-                <button @onclick="_ => RemovePersonnelRole(personnel)">Remove</button>
+                <MudNumericField Class="" T="int" @bind-Value:get="personnel.Count" @bind-Value:set="value => personnel.Count = value" Label="Count" Variant="Variant.Filled" Margin="Margin.Dense"/>
+                <MudTextField Class="" T="string" Label="Occupation" Variant="Variant.Filled" Margin="Margin.Dense" type="text" @bind-Value:get="StringHelper.JoinList(personnel.RequiredQualifications)" @bind-Value:set="value => personnel.RequiredQualifications = StringHelper.FormatSplitString(value)" />
+                <div class="flex flex-col justify-center bg-red-600 rounded-lg m-2">
+                    <MudButton Class="" OnClick="_ => RemovePersonnelRole(personnel)">✖</MudButton>
+                </div>
             </div>
         }
 
-        <button @onclick="AddPersonnelRole">Add Role</button>
+        <MudButton @onclick="AddPersonnelRole" Class="w-full mt-4" Variant="Variant.Outlined">Add occupation</MudButton>
     </div>
 }
 

@@ -7,24 +7,26 @@ using System.Text;
 using System.IO;
 
 
-public enum SupportedFileTypes
+public enum SupportedFileTypes2
 {
-    JSON, CSV, XLSX, GSHEET
+    JSON
 }
 
-public class Exporter
+public class InputsExporter
 {
-    public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, SupportedFileTypes FileExt)
+    public const string FileName = "ScheduleInputs";
+    public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, SupportedFileTypes2 FileExt)
     {
         switch (FileExt)
         {
             default: throw new NotImplementedException("No implemented collection handler");
-            case SupportedFileTypes.JSON: return GetJSONStream(ProblemScope);
-            case SupportedFileTypes.CSV: return GetCSVStream(ProblemScope);
-            case SupportedFileTypes.XLSX: return GetXLSXStream(ProblemScope);
-            case SupportedFileTypes.GSHEET: return GetGSHEETStream(ProblemScope);
+            case SupportedFileTypes2.JSON: return GetJSONStream(ProblemScope);
+            //case SupportedFileTypes2.CSV: return GetCSVStream(ProblemScope);
+            //case SupportedFileTypes2.XLSX: return GetXLSXStream(ProblemScope);
+            //case SupportedFileTypes2.GSHEET: return GetGSHEETStream(ProblemScope);
         }
     }
+
     public MemoryStream GetJSONStream(ProblemScope ProblemScope)
     {
         return new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ProblemScope)));

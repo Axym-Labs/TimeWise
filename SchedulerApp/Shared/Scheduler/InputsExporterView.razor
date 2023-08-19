@@ -1,0 +1,40 @@
+﻿@namespace SchedulerApp.Shared.Scheduler
+@using SchedulerApp.Modules
+@using Data.Scheduler
+@using System.Text;
+@using System.Text.Json;
+
+@using MudBlazor
+@using Newtonsoft.Json
+
+@inject IJSRuntime JS
+@inject InputsExporter inputsExporter
+
+<div>
+    <p class="m-3">
+        Download your inputs to regenerate the schedule later on (by importing it).
+    </p>
+    <div class="m-3">
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="rounded-lg" OnClick="_ => DownloadFileStream(SupportedFileTypes2.JSON)">
+            Download JSON Inputs
+        </MudButton>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ProblemScope ProblemScope { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<ProblemScope> OnProblemScopeChanged { get; set; }
+
+
+
+    private async Task DownloadFileStream(SupportedFileTypes2 FileExt)
+    {
+        var stream = inputsExporter.GetStreamByFileExt(ProblemScope, FileExt);
+        using var streamref = new DotNetStreamReference(stream: stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", InputsExporter.FileName + "." + FileExt.ToString().ToLower(), streamref);
+    }
+
+}

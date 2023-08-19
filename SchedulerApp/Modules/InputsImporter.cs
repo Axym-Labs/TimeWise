@@ -3,7 +3,7 @@ using SchedulerApp.Data.Scheduler;
 
 namespace SchedulerApp.Modules;
 
-public class Importer
+public class InputsImporter
 {
 
     public Problem? JsonToProblem(string input)
@@ -11,5 +11,4 @@ public class Importer
         try { return JsonConvert.DeserializeObject<Problem>(input); }
         catch { return null; }
     }
-
 }
