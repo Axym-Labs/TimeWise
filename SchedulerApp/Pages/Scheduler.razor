@@ -119,10 +119,7 @@
         var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
         showSolutionLoadingCircle = false;
         alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
-
         solution = await solutionTask;
-
-        var solEval = ComparisonAlgorithm.CalculateObjectiveValues(solution!, ProblemScope.Problem);
 
         if (solution == null || !solution.Status)
         {

@@ -20,13 +20,13 @@
                         {
                             <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveCost.ToString("0.0"))</MudText>
                             <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Success"></MudIcon>
-                            <MudText Color="Color.Success">@(((1 - Solution.ObjectiveCost / AlternativeSolution.ObjectiveCost) * 100).ToString("0.00"))%</MudText>
+                            <MudText Color="Color.Success">@(CalcPercentage(AlternativeSolution.ObjectiveCost, Solution.ObjectiveCost).ToString("0.00"))%</MudText>
                         }
                         else
                         {
                             <MudText Class="ml-2" Color="Color.Error">@(Solution.ObjectiveCost.ToString("0.0"))</MudText>
                             <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Error"></MudIcon>
-                            <MudText Color="Color.Error">@(((1 - Solution.ObjectiveCost / AlternativeSolution.ObjectiveCost) * 100).ToString("0.00"))%</MudText>
+                            <MudText Color="Color.Error">@(CalcPercentage(AlternativeSolution.ObjectiveCost, Solution.ObjectiveCost).ToString("0.00"))%</MudText>
                         }
                     </div>
                     <div class="d-flex flex-row">
@@ -35,13 +35,13 @@
                         {
                             <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
                             <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Success"></MudIcon>
-                            <MudText Color="Color.Success">@(((1 - Solution.ObjectiveStrain / AlternativeSolution.ObjectiveStrain) * 100).ToString("0.00"))%</MudText>
+                            <MudText Color="Color.Success">@(CalcPercentage(AlternativeSolution.ObjectiveStrain, Solution.ObjectiveStrain).ToString("0.00"))%</MudText>
                         }
                         else
                         {
                             <MudText Class="ml-2" Color="Color.Error"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
                             <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Error"></MudIcon>
-                            <MudText Color="Color.Error">@(((1 - Solution.ObjectiveStrain / AlternativeSolution.ObjectiveStrain) * 100).ToString("0.00"))%</MudText>
+                            <MudText Color="Color.Error">@(CalcPercentage(AlternativeSolution.ObjectiveStrain, Solution.ObjectiveStrain).ToString("0.00"))%</MudText>
                         }
                     </div>
                 </div>
@@ -140,5 +140,10 @@
         if (string.IsNullOrEmpty(value))
             return workersName;
         return workersName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private double CalcPercentage(double oldValue, double newValue)
+    {
+        return (newValue - oldValue) / oldValue * 100;
     }
 }
