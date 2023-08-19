@@ -122,7 +122,7 @@
 
         solution = await solutionTask;
 
-        var solEval = ComparisonAlgorithm.CalculateObjectiveValues(solution, ProblemScope.Problem);
+        var solEval = ComparisonAlgorithm.CalculateObjectiveValues(solution!, ProblemScope.Problem);
 
         if (solution == null)
         {

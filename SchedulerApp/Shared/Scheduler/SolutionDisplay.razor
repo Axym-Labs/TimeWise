@@ -16,13 +16,13 @@
                     <MudText>Objective Personnel costs: </MudText>
                     @if (Solution.ObjectiveCost < AlternativeSolution.ObjectiveCost)
                     {
-                        <MudText Color="Color.Success"> @(Solution.ObjectiveCost.ToString("0.0"))</MudText>
+                        <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveCost.ToString("0.0"))</MudText>
                         <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Success"></MudIcon>
-                        <MudText Color="Color.Success">@(((1 - Solution.ObjectiveCost / AlternativeSolution.ObjectiveCost) * 100).ToString())%</MudText>
+                        <MudText Color="Color.Success">@(((1 - Solution.ObjectiveCost / AlternativeSolution.ObjectiveCost) * 100).ToString("0.00"))%</MudText>
                     }
                     else
                     {
-                        <MudText Color="Color.Error"> @(Solution.ObjectiveCost.ToString("0.0"))</MudText>
+                        <MudText Class="ml-2" Color="Color.Error">@(Solution.ObjectiveCost.ToString("0.0"))</MudText>
                         <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Error"></MudIcon>
                         <MudText Color="Color.Error">@(((1 - Solution.ObjectiveCost / AlternativeSolution.ObjectiveCost) * 100).ToString("0.00"))%</MudText>
                     }
@@ -31,13 +31,13 @@
                     <MudText>Objective Personnel strain: </MudText>
                     @if (Solution.ObjectiveStrain < AlternativeSolution.ObjectiveStrain)
                     {
-                        <MudText Color="Color.Success"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
+                        <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
                         <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Success"></MudIcon>
                         <MudText Color="Color.Success">@(((1 - Solution.ObjectiveStrain / AlternativeSolution.ObjectiveStrain) * 100).ToString("0.00"))%</MudText>
                     }
                     else
                     {
-                        <MudText Color="Color.Error"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
+                        <MudText Class="ml-2" Color="Color.Error"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
                         <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Error"></MudIcon>
                         <MudText Color="Color.Error">@(((1 - Solution.ObjectiveStrain / AlternativeSolution.ObjectiveStrain) * 100).ToString("0.00"))%</MudText>
                     }

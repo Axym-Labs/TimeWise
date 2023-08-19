@@ -19,7 +19,7 @@ public class ComparisonAlgorithm
     public static Solution ProcedualScheduling(Problem problem)
     {
         var schedule = problem.Schedule;
-        var workers = problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList();
+        var workers = Shuffle(problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList());
 
         var solution = new Solution();
 
@@ -47,13 +47,14 @@ public class ComparisonAlgorithm
                                 workers.OrderBy(emp => emp.SortingValue);
                                 foreach (var employee in workers)
                                 {
-                                    if (employee.HoursWorked <= problem.MaxHoursPerWeek)
+                                    var timeOfShift = problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
+                                    if (employee.HoursWorked + timeOfShift <= problem.MaxHoursPerWeek)
                                     {
                                         if (employee.Employee.Occupations.SequenceEqual(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].RequiredQualifications))
                                         {
                                             if (employee.IsAvailable)
                                             {
-                                                employee.HoursWorked += problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
+                                                employee.HoursWorked += timeOfShift;
                                                 employee.SortingValue += 1;
                                                 employee.IsAvailable = false;
                                                 shiftResult.Add(employee.Employee.Name);
@@ -116,4 +117,20 @@ public class ComparisonAlgorithm
 
         return (costList.Sum(), strainList.Sum());
     }
+
+    public static List<T> Shuffle<T>(List<T> list)
+    {
+        var random = new Random();
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+        return list;
+    }
 }
+
