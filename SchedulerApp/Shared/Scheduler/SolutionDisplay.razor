@@ -15,7 +15,7 @@
             {
                 <div class="d-flex flex-column">
                     <div class ="d-flex flex-row">
-                        <MudText>Objective Personnel costs: </MudText>
+                        <MudText>Objective personnel costs: </MudText>
                         @if (Solution.ObjectiveCost < AlternativeSolution.ObjectiveCost)
                         {
                             <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveCost.ToString("0.0"))</MudText>
@@ -30,7 +30,7 @@
                         }
                     </div>
                     <div class="d-flex flex-row">
-                        <MudText>Objective Personnel strain: </MudText>
+                        <MudText>Median objective personnel strain: </MudText>
                         @if (Solution.ObjectiveStrain < AlternativeSolution.ObjectiveStrain)
                         {
                             <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
