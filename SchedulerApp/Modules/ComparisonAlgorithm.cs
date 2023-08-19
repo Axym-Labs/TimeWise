@@ -1,7 +1,9 @@
 ﻿namespace SchedulerApp.Modules;
 
 using DocumentFormat.OpenXml.Spreadsheet;
+using Irony;
 using MathNet.Numerics.Statistics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchedulerApp.Data.Scheduler;
 public class ComparisonAlgorithm
 {
@@ -17,10 +19,46 @@ public class ComparisonAlgorithm
             Employee = employee;
         }
     }
+
+    public static bool IsScheduleComplete(Solution solution, Problem problem)
+    {
+        var workSchedule = solution.Result;
+        var schedule = problem.Schedule;
+        var workers = problem.Workers;
+
+        var isValid = new List<bool>();
+
+        foreach (var weekI in Enumerable.Range(0, schedule.Weeks.Count))
+        {
+            List<List<List<List<string>>>> weekResult = new List<List<List<List<string>>>>();
+
+            foreach (var dayI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days.Count))
+            {
+                List<List<List<string>>> dayResult = new List<List<List<string>>>();
+
+                foreach (var slotI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots.Count))
+                {
+                    List<List<string>> slotResult = new List<List<string>>();
+
+                    foreach (var shiftI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts.Count))
+                    {
+                        List<string> shiftResult = new List<string>();
+                        foreach (var requirementI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Count))
+                        {
+                            isValid.Add(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].Count == workSchedule[weekI][dayI][slotI][shiftI].Count);
+                        }
+                    }
+                }
+            }
+        }
+
+        return isValid.All(x => x == true);
+    }
+
     public static Solution ProcedualScheduling(Problem problem)
     {
         var schedule = problem.Schedule;
-        var workers = problem.Workers.Select(emp => new EmployeeWrapper(emp)).OrderBy(x => x.Employee.Wage).ToList();
+        var workers = Shuffle(problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList());
 
         var solution = new Solution();
 
@@ -49,8 +87,9 @@ public class ComparisonAlgorithm
                                 foreach (var employee in workers)
                                 {
                                     var timeOfShift = problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length;
+                                    /*
                                     if (employee.HoursWorked + timeOfShift <= problem.MaxHoursPerWeek)
-                                    {
+                                    { */
                                         if (employee.Employee.Occupations.SequenceEqual(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].RequiredQualifications))
                                         {
                                             if (employee.IsAvailable)
@@ -62,7 +101,7 @@ public class ComparisonAlgorithm
                                                 break;
                                             }
                                         }
-                                    }
+                                    //}
                                 }
                             }
                         }

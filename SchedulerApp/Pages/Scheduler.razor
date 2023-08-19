@@ -124,7 +124,7 @@
 
         var solEval = ComparisonAlgorithm.CalculateObjectiveValues(solution!, ProblemScope.Problem);
 
-        if (solution == null)
+        if (solution == null || !solution.Status)
         {
             Snackbar.Add(@<div>Schedule could not be generated. Try completing and sanitizing your inputs. If the error persists, try again later or <a href="/contact">contact us</a>.</div>, Severity.Error);
         } else
