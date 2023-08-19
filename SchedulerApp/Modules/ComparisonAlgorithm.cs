@@ -1,6 +1,7 @@
 ﻿namespace SchedulerApp.Modules;
 
 using DocumentFormat.OpenXml.Spreadsheet;
+using MathNet.Numerics.Statistics;
 using SchedulerApp.Data.Scheduler;
 public class ComparisonAlgorithm
 {
@@ -19,7 +20,7 @@ public class ComparisonAlgorithm
     public static Solution ProcedualScheduling(Problem problem)
     {
         var schedule = problem.Schedule;
-        var workers = Shuffle(problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList());
+        var workers = problem.Workers.Select(emp => new EmployeeWrapper(emp)).OrderBy(x => x.Employee.Wage).ToList();
 
         var solution = new Solution();
 
@@ -91,7 +92,9 @@ public class ComparisonAlgorithm
         var strainList = new List<double>();
         var costList = new List<double>();
 
-        foreach(var employee in problem.Workers)
+        var workers = problem.Workers.OrderBy(x => x.Wage).ToList();
+
+        foreach(var employee in workers)
         {
             foreach (var weekI in Enumerable.Range(0, workSchedule.Count))
             {
@@ -106,7 +109,8 @@ public class ComparisonAlgorithm
                                 if (workSchedule[weekI][dayI][slotI][shiftI][workerI] == employee.Name)
                                 {
                                     costList.Add(employee.Wage * problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length);
-                                    strainList.Add(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Strain);
+                                    if (employee == workers[workers.Count / 2 - 1])
+                                        strainList.Add(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Strain);
                                 }
                             }
                         }
