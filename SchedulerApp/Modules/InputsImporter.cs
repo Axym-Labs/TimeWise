@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SchedulerApp.Data.Scheduler;
+using TimeWise.Data.Scheduler;
 
-namespace SchedulerApp.Modules;
+namespace TimeWise.Modules;
 
 public class InputsImporter
 {

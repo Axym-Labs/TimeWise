@@ -1,10 +1,10 @@
-﻿namespace SchedulerApp.Modules;
+﻿namespace TimeWise.Modules;
 
 using DocumentFormat.OpenXml.Spreadsheet;
 using Irony;
 using MathNet.Numerics.Statistics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchedulerApp.Data.Scheduler;
+using TimeWise.Data.Scheduler;
 public class ComparisonAlgorithm
 {
     private class EmployeeWrapper

@@ -1,7 +1,7 @@
-namespace SchedulerApp.Modules;
-using SchedulerApp.Data.Scheduler;
+namespace TimeWise.Modules;
+using TimeWise.Data.Scheduler;
 using RestSharp;
-using SchedulerApp.Modules;
+using TimeWise.Modules;
 using System.Net.Http;
 using Newtonsoft.Json;
 

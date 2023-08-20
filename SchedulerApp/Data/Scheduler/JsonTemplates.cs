@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SchedulerApp.Data.Scheduler;
+namespace TimeWise.Data.Scheduler;
 
 public class RatingUser
 {

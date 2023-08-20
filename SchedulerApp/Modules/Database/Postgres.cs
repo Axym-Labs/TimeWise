@@ -1,8 +1,8 @@
-﻿namespace SchedulerApp.Modules.Database;
+﻿namespace TimeWise.Modules.Database;
 
 using Newtonsoft.Json;
 using Npgsql;
-using SchedulerApp.Data.Scheduler;
+using TimeWise.Data.Scheduler;
 
 public static class Postgres
 {

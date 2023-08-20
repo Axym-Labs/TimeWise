@@ -1,4 +1,4 @@
-namespace SchedulerApp.Modules;
+namespace TimeWise.Modules;
 using Newtonsoft.Json;
 
 public class ContentStorage

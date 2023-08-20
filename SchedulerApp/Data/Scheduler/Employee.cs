@@ -1,4 +1,4 @@
-namespace SchedulerApp.Data.Scheduler;
+namespace TimeWise.Data.Scheduler;
 
 public class Employee {
     public string Name { get; set; } = "";

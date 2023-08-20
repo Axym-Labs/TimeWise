@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SchedulerApp.Data.Scheduler;
+namespace TimeWise.Data.Scheduler;
 
 public class Solution
 {

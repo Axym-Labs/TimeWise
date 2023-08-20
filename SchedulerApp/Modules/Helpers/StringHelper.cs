@@ -1,4 +1,4 @@
-﻿namespace SchedulerApp.Modules.Helpers;
+﻿namespace TimeWise.Modules.Helpers;
 using Data.Scheduler;
 
 public static class StringHelper

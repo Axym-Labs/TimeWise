@@ -1,16 +1,16 @@
 ﻿@inherits LayoutComponentBase
-@using SchedulerApp.Shared.Layout
+@using TimeWise.Shared.Layout
 
 <MudThemeProvider IsDarkMode="@(true)" Theme="CustomDarkTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<PageTitle>SchedulerApp</PageTitle>
+<PageTitle>TimeWise</PageTitle>
 
 
 
 <MudLayout>
-    <SchedulerApp.Shared.Layout.Navbar />
+    <TimeWise.Shared.Layout.Navbar />
     <MudMainContent>
         @Body
     </MudMainContent>

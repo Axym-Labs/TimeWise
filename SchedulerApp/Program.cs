@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using SchedulerApp.Data;
+using TimeWise.Data;
 using MudBlazor;
 using MudBlazor.Services;
-using SchedulerApp.Modules;
+using TimeWise.Modules;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
-using SchedulerApp.Modules.Database;
+using TimeWise.Modules.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 

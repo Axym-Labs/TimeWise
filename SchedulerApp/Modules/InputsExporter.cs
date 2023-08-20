@@ -1,5 +1,5 @@
-namespace SchedulerApp.Modules;
-using SchedulerApp.Data.Scheduler;
+namespace TimeWise.Modules;
+using TimeWise.Data.Scheduler;
 using Newtonsoft.Json;
 using Csv;
 using System;

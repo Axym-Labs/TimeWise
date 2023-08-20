@@ -1,13 +1,13 @@
-﻿namespace SchedulerApp.Modules;
-using SchedulerApp.Data.Scheduler;
+﻿namespace TimeWise.Modules;
+using TimeWise.Data.Scheduler;
 using Newtonsoft.Json;
 using System;
 using System.Text;
 using System.IO;
 using ClosedXML.Excel;
-using SchedulerApp.Modules.Helpers;
+using TimeWise.Modules.Helpers;
 using DocumentFormat.OpenXml.Bibliography;
-using SchedulerApp.Shared.Sections;
+using TimeWise.Shared.Sections;
 using System.Linq;
 
 public enum SupportedFileTypes
@@ -217,7 +217,7 @@ public class ScheduleExporter
     {
         using (var notebook = new XLWorkbook())
         {
-            notebook.Author = "SchedulerApp";
+            notebook.Author = "TimeWise";
             var ws = notebook.Worksheets.Add("Schedule");
             
             foreach (int i1 in Enumerable.Range(0, list.Count))
@@ -345,7 +345,7 @@ public class ScheduleExporter
         var result = Solution.Result;
         using (var notebook = new XLWorkbook())
         {
-            notebook.Author = "SchedulerApp";
+            notebook.Author = "TimeWise";
             var ws = notebook.Worksheets.Add("Schedule");
             ws.Cell("A1").Value = "Schedule";
             ws.Cell("A2").Value = "Weeks";
@@ -402,7 +402,7 @@ public class ScheduleExporter
     {
         var result = solution.Result;
         using var nb = new XLWorkbook();
-        nb.Author = "SchedulerApp";
+        nb.Author = "TimeWise";
         var ws = nb.Worksheets.Add("Schedule by Employee");
         ws.FirstCell().SetValue("Employees")
             .CellRight().SetValue("Weeks")

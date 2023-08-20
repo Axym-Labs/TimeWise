@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace SchedulerApp.Data.Migrations
+namespace TimeWise.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

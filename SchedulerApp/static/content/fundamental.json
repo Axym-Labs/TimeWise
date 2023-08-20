@@ -1,12 +1,12 @@
 {
   "siteBase": {
-    "projectName": "SchedulerApp"
+    "projectName": "TimeWise"
   },
   "navbar": {
     "links": [
       [ "Scheduler", "/scheduler" ],
       [ "How it works", "/#howitworks" ],
-      [ "Github Repo", "https://github.com/Jonathan-Schaefer-git/SchedulerApp" ],
+      [ "Github Repo", "https://github.com/Jonathan-Schaefer-git/TimeWise" ],
       [ "Contact", "mailto:jonathan.schaefer_@outlook.de" ]
     ],
     "specialAnnouncement": "We launched: Try our scheduler for free!",
@@ -16,8 +16,8 @@
     "links": [
       [ "Scheduler", "/scheduler" ],
       [ "How it works", "/#howitworks" ],
-      [ "Github Repo", "https://github.com/Jonathan-Schaefer-git/SchedulerApp" ],
-      [ "Wiki", "https://github.com/Jonathan-Schaefer-git/SchedulerApp" ],
+      [ "Github Repo", "https://github.com/Jonathan-Schaefer-git/TimeWise" ],
+      [ "Wiki", "https://github.com/Jonathan-Schaefer-git/TimeWise" ],
       [ "Contact", "mailto:jonathan.schaefer_@outlook.de" ]
     ]
   },

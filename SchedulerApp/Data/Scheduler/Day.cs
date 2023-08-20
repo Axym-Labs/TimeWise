@@ -1,4 +1,4 @@
-namespace SchedulerApp.Data.Scheduler;
+namespace TimeWise.Data.Scheduler;
 public class Day
 {
     public List<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();

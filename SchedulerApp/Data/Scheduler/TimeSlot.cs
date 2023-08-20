@@ -1,4 +1,4 @@
-namespace SchedulerApp.Data.Scheduler;
+namespace TimeWise.Data.Scheduler;
 public class TimeSlot
 {
     public List<ShiftInfo> Shifts{ get; set; } = new List<ShiftInfo>(); 
