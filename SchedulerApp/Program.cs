@@ -4,8 +4,9 @@ using SchedulerApp.Data;
 using MudBlazor;
 using MudBlazor.Services;
 using SchedulerApp.Modules;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
-
+using SchedulerApp.Modules.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,11 @@ builder.Services.AddMudServices(config =>
 });
 
 var app = builder.Build();
+#if DEBUG
+Postgres.ConnectionString = builder.Configuration["Database:ConnectionStringTesting"]!;
+#else
+Postgres.ConnectionString = builder.Configuration["Database:ConnectionStringProduction"]!;
+#endif
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
