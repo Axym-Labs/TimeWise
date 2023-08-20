@@ -63,6 +63,12 @@
             <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
                 Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
             </MudSlider>
+            @if (ProblemScope.Problem.Options.MinimumWorkingHoursConstraint)
+            {
+                <MudSlider @bind-Value="ProblemScope.Problem.MinHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
+                    Minimum weekly working hours: @ProblemScope.Problem.MinHoursPerWeek
+                </MudSlider>
+            }
         </SchedulerSection>
 
         <SchedulerSection title="Add Slots">
