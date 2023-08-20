@@ -1,6 +1,7 @@
 @namespace SchedulerApp.Pages
 @page "/scheduler"
 
+@using SchedulerApp.Modules.Database;
 @using SchedulerApp.Shared.Scheduler
 @using SchedulerApp.Shared.BaseUI.btn
 @using SchedulerApp.Data.Scheduler
@@ -114,12 +115,18 @@
     private async Task FetchSolution()
     {
         Snackbar.Add("Generating Solution. This may take up to 20 seconds.", Severity.Success);
-
         showSolutionLoadingCircle = true;
+        var problemLoggingTask = Task.Run(() => Postgres.LogProblem(ProblemScope.Problem));
+
         var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
-        showSolutionLoadingCircle = false;
         alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
+        var result = await problemLoggingTask;
+
+        if (!result)
+            Snackbar.Add("No connection to the DB could be established", Severity.Error);
+
         solution = await solutionTask;
+        showSolutionLoadingCircle = false;
 
         if (solution == null || !solution.Status)
         {

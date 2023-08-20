@@ -4,10 +4,10 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>6504fab1-c8d0-4e17-b415-228a6eda33d2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CassandraCSharpDriver" Version="3.19.2" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="ClosedXML.Extensions.AspNet" Version="0.3.0" />
     <PackageReference Include="Csv" Version="2.0.93" />
@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
     <PackageReference Include="MudBlazor" Version="6.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Npgsql" Version="7.0.4" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
 
