@@ -1,0 +1,55 @@
+﻿@namespace TimeWise.Shared.SchedulingInputs
+@using TimeWise.Data.Scheduler
+@using TimeWise.Shared
+@using TimeWise.Modules.Helpers
+
+@using MudBlazor
+
+
+@if (ShiftData != null)
+{
+    <div>
+        <MudTextField @bind-Value="ShiftData.Name" Label="Name" Variant="Variant.Filled" />
+    </div>
+    <div>
+        <MudNumericField T="double" @bind-Value="ShiftData.Length" Label="Length (h)" Variant="Variant.Filled" Min="0" Max="24"/>
+    </div>
+    <div>
+        <MudNumericField T="double" @bind-Value="ShiftData.Strain" Label="Strain (Number)" Variant="Variant.Filled" Min="0" Step="1"/>
+    </div>
+    <div>
+        <p class="m-3 text-b600">Required Personnel:</p>
+        @foreach(var personnel in ShiftData.RequiredPersonnel)
+        {
+            <div class="d-flex flex-row" style="height:auto">
+                <MudNumericField Class="" T="int" @bind-Value:get="personnel.Count" @bind-Value:set="value => personnel.Count = value" Label="Count" Variant="Variant.Filled" Margin="Margin.Dense"/>
+                <MudTextField Class="" T="string" Label="Occupation" Variant="Variant.Filled" Margin="Margin.Dense" type="text" @bind-Value:get="StringHelper.JoinList(personnel.RequiredQualifications)" @bind-Value:set="value => personnel.RequiredQualifications = StringHelper.FormatSplitString(value)" />
+                <div class="flex flex-col justify-center bg-red-600 rounded-lg m-2">
+                    <MudButton Class="" OnClick="_ => RemovePersonnelRole(personnel)">✖</MudButton>
+                </div>
+            </div>
+        }
+
+        <MudButton @onclick="AddPersonnelRole" Class="w-full mt-4" Variant="Variant.Outlined">Add occupation</MudButton>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public ShiftInfo ShiftData {get;set;} = default!;
+    [Parameter]
+    public EventCallback<ShiftInfo> OnShiftInfoChanged { get; set; }
+
+
+    private async Task AddPersonnelRole()
+    {
+        ShiftData.RequiredPersonnel.Add(new RequiredPersonnel(1, new List<string>() {string.Empty}));
+        await OnShiftInfoChanged.InvokeAsync(ShiftData);
+    }
+
+    private async Task RemovePersonnelRole(RequiredPersonnel personnel)
+    {
+        ShiftData.RequiredPersonnel.Remove(personnel);
+        await OnShiftInfoChanged.InvokeAsync(ShiftData);
+    }
+}

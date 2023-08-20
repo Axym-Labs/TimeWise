@@ -1,0 +1,29 @@
+@namespace TimeWise.Shared.Layout
+@using TimeWise.Modules
+@using MudBlazor
+
+@inject ContentStorage content
+
+
+<div class="flex justify-center">
+    <div class="pt-20 w-full max-w-6xl mx-10 md:mx-36">
+        <div class="grid justify-items-center" style="grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));">     
+        @foreach (var linkPair in c.footer.links) {
+            <div class="m-2 text-center">
+                    <MudElement HtmlTag="a" href="@linkPair[1].ToString()" Class="hover:underline text-gray-300 hover:text-focusColor">@linkPair[0]</MudElement>
+            </div>
+        }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private dynamic c = default!;
+
+    protected override void OnInitialized()
+    {
+        c = content.files["fundamental"];
+    }
+}
+

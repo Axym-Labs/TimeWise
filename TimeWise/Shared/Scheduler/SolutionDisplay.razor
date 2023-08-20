@@ -1,0 +1,149 @@
+﻿@namespace TimeWise.Shared.Scheduler
+
+@using Data.Scheduler
+@using TimeWise.Modules.Helpers
+@using MudBlazor
+
+@inject ISnackbar Snackbar
+
+    @if(Solution is not null)
+    {
+        @if (Solution.Status)
+        {
+        <div class="min-h-20">
+            @if (ComparisonAlgorithm.IsScheduleComplete(AlternativeSolution,Problem))
+            {
+                <div class="d-flex flex-column">
+                    <div class ="d-flex flex-row">
+                        <MudText>Objective personnel costs: </MudText>
+                        @if (Solution.ObjectiveCost < AlternativeSolution.ObjectiveCost)
+                        {
+                            <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveCost.ToString("0.0"))</MudText>
+                            <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Success"></MudIcon>
+                            <MudText Color="Color.Success">@(CalcPercentage(AlternativeSolution.ObjectiveCost, Solution.ObjectiveCost).ToString("0.00"))%</MudText>
+                        }
+                        else
+                        {
+                            <MudText Class="ml-2" Color="Color.Error">@(Solution.ObjectiveCost.ToString("0.0"))</MudText>
+                            <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Error"></MudIcon>
+                            <MudText Color="Color.Error">@(CalcPercentage(AlternativeSolution.ObjectiveCost, Solution.ObjectiveCost).ToString("0.00"))%</MudText>
+                        }
+                    </div>
+                    <div class="d-flex flex-row">
+                        <MudText>Median objective personnel strain: </MudText>
+                        @if (Solution.ObjectiveStrain < AlternativeSolution.ObjectiveStrain)
+                        {
+                            <MudText Class="ml-2" Color="Color.Success"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
+                            <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Success"></MudIcon>
+                            <MudText Color="Color.Success">@(CalcPercentage(AlternativeSolution.ObjectiveStrain, Solution.ObjectiveStrain).ToString("0.00"))%</MudText>
+                        }
+                        else
+                        {
+                            <MudText Class="ml-2" Color="Color.Error"> @(Solution.ObjectiveStrain.ToString("0.0"))</MudText>
+                            <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Error"></MudIcon>
+                            <MudText Color="Color.Error">@(CalcPercentage(AlternativeSolution.ObjectiveStrain, Solution.ObjectiveStrain).ToString("0.00"))%</MudText>
+                        }
+                    </div>
+                </div>
+            }
+
+            <MudAutocomplete Style="color: white" Clearable="true" OnClearButtonClick="_ => inputName = string.Empty" T="string" Label="Search by Employee" SearchFunc="SearchEmployee" Class="px-3 mb-8" @bind-Value="inputName" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+            <MudCheckBox T="bool" @bind-Checked="expandTree">Tree fully expanded</MudCheckBox>
+
+            @if (inputName == string.Empty)
+            {
+                <MudTreeView T="string" ExpandOnClick="true">
+                    @foreach (var weekI in Enumerable.Range(0, Solution.Result.Count))
+                    {
+                        <MudTreeViewItem Value="@("Week " + (weekI + 1).ToString())" Expanded="@expandTree">
+                            @foreach (var dayI in Enumerable.Range(0, Solution.Result[weekI].Count))
+                            {
+                                <MudTreeViewItem Value="@("Day " + (dayI + 1).ToString())" Expanded="@expandTree">
+                                    @foreach (var timeSlotI in Enumerable.Range(0, Solution.Result[weekI][dayI].Count))
+                                {
+                                    <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())" Expanded="@expandTree">
+                                        @foreach (var shiftI in Enumerable.Range(0, Solution.Result[weekI][dayI][timeSlotI].Count))
+                                    {
+                                        <MudTreeViewItem Value="@Problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name" Expanded="@expandTree">
+                                            @foreach (var employeeName in Solution.Result[weekI][dayI][timeSlotI][shiftI])
+                                        {
+                                            <MudTreeViewItem Value="@employeeName" />
+                                        }
+                                    </MudTreeViewItem>
+                                    }
+                                </MudTreeViewItem>
+                                }
+                            </MudTreeViewItem>
+                            }
+                        </MudTreeViewItem>
+                    }
+                </MudTreeView>
+            }
+            else
+            {
+                // Filter logic
+                var indicesCollection = StringHelper.FindStringIndices(Solution, inputName);
+                <MudTreeView T="string" ExpandOnClick="true">
+                    @foreach (var weekI in indicesCollection.Select(x => x.Item1).Distinct())
+                    {
+                        <MudTreeViewItem Value="@("Week " + (weekI + 1).ToString())" Expanded="@expandTree">
+                            @foreach (var dayI in indicesCollection.Where(x => x.Item1 == weekI).Select(x => x.Item2).Distinct())
+                            {
+                                <MudTreeViewItem Value="@("Day " + (dayI + 1).ToString())" Expanded="@expandTree">
+                                    @foreach (var timeSlotI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI).Select(x => x.Item3).Distinct())
+                                {
+                                    <MudTreeViewItem Value="@("Time Slot " + (timeSlotI + 1).ToString())" Expanded="@expandTree">
+                                        @foreach (var shiftI in indicesCollection.Where(x => x.Item1 == weekI && x.Item2 == dayI && x.Item3 == timeSlotI).Select(x => x.Item4).Distinct())
+                                    {
+                                        <MudTreeViewItem Value="@Problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[timeSlotI].Shifts[shiftI].Name" Expanded="@expandTree" />
+                                    }
+                                </MudTreeViewItem>
+                                }
+                            </MudTreeViewItem>
+                            }
+                        </MudTreeViewItem>
+                    }
+                </MudTreeView>
+            }
+            
+        </div>
+        }
+        else{
+            Snackbar.Add("The model couldn't be solved. Please change your options and click 'generate solution' again.");
+        }
+    }
+    else
+    {
+        <div class="h-20 flex justify-center items-center text-lg">
+            Nothing here yet.
+        </div>
+    }
+
+@code {
+    [Parameter]
+    public Problem Problem { get; set; } = default!;
+
+    [Parameter]
+    public Solution Solution { get; set; } = default!;
+
+    [Parameter]
+    public Solution AlternativeSolution { get; set; } = default!;
+
+    private bool expandTree = false;
+
+    private string inputName = string.Empty;
+
+    private async Task<IEnumerable<string>> SearchEmployee(string value)
+    {
+        await Task.Delay(1);
+        var workersName = Problem.Workers.Select(emp => emp.Name);
+        if (string.IsNullOrEmpty(value))
+            return workersName;
+        return workersName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private double CalcPercentage(double oldValue, double newValue)
+    {
+        return (newValue - oldValue) / oldValue * 100;
+    }
+}

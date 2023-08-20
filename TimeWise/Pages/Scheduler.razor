@@ -1,0 +1,163 @@
+@namespace TimeWise.Pages
+@page "/scheduler"
+
+@using TimeWise.Modules.Database;
+@using TimeWise.Shared.Scheduler
+@using TimeWise.Shared.BaseUI.btn
+@using TimeWise.Data.Scheduler
+@using TimeWise.Modules
+@using TimeWise.Shared
+@using TimeWise.Shared.Sections
+
+@using MudBlazor
+@using Newtonsoft.Json
+
+@inject ISnackbar Snackbar
+@inject SchedulingAPIService sAPIs
+@inject Constants constants
+@inject ContentStorage content
+@inject InputsExporter inputsExporter
+
+
+@if (showLoadingCircle)
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center;align-items: center; z-index: 9999;">
+        <div class="d-flex flex-column" style="align-items:center;">
+            <MudText Typo="Typo.h2">Connecting to the Scheduling API</MudText>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        </div>
+    </div>
+}
+
+<div class="w-screen flex justify-center px-2 md:px-4">
+    <div class="max-w-7xl">
+        @if(DisplayConnectionError)
+        {
+            <div class="flex justify-center">
+                <MudAlert Severity="Severity.Error" Class="max-w-2xl text-lg">The connection to the API could not be established. You can only import and view your inputs. If you want to generate a new schedule, try again later. If this error persists, <a href="/contact" class="underline">contact us</a>.</MudAlert>
+            </div>
+        }
+
+
+
+        <SchedulerSection title="Start">
+            <div class="mb-8">
+                <MudTextField @bind-Value="scheduleName" Variant="Variant.Outlined" Label="Schedule name" Margin="Margin.Dense" />
+            </div>
+    
+            <InputsImporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value" />
+        </SchedulerSection>
+
+        <SchedulerSection title="Add employees">
+            <EmployeePlanner Employees="ProblemScope.Problem.Workers" OnEmployeesChanged="employees => ProblemScope.Problem.Workers = employees" />
+        </SchedulerSection>
+
+        <SchedulerSection title="Customize scheduling options">
+            <div class="mb-4">
+                <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
+            </div>
+
+        @*    <MudNumericField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
+        *@    
+
+            <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
+                Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
+            </MudSlider>
+        </SchedulerSection>
+
+        <SchedulerSection title="Add Slots">
+            <SchedulerSlots ProblemScope="ProblemScope" ProblemScopeChanged="value => ProblemScope = value"/>
+        </SchedulerSection>
+    
+        <SchedulerSection title="Schedule View">
+            <div class="d-flex flex-row mb-8">
+                    @if (showSolutionLoadingCircle)
+                    {
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="ml-5"/>
+                    } else
+                    {
+                        <MudButton Color="Color.Primary" OnClick="_ => FetchSolution()" Class="w-full rounded-lg" Variant="Variant.Filled" Disabled="!ValidInputs()">
+                            <p>Generate Solution</p>
+                        </MudButton>
+                    }
+            </div>
+            <div>
+                <SolutionDisplay Solution="solution" AlternativeSolution="alternativeSolution" Problem="ProblemScope.Problem" />
+            </div>
+        </SchedulerSection>
+
+        <SchedulerSection title="Rate your experience until now">
+            <FeedbackSection />
+        </SchedulerSection>
+
+        <SchedulerSection title="Export Options">
+            <div class="mb-8">
+                <InputsExporterView ProblemScope="ProblemScope" OnProblemScopeChanged="value => ProblemScope = value"/>
+            </div>
+            <ExporterView Problem="ProblemScope.Problem" Solution="solution" OnSolutionChanged="value => solution = value" FileName="@scheduleName" />
+        </SchedulerSection>
+
+    </div>
+</div>
+
+@code {
+    private ProblemScope ProblemScope = new ProblemScope();
+
+    private Solution? solution = null;
+    private Solution? alternativeSolution = null;
+    private bool showLoadingCircle = true;
+    private bool showSolutionLoadingCircle = false;
+    private bool DisplayConnectionError = false;
+    private string Version = string.Empty;
+
+    private string scheduleName = "Schedule";
+
+    private async Task FetchSolution()
+    {
+        Snackbar.Add("Generating Solution. This may take up to 20 seconds.", Severity.Success);
+        showSolutionLoadingCircle = true;
+        var problemLoggingTask = Task.Run(() => Postgres.LogProblem(ProblemScope.Problem));
+
+        var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
+        alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
+        var result = await problemLoggingTask;
+
+        if (!result)
+            Snackbar.Add("No connection to the DB could be established", Severity.Error);
+
+        solution = await solutionTask;
+        showSolutionLoadingCircle = false;
+
+        if (solution == null || !solution.Status)
+        {
+            Snackbar.Add(@<div>Schedule could not be generated. Try completing and sanitizing your inputs. If the error persists, try again later or <a href="/contact">contact us</a>.</div>, Severity.Error);
+        } else
+        {
+            Snackbar.Add("Your schedule was generated.", Severity.Success);
+            // update solution
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var version = await sAPIs.GetAPIVersion();
+        if(version is null)
+        {
+            showLoadingCircle = false;
+            DisplayConnectionError = true;
+        }
+        else
+        {
+            showLoadingCircle = false;
+            Version = version;
+        }
+        
+        dynamic schedulingPage = content.files["schedulingPage"];
+    }
+
+    private bool ValidInputs()
+    {
+        return ProblemScope.Problem.Workers.Count > 0;
+    }
+
+}

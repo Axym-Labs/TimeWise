@@ -1,0 +1,45 @@
+@namespace TimeWise.Pages
+@page "/"
+@using TimeWise.Modules
+@inject ContentStorage content
+@using MudBlazor
+@using TimeWise.Shared.Sections
+@using TimeWise.Shared
+@using TimeWise.Pages
+@using TimeWise.Shared.BaseUI
+@using TimeWise.Shared.BaseUI.btn
+
+@inject Constants constants
+
+<PageTitle>TimeWise</PageTitle>
+
+
+<HeroSection title="TimeWise" description="Your open-source choice for generating optimal schedules. In less than 5 minutes."
+    imageLoc="/static/img/sample.png">
+    <PrimaryLinkBtn link="/scheduler" t="Try now" />
+</HeroSection>
+
+<div class="p-10">
+</div>
+
+<WikiFront/>
+
+<UserViewSection />
+
+
+<Wiki />
+
+<MudScrollToTop>
+    <MudFab Style="background: #1976d2;" Color="Color.Primary" Class="mr-5 mb-2" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
+</MudScrollToTop>
+
+<AnchorScoller />
+
+@code {
+    protected override void OnInitialized()
+    {
+        dynamic landingPage = content.files["main"];
+
+    }
+}
+

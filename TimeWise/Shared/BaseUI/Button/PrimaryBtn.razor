@@ -1,0 +1,12 @@
+@namespace TimeWise.Shared.BaseUI.btn
+@using MudBlazor
+
+
+<MudButton Class="m-5 rounded-xl px-6" Variant="Variant.Filled" Color="Color.Primary" Disabled=@disabled >@t</MudButton>
+
+@code {
+    [Parameter]
+    public string t { get; set; } = "Continue";
+    [Parameter]
+    public bool disabled { get; set; } = false;
+}

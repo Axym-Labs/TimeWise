@@ -1,0 +1,70 @@
+﻿@namespace TimeWise.Shared.Scheduler
+@using TimeWise.Modules
+@using Data.Scheduler
+@using System.Text;
+@using System.Text.Json;
+
+@using MudBlazor
+@using Newtonsoft.Json
+
+@inject IJSRuntime JS
+@inject InputsExporter exporter
+
+<div>
+    <p class="mb-3">If you have saved your inputs as JSON, you can import it here to start your configuration off with them.</p>
+
+    <MudFileUpload T="IBrowserFile" Accept=".json" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
+        <ButtonTemplate>
+            <MudButton HtmlTag="label"
+                       Variant="Variant.Filled"
+                       Color="Color.Secondary"
+                       Class="rounded-lg"
+                       StartIcon="@Icons.Material.Filled.Upload"
+                       for="@context">
+                Import JSON Inputs
+            </MudButton>
+        </ButtonTemplate>
+    </MudFileUpload>
+</div>
+@code {
+    [Parameter]
+    public ProblemScope ProblemScope { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<ProblemScope> OnProblemScopeChanged { get; set; }
+
+    private bool ErrorDisplayed = false;
+
+    private string ErrorMessage = "";
+
+    private async Task UploadJson(IBrowserFile file)
+    {
+        if (file.ContentType == "application/json")
+        {
+            var stream = file.OpenReadStream();
+
+            try
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    var problemScope = JsonConvert.DeserializeObject<ProblemScope>(Encoding.UTF8.GetString(memoryStream.ToArray()))!;
+                    ProblemScope = problemScope;
+                    await OnProblemScopeChanged.InvokeAsync(ProblemScope);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorDisplayed = true;
+                ErrorMessage = ex.Message;
+            }
+        }
+        else
+        {
+            ErrorDisplayed = true;
+            ErrorMessage = "Submitted Json seems to be corrupted";
+        }
+    }
+
+}
