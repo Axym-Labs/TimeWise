@@ -79,7 +79,7 @@
                     }
             </div>
             <div>
-                <SolutionDisplay Solution="solution" AlternativeSolution="alternativeSolution" Problem="ProblemScope.Problem" />
+                <SolutionDisplay Solution="solution" AlternativeSolution="alternativeSolution" ComparisonAlgorithmSuccessful="ComparisonAlgorithmSuccessful" Problem="ProblemScope.Problem" />
             </div>
         </SchedulerSection>
 
@@ -97,6 +97,10 @@
     </div>
 </div>
 
+<div class="flex justify-center my-4">
+    <p class="text-sm">Version: @Version</p>
+</div>
+
 @code {
     private ProblemScope ProblemScope = new ProblemScope();
 
@@ -106,6 +110,7 @@
     private bool showSolutionLoadingCircle = false;
     private bool DisplayConnectionError = false;
     private string Version = string.Empty;
+    private bool ComparisonAlgorithmSuccessful = false; 
 
     private string scheduleName = "Schedule";
 
@@ -117,6 +122,13 @@
 
         var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
         alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
+
+        if (ComparisonAlgorithm.IsScheduleComplete(alternativeSolution, ProblemScope.Problem) || true)
+        {
+            ComparisonAlgorithmSuccessful = true;
+            await ResultsFileLoader.SaveComparisonResults(alternativeSolution.ObjectiveStrain, alternativeSolution.ObjectiveCost);
+        }
+
         var result = await problemLoggingTask;
 
         if (!result)
@@ -131,7 +143,7 @@
         } else
         {
             Snackbar.Add("Your schedule was generated.", Severity.Success);
-            // update solution
+            await ResultsFileLoader.SaveIlpResults(solution.ObjectiveStrain, solution.ObjectiveCost);
         }
     }
 

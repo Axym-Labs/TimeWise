@@ -76,7 +76,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        UserRatings = await usageFileLoader.LoadFileAsync();
+        UserRatings = await UsageFileLoader.LoadFileAsync();
 
         ratingUsers = UserRatings.RatingUsers.Keys.ToList<string>();
 

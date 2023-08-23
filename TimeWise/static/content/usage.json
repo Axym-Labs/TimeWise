@@ -1,11 +1,11 @@
 {
-  "TotalUsers": 101,
+  "TotalUsers": 102,
   "Ratings": [
     0,
     0,
     0,
-    3,
-    1
+    2,
+    3
   ],
   "RatingUsers": {
     "Jonathan Schäfer": {
@@ -19,7 +19,7 @@
       "Feedback": "Thank you"
     },
     "User #14": {
-      "Rating": 5,
+      "Rating": 4,
       "Role": "Manager",
       "Feedback": "I like that it's open source"
     },
@@ -27,6 +27,11 @@
       "Rating": 5,
       "Role": "Manager",
       "Feedback": "Nice App"
+    },
+    "User #103": {
+      "Rating": 5,
+      "Role": "Manager",
+      "Feedback": ""
     }
   }
 }

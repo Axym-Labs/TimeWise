@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="d-flex flex-column mb-5">
-                    @if (ComparisonAlgorithm.IsScheduleComplete(AlternativeSolution,Problem))
+                    @if (ComparisonAlgorithmSuccessful)
                     {
                             <div class="d-flex flex-row">
                                 <MudText>Total personnel costs:</MudText>
@@ -52,7 +52,7 @@
                             <MudText Class="ml-2"> @($"{Solution.ObjectiveCost:N}")€</MudText>
                             <p class="w-4"></p>
 
-                            @if (ComparisonAlgorithm.IsScheduleComplete(AlternativeSolution, Problem))
+                            @if (ComparisonAlgorithmSuccessful)
                             {
                                 @if (Solution.ObjectiveCost < AlternativeSolution.ObjectiveCost)
                                 {
@@ -71,7 +71,7 @@
                             <MudText Class="ml-2"> @($"{Solution.ObjectiveStrain:N}")</MudText>
                             <p class="w-4"></p>
                        
-                            @if (ComparisonAlgorithm.IsScheduleComplete(AlternativeSolution, Problem))
+                            @if (ComparisonAlgorithmSuccessful)
                             {
                                 @if (Solution.ObjectiveStrain < AlternativeSolution.ObjectiveStrain)
                                 {
@@ -171,6 +171,9 @@
 
     [Parameter]
     public Solution AlternativeSolution { get; set; } = default!;
+
+    [Parameter]
+    public bool ComparisonAlgorithmSuccessful { get; set; } = false;
 
     private bool expandTree = false;
 

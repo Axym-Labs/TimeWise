@@ -46,7 +46,7 @@
 
     private async Task SubmitFeedback() {
 
-        UserRatings ro = await usageFileLoader.LoadFileAsync();
+        UserRatings ro = await UsageFileLoader.LoadFileAsync();
 
         if (personName.Trim() == "") personName = "User #" + (ro.TotalUsers+1).ToString();
 
@@ -62,7 +62,7 @@
             ro = UpdateSummedRatings(ro);
         }
 
-        await usageFileLoader.SaveFileAsync(ro);
+        await UsageFileLoader.SaveFileAsync(ro);
 
         previousPersonName = personName;
         previousStarVal = selectedStarVal;
@@ -127,16 +127,16 @@
     {
         if (await JS.InvokeAsync<string>("sessionStorageInterop.getItem", "incrementedUserCount") == "true") return;
 
-        UserRatings ro = await usageFileLoader.LoadFileAsync();
+        UserRatings ro = await UsageFileLoader.LoadFileAsync();
         ro.TotalUsers++;
-        await usageFileLoader.SaveFileAsync(ro);
+        await UsageFileLoader.SaveFileAsync(ro);
 
         await JS.InvokeVoidAsync("sessionStorageInterop.setItem", "incrementedUserCount", "true");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        UserRatings ro = await usageFileLoader.LoadFileAsync();
+        UserRatings ro = await UsageFileLoader.LoadFileAsync();
         personName = "User #" + (ro.TotalUsers+1).ToString();
 
     }
