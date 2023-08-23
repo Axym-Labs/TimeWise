@@ -43,8 +43,12 @@ public static class ResultsFileLoader
         double Ds = (Strain - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
         double Dc = (Cost - sr.ComparisonCostAvg) / sr.ComparisonCostNum;
 
-        sr.ComparisonStrainAvg += Math.Round(Ds, 2, MidpointRounding.AwayFromZero);
-        sr.ComparisonCostAvg += Math.Round(Dc, 2, MidpointRounding.AwayFromZero);
+        sr.ComparisonStrainAvg = Math.Round(sr.ComparisonStrainAvg+Ds, 2, MidpointRounding.AwayFromZero);
+        sr.ComparisonCostAvg = Math.Round(sr.ComparisonCostAvg+Dc, 2, MidpointRounding.AwayFromZero);
+
+        sr.IlpStrainNum += 1;
+        sr.IlpCostNum += 1;
+
         await SaveFileAsync(sr);
     }
 
@@ -54,8 +58,12 @@ public static class ResultsFileLoader
         double Ds = (Strain - sr.IlpStrainAvg) / sr.IlpStrainNum;
         double Dc = (Cost - sr.IlpCostAvg) / sr.IlpCostNum;
 
-        sr.IlpStrainAvg += Math.Round(Ds, 2, MidpointRounding.AwayFromZero);
-        sr.IlpCostAvg += Math.Round(Dc, 2, MidpointRounding.AwayFromZero);
+        sr.IlpStrainAvg = Math.Round(sr.IlpStrainAvg+Ds, 2, MidpointRounding.AwayFromZero);
+        sr.IlpCostAvg = Math.Round(sr.IlpCostAvg+Dc, 2, MidpointRounding.AwayFromZero);
+
+        sr.ComparisonStrainNum += 1;
+        sr.ComparisonCostNum += 1;
+
         await SaveFileAsync(sr);
     }
 
