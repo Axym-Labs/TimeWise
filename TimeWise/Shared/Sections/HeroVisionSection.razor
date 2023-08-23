@@ -1,0 +1,104 @@
+﻿@using MudBlazor
+@using TimeWise.Shared
+@using TimeWise.Modules
+@using TimeWise.Data.Scheduler
+
+
+<div class="flex flex-col justify-center" style="height: inherit;">
+    @if (ShowCostDiff) {
+        <div class="m-3">
+            <h1 class="text-4xl md:text-7xl text-b900 text-center code">
+                @(CostDiffDisplay.ToString("00.00"))%
+                <br />
+                <p class="text-base text-b500" style="letter-spacing: initial;">
+                    reduced total cost.
+                </p>
+            </h1>
+        </div>
+    }
+    @if (ShowStrainDiff)
+    {
+        <div class="m-3">
+            <h1 class="text-4xl md:text-7xl text-b900 text-center code">
+                @(StrainDiffDisplay.ToString("00.00"))%
+                <br />
+                <p class="text-base text-b500" style="letter-spacing: initial;">
+                    less strain on workers.
+                </p>
+            </h1>
+        </div>
+    }
+</div>
+
+
+
+@code {
+        bool ShowCostDiff = false;
+        bool ShowStrainDiff = false;
+
+        double CostDiff = default!;
+        double StrainDiff = default!;
+        double CostDiffDisplay = 0.0;
+        double StrainDiffDisplay = 0.0;
+
+        bool isIncrementingCost = false;
+        bool isIncrementingStrain = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ScheduleResults sr = await ResultsFileLoader.LoadFileAsync();
+
+        ShowCostDiff = sr.ComparisonCostAvg > sr.IlpCostAvg;
+        ShowStrainDiff = sr.ComparisonStrainAvg > sr.IlpStrainAvg;
+
+        CostDiff = Math.Round(CalcPercentage(sr.ComparisonCostAvg, sr.IlpCostAvg), 2, MidpointRounding.AwayFromZero);
+        StrainDiff = Math.Round(CalcPercentage(sr.ComparisonStrainAvg, sr.IlpStrainAvg), 2, MidpointRounding.AwayFromZero);
+
+        await StartAnimations();
+    }
+
+    private double CalcPercentage(double oldValue, double newValue)
+    {
+        return (newValue - oldValue) / oldValue * 100;
+    }
+
+    private async Task StartAnimations()
+    {
+        Task costTask = AnimateIncreasedCostNum();
+        Task strainTask = AnimateIncreasedStrainNum();
+        await Task.WhenAll(costTask, strainTask);
+    }
+
+    private async Task AnimateIncreasedCostNum()
+    {
+        if (!isIncrementingCost)
+        {
+            isIncrementingCost = true;
+            Console.WriteLine((CostDiffDisplay > CostDiff));
+            while (CostDiffDisplay > CostDiff)
+            {
+                Console.WriteLine((CostDiffDisplay > CostDiff));
+                CostDiffDisplay -= 0.02;
+                StateHasChanged();
+                await Task.Delay(10);
+            }
+            isIncrementingCost = false;
+        }
+    }
+
+    private async Task AnimateIncreasedStrainNum()
+    {
+        if (!isIncrementingStrain)
+        {
+            isIncrementingStrain = true;
+            while (StrainDiffDisplay > StrainDiff)
+            {
+                StrainDiffDisplay -= 0.05;
+                StateHasChanged();
+                await Task.Delay(10);
+            }
+            isIncrementingStrain = false;
+        }
+    }
+}

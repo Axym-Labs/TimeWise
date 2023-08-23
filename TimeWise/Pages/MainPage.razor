@@ -6,6 +6,7 @@
 @using TimeWise.Shared.Sections
 @using TimeWise.Shared
 @using TimeWise.Pages
+@using TimeWise.Shared.Sections
 @using TimeWise.Shared.BaseUI
 @using TimeWise.Shared.BaseUI.btn
 
@@ -14,9 +15,8 @@
 <PageTitle>TimeWise</PageTitle>
 
 
-<HeroSection title="TimeWise" description="Your open-source choice for generating optimal schedules. In less than 5 minutes."
-    imageLoc="/static/img/sample.png">
-    <PrimaryLinkBtn link="/scheduler" t="Try now" />
+<HeroSection title="TimeWise" description="Your open-source choice for generating optimal schedules. In less than 5 minutes.">
+    <HeroVisionSection />
 </HeroSection>
 
 <div class="p-10">
@@ -36,9 +36,11 @@
 <AnchorScoller />
 
 @code {
+
     protected override void OnInitialized()
     {
         dynamic landingPage = content.files["main"];
+
 
     }
 }
