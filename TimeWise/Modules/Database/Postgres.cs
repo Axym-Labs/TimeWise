@@ -19,6 +19,8 @@ public static class Postgres
 
     public static async Task<bool> LogProblem(Problem problem)
     {
+        try
+        {
         using var conn = new NpgsqlConnection(ConnectionString);
         await conn.OpenAsync();
         using var cmd = new NpgsqlCommand("INSERT INTO Problems (problemdata) VALUES (CAST(@problemdata AS JSON))", conn);
@@ -26,7 +28,10 @@ public static class Postgres
         var result = await cmd.ExecuteNonQueryAsync();
         await conn.CloseAsync();
         return result != -1;
+        } catch
+        {
+            return false;
+        }
     }
 
 }
-

@@ -57,9 +57,6 @@
                 <SchedulingOptionsInputs Options="ProblemScope.Problem.Options" OnOptionsChanged="value => ProblemScope.Problem.Options = value" />
             </div>
 
-        @*    <MudNumericField Variant="Variant.Filled" Label="Maximum working hours" T="double" @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Min="0" Max="100" />
-        *@    
-
             <MudSlider @bind-Value="ProblemScope.Problem.MaxHoursPerWeek" Color="Color.Info" Variant="Variant.Filled" Min="0" Max="120" Class="px-5">
                 Maximum weekly working hours: @ProblemScope.Problem.MaxHoursPerWeek
             </MudSlider>
@@ -123,7 +120,7 @@
         var result = await problemLoggingTask;
 
         if (!result)
-            Snackbar.Add("No connection to the DB could be established", Severity.Error);
+            Snackbar.Add("No connection to the Database could be established. This does not affect the operability of the webapp.", Severity.Error);
 
         solution = await solutionTask;
         showSolutionLoadingCircle = false;
