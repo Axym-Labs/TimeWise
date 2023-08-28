@@ -6,7 +6,7 @@
     "links": [
       [ "Scheduler", "/scheduler" ],
       [ "How it works", "/#howitworks" ],
-      [ "Source Code", "https://github.com/Jonathan-Schaefer-git/TimeWise" ],
+      [ "Source Code", "https://github.com/TimeWise-dev/TimeWise" ],
       [ "Contact", "mailto:jonathan.schaefer_@outlook.de" ]
     ],
     "specialAnnouncement": "We launched: Try our scheduler for free!",
@@ -16,8 +16,8 @@
     "links": [
       [ "Scheduler", "/scheduler" ],
       [ "How it works", "/#howitworks" ],
-      [ "Source Code", "https://github.com/Jonathan-Schaefer-git/TimeWise" ],
-      [ "Wiki", "https://github.com/Jonathan-Schaefer-git/TimeWise" ],
+      [ "Source Code", "https://github.com/TimeWise-dev/TimeWise" ],
+      [ "Wiki", "https://github.com/TimeWise-dev/TimeWise/wiki" ],
       [ "Contact", "mailto:jonathan.schaefer_@outlook.de" ]
     ]
   },
