@@ -8,15 +8,6 @@ public static class Postgres
 {
     public static string ConnectionString = string.Empty;
 
-    public static async Task<bool> AddUser()
-    {
-        return true;
-    }
-    public static async Task<bool> UpdateUser()
-    {
-        return true;
-    }
-
     public static async Task<bool> LogProblem(Problem problem)
     {
         try
