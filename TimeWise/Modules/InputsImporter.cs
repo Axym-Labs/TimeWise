@@ -5,7 +5,6 @@ namespace TimeWise.Modules;
 
 public class InputsImporter
 {
-
     public Problem? JsonToProblem(string input)
     {
         try { return JsonConvert.DeserializeObject<Problem>(input); }
