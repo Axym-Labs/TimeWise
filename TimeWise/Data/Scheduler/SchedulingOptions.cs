@@ -7,13 +7,11 @@ public class SchedulingOptions{
     public bool CapMaximumWorkingHoursConstraint { get; set; } = true;
 
     public SchedulingOptions() {}
-    public SchedulingOptions(bool ExpenseMinimizing,
-                             bool StrainMinimizing,
+    public SchedulingOptions(bool StrainMinimizing,
                              bool EnsureQualifiedPersonnelConstraint,
                              bool NoDoubleShiftConstraint,
                              bool CapMaximumWorkingHoursConstraint) 
     {
-        this.ExpenseMinimizing = ExpenseMinimizing;
         this.StrainMinimizing = StrainMinimizing;
         this.EnsureQualifiedPersonnelConstraint = EnsureQualifiedPersonnelConstraint;
         this.NoDoubleShiftConstraint = NoDoubleShiftConstraint;
