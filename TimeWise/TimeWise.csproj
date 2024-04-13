@@ -27,4 +27,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Scheduling-Lib\Scheduling-Lib\Scheduling-Lib.fsproj" />
+  </ItemGroup>
+
 </Project>
