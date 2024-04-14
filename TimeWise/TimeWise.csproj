@@ -8,27 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.102.1" />
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="ClosedXML.Extensions.AspNet" Version="0.3.0" />
     <PackageReference Include="Csv" Version="2.0.93" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
-    <PackageReference Include="MudBlazor" Version="6.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+    <PackageReference Include="MudBlazor" Version="6.19.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Npgsql" Version="7.0.4" />
+    <PackageReference Include="Npgsql" Version="8.0.2" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="Scheduling-Lib" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Modules\Helpers\" />
     <Folder Include="Shared\BaseUI\Button\" />
     <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Scheduling-Lib\Scheduling-Lib\Scheduling-Lib.fsproj" />
   </ItemGroup>
 
 </Project>
