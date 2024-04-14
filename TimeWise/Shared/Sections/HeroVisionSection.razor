@@ -75,10 +75,8 @@
         if (!isIncrementingCost)
         {
             isIncrementingCost = true;
-            Console.WriteLine((CostDiffDisplay > CostDiff));
             while (CostDiffDisplay > CostDiff)
             {
-                Console.WriteLine((CostDiffDisplay > CostDiff));
                 CostDiffDisplay -= 0.25;
                 StateHasChanged();
                 await Task.Delay(5);
