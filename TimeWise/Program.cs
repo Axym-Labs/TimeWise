@@ -35,6 +35,8 @@ builder.Services.AddMudServices(config =>
 });
 
 var app = builder.Build();
+
+
 #if DEBUG
 Postgres.ConnectionString = builder.Configuration["Database:ConnectionStringTesting"]!;
 #else

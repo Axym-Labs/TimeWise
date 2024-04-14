@@ -73,15 +73,15 @@
                        
                             @if (ComparisonAlgorithmSuccessful)
                             {
-                                @if (Solution.ObjectiveStrain < AlternativeSolution.ObjectiveStrain)
+                                @if (Solution.ObjectiveStrain.Min(x => x.Item2) < AlternativeSolution.ObjectiveStrain.Min(x => x.Item2))
                                 {
                                     <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowDown" Size="Size.Medium" Color="Color.Success"></MudIcon>
-                                    <MudText Color="Color.Success">@(CalcPercentage(AlternativeSolution.ObjectiveStrain, Solution.ObjectiveStrain).ToString("0.00"))%</MudText>
+                                    <MudText Color="Color.Success">@(CalcPercentage(AlternativeSolution.ObjectiveStrain.Min(x => x.Item2), Solution.ObjectiveStrain.Min(x => x.Item2)).ToString("0.00"))%</MudText>
                                 }
                                 else
                                 {
                                     <MudIcon Icon="@Icons.Material.Filled.KeyboardDoubleArrowUp" Size="Size.Medium" Color="Color.Error"></MudIcon>
-                                    <MudText Color="Color.Error">@(CalcPercentage(AlternativeSolution.ObjectiveStrain, Solution.ObjectiveStrain).ToString("0.00"))%</MudText>
+                                    <MudText Color="Color.Error">@(CalcPercentage(AlternativeSolution.ObjectiveStrain.Min(x => x.Item2), Solution.ObjectiveStrain.Min(x => x.Item2)).ToString("0.00"))%</MudText>
                                 }
                             }
                         </div>

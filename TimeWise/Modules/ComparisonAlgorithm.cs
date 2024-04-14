@@ -55,7 +55,7 @@ public class ComparisonAlgorithm
         return isValid.All(x => x == true);
     }
 
-    public static Solution ProcedualScheduling(Problem problem)
+    public static Solution ProceduralScheduling(Problem problem)
     {
         var schedule = problem.Schedule;
         var workers = Shuffle(problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList());
@@ -125,10 +125,10 @@ public class ComparisonAlgorithm
         return solution;
     }
 
-    public static (double cost,double strain) CalculateObjectiveValues(Solution solution, Problem problem)
+    public static (double cost,List<Tuple<string,double>> strain) CalculateObjectiveValues(Solution solution, Problem problem)
     {
         var workSchedule = solution.Result;
-        var strainList = new List<double>();
+        var strainList = new List<Tuple<string,double>>();
         var costList = new List<double>();
 
         var workers = problem.Workers.OrderBy(x => x.Wage).ToList();
@@ -148,8 +148,7 @@ public class ComparisonAlgorithm
                                 if (workSchedule[weekI][dayI][slotI][shiftI][workerI] == employee.Name)
                                 {
                                     costList.Add(employee.Wage * problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length);
-                                    if (employee == workers[workers.Count / 2 - 1])
-                                        strainList.Add(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Strain);
+                                    strainList.Add(new Tuple<string,double>(employee.Name,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Strain));
                                 }
                             }
                         }
@@ -158,7 +157,7 @@ public class ComparisonAlgorithm
             }
         }
 
-        return (costList.Sum(), strainList.Sum());
+        return (costList.Sum(), strainList);
     }
 
     public static List<T> Shuffle<T>(List<T> list)

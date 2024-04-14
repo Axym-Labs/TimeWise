@@ -37,10 +37,10 @@ public class ScheduleResults
 
 public static class ResultsFileLoader
 {
-    public static async Task SaveComparisonResults(double Strain, double Cost)
+    public static async Task SaveComparisonResults(List<Tuple<string,double>> Strain, double Cost)
     {
         ScheduleResults sr = await LoadFileAsync();
-        double Ds = (Strain - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
+        double Ds = (Strain.Min(x => x.Item2) - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
         double Dc = (Cost - sr.ComparisonCostAvg) / sr.ComparisonCostNum;
 
         sr.ComparisonStrainAvg = Math.Round(sr.ComparisonStrainAvg+Ds, 2, MidpointRounding.AwayFromZero);
@@ -52,10 +52,10 @@ public static class ResultsFileLoader
         await SaveFileAsync(sr);
     }
 
-    public static async Task SaveIlpResults(double Strain, double Cost)
+    public static async Task SaveIlpResults(List<Tuple<string,double>> Strain, double Cost)
     {
         ScheduleResults sr = await LoadFileAsync();
-        double Ds = (Strain - sr.IlpStrainAvg) / sr.IlpStrainNum;
+        double Ds = (Strain.Min(x => x.Item2) - sr.IlpStrainAvg) / sr.IlpStrainNum;
         double Dc = (Cost - sr.IlpCostAvg) / sr.IlpCostNum;
 
         sr.IlpStrainAvg = Math.Round(sr.IlpStrainAvg+Ds, 2, MidpointRounding.AwayFromZero);

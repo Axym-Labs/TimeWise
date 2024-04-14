@@ -106,7 +106,7 @@
 
     private Solution? solution = null;
     private Solution? alternativeSolution = null;
-    private bool showLoadingCircle = true;
+    private bool showLoadingCircle = false;
     private bool showSolutionLoadingCircle = false;
     private bool DisplayConnectionError = false;
     private string Version = string.Empty;
@@ -121,7 +121,7 @@
         var problemLoggingTask = Task.Run(() => Postgres.LogProblem(ProblemScope.Problem));
 
         var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
-        alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
+        alternativeSolution = ComparisonAlgorithm.ProceduralScheduling(ProblemScope.Problem);
 
         if (ComparisonAlgorithm.IsScheduleComplete(alternativeSolution, ProblemScope.Problem))
         {
@@ -149,17 +149,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var version = await sAPIs.GetAPIVersion();
-        if(version is null)
-        {
-            showLoadingCircle = false;
-            DisplayConnectionError = true;
-        }
-        else
-        {
-            showLoadingCircle = false;
-            Version = version;
-        }
         
         dynamic schedulingPage = content.files["schedulingPage"];
     }
