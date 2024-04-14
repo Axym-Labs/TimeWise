@@ -4,7 +4,10 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Irony;
 using MathNet.Numerics.Statistics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using TimeWise.Data.Scheduler;
+using Microsoft.FSharp.Collections;
+using SchedulingLib;
+using System.Linq;
+
 public class ComparisonAlgorithm
 {
     private class EmployeeWrapper
@@ -23,65 +26,58 @@ public class ComparisonAlgorithm
     public static bool IsScheduleComplete(Solution solution, Problem problem)
     {
         var workSchedule = solution.Result;
-        var schedule = problem.Schedule;
-        var workers = problem.Workers;
+        var schedule = problem.Schedule.Weeks.Select(week => week.Days.Select(day => day.TimeSlots.Select(slot => slot.Shifts.ToList()).ToList()).ToList()).ToList();
 
         var isValid = new List<bool>();
 
-        foreach (var weekI in Enumerable.Range(0, schedule.Weeks.Count))
+
+        foreach (var week in schedule)
         {
-            List<List<List<List<string>>>> weekResult = new List<List<List<List<string>>>>();
-
-            foreach (var dayI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days.Count))
+            foreach (var day in week)
             {
-                List<List<List<string>>> dayResult = new List<List<List<string>>>();
-
-                foreach (var slotI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots.Count))
+                foreach (var slot in day)
                 {
-                    List<List<string>> slotResult = new List<List<string>>();
-
-                    foreach (var shiftI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts.Count))
+                    foreach (var shift in slot)
                     {
-                        List<string> shiftResult = new List<string>();
-                        foreach (var requirementI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Count))
+                        foreach (var requirement in shift.RequiredPersonnel)
                         {
-                            isValid.Add(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].Count == workSchedule[weekI][dayI][slotI][shiftI].Count);
+                            isValid.Add(requirement.Count == workSchedule.SelectMany(w => w.SelectMany(d => d.SelectMany(s => s))).Count());
                         }
                     }
                 }
             }
         }
 
-        return isValid.All(x => x == true);
+        return isValid.All(x => x);
     }
 
-    public static Solution ProcedualScheduling(Problem problem)
+    public static Solution ProceduralScheduling(Problem problem)
     {
-        var schedule = problem.Schedule;
+        var schedule = problem.Schedule.Weeks.Select(week => week.Days.Select(day => day.TimeSlots.Select(slot => slot.Shifts.ToList()).ToList()).ToList()).ToList();
         var workers = Shuffle(problem.Workers.Select(emp => new EmployeeWrapper(emp)).ToList());
-
-        var solution = new Solution();
 
         List<List<List<List<List<string>>>>> result = new List<List<List<List<List<string>>>>>();
 
-        foreach (var weekI in Enumerable.Range(0,schedule.Weeks.Count))
+        foreach (var weekI in Enumerable.Range(0,schedule.Count))
         {
             List<List<List<List<string>>>> weekResult = new List<List<List<List<string>>>>();
 
-            foreach (var dayI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days.Count))
+            foreach (var dayI in Enumerable.Range(0, schedule[weekI].Count))
             {
                 List<List<List<string>>> dayResult = new List<List<List<string>>>();
 
-                foreach (var slotI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots.Count))
+                foreach (var slotI in Enumerable.Range(0, schedule[weekI][dayI].Count))
                 {
                     List<List<string>> slotResult = new List<List<string>>();
 
-                    foreach (var shiftI in Enumerable.Range(0, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts.Count))
+                    foreach (var shiftI in Enumerable.Range(0, schedule[weekI][dayI][slotI].Count))
                     {
                         List<string> shiftResult = new List<string>();
-                        foreach(var requirementI in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel.Count))
+                        foreach(var requirementI in Enumerable.Range(0,schedule[weekI][dayI][slotI][shiftI].RequiredPersonnel.Count()))
                         {
-                            foreach(var count in Enumerable.Range(0,problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].RequiredPersonnel[requirementI].Count))
+                            var reqPersonals = schedule[weekI][dayI][slotI][shiftI].RequiredPersonnel.ToList();
+                            var reqPersonnel = reqPersonals[requirementI];
+                            foreach (var count in Enumerable.Range(0, reqPersonnel.Count))
                             {
                                 workers.OrderBy(emp => emp.SortingValue);
                                 foreach (var employee in workers)
@@ -115,41 +111,38 @@ public class ComparisonAlgorithm
             workers.ForEach(emp => emp.HoursWorked = 0);
             result.Add(weekResult);
         }
+        
 
-        solution.Result = result;
-        solution.Status = true;
-        var (cost, strain) = CalculateObjectiveValues(solution, problem);
-        solution.ObjectiveCost = cost;
-        solution.ObjectiveStrain = strain;
+        var (cost, strain) = CalculateObjectiveValues(result, problem);
 
-        return solution;
+
+        return new Solution(result, cost, strain);
     }
 
-    public static (double cost,double strain) CalculateObjectiveValues(Solution solution, Problem problem)
+    public static (double cost,List<Tuple<string,double>> strain) CalculateObjectiveValues(List<List<List<List<List<string>>>>> solution, Problem problem)
     {
-        var workSchedule = solution.Result;
-        var strainList = new List<double>();
+        var workSchedule = solution;
+        var strainList = new List<Tuple<string,double>>();
         var costList = new List<double>();
 
         var workers = problem.Workers.OrderBy(x => x.Wage).ToList();
 
         foreach(var employee in workers)
         {
-            foreach (var weekI in Enumerable.Range(0, workSchedule.Count))
+            foreach (var weekI in Enumerable.Range(0, workSchedule.Count()))
             {
-                foreach (var dayI in Enumerable.Range(0, workSchedule[weekI].Count))
+                foreach (var dayI in Enumerable.Range(0, workSchedule.ElementAt(weekI).Count()))
                 {
-                    foreach (var slotI in Enumerable.Range(0, workSchedule[weekI][dayI].Count))
+                    foreach (var slotI in Enumerable.Range(0, workSchedule.ElementAt(weekI).ElementAt(dayI).Count()))
                     {
-                        foreach (var shiftI in Enumerable.Range(0, workSchedule[weekI][dayI][slotI].Count))
+                        foreach (var shiftI in Enumerable.Range(0, workSchedule.ElementAt(weekI).ElementAt(dayI).ElementAt(slotI).Count()))
                         {
-                            foreach(var workerI in Enumerable.Range(0, workSchedule[weekI][dayI][slotI][shiftI].Count))
+                            foreach(var workerI in Enumerable.Range(0, workSchedule.ElementAt(weekI).ElementAt(dayI).ElementAt(slotI).ElementAt(shiftI).Count()))
                             {
-                                if (workSchedule[weekI][dayI][slotI][shiftI][workerI] == employee.Name)
+                                if (workSchedule.ElementAt(weekI).ElementAt(dayI).ElementAt(slotI).ElementAt(shiftI).ElementAt(workerI) == employee.Name)
                                 {
                                     costList.Add(employee.Wage * problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Length);
-                                    if (employee == workers[workers.Count / 2 - 1])
-                                        strainList.Add(problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Strain);
+                                    strainList.Add(new Tuple<string,double>(employee.Name, problem.Schedule.Weeks[weekI].Days[dayI].TimeSlots[slotI].Shifts[shiftI].Strain));
                                 }
                             }
                         }
@@ -158,7 +151,7 @@ public class ComparisonAlgorithm
             }
         }
 
-        return (costList.Sum(), strainList.Sum());
+        return (costList.Sum(), strainList);
     }
 
     public static List<T> Shuffle<T>(List<T> list)

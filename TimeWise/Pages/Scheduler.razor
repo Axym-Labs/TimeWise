@@ -8,7 +8,7 @@
 @using TimeWise.Modules
 @using TimeWise.Shared
 @using TimeWise.Shared.Sections
-
+@using SchedulingLib
 @using MudBlazor
 @using Newtonsoft.Json
 
@@ -121,7 +121,7 @@
         var problemLoggingTask = Task.Run(() => Postgres.LogProblem(ProblemScope.Problem));
 
         var solutionTask = Task.Run(() => sAPIs.GetSolution(ProblemScope.Problem));
-        alternativeSolution = ComparisonAlgorithm.ProcedualScheduling(ProblemScope.Problem);
+        alternativeSolution = ComparisonAlgorithm.ProceduralScheduling(ProblemScope.Problem);
 
         if (ComparisonAlgorithm.IsScheduleComplete(alternativeSolution, ProblemScope.Problem))
         {

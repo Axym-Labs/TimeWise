@@ -9,6 +9,8 @@ using TimeWise.Modules.Helpers;
 using DocumentFormat.OpenXml.Bibliography;
 using TimeWise.Shared.Sections;
 using System.Linq;
+using SchedulingLib;
+
 
 public enum SupportedFileTypes
 {

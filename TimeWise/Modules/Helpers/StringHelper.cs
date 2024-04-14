@@ -1,5 +1,6 @@
 ﻿namespace TimeWise.Modules.Helpers;
 using Data.Scheduler;
+using SchedulingLib;
 
 public static class StringHelper
 {
@@ -12,20 +13,20 @@ public static class StringHelper
         return str.Split(',').Select(s => s.TrimStart()).ToList();
     }
     public static List<Tuple<int, int, int, int, int>> FindStringIndices(Solution solution, string targetString, bool allOnEmptyTarget = false)
-    {
-        List<Tuple<int, int, int, int, int>> indices = new List<Tuple<int, int, int, int, int>>();
-
-        for (int i = 0; i < solution.Result.Count; i++)
+	{
+        List<Tuple<int, int, int, int, int>> indices = new();
+        var result = solution.Result;
+        for (int i = 0; i < result.Count(); i++)
         {
-            for (int j = 0; j < solution.Result[i].Count; j++)
+            for (int j = 0; j < result.ElementAt(i).Count(); j++)
             {
-                for (int k = 0; k < solution.Result[i][j].Count; k++)
+                for (int k = 0; k < result.ElementAt(i).ElementAt(j).Count(); k++)
                 {
-                    for (int l = 0; l < solution.Result[i][j][k].Count; l++)
+                    for (int l = 0; l < result.ElementAt(i).ElementAt(j).ElementAt(k).Count(); l++)
                     {
-                        for (int m = 0; m < solution.Result[i][j][k][l].Count; m++)
+                        for (int m = 0; m < result.ElementAt(j).ElementAt(k).ElementAt(l).Count(); m++)
                         {
-                            if (solution.Result[i][j][k][l][m] == targetString || (targetString == string.Empty && allOnEmptyTarget))
+                            if (result.ElementAt(j).ElementAt(k).ElementAt(l).ElementAt(m) == targetString || (targetString == string.Empty && allOnEmptyTarget))
                             {
                                 indices.Add(Tuple.Create(i, j, k, l, m));
                             }

@@ -2,7 +2,7 @@
 
 using Newtonsoft.Json;
 using Npgsql;
-using TimeWise.Data.Scheduler;
+using SchedulingLib;
 
 public static class Postgres
 {

@@ -2,6 +2,8 @@
 @using MudBlazor
 @using TimeWise.Shared.SchedulingInputs
 @using Data.Scheduler
+@using SchedulingLib
+
 
 <h1 class="text-lg m-3">
     Employees
@@ -22,13 +24,13 @@
 
 @code {
     [Parameter]
-    public List<Employee> Employees {get;set;} = new List<Employee>();
+    public IEnumerable<Employee> Employees { get; set; } = new List<Employee>();
     [Parameter]
     public EventCallback<List<Employee>> OnEmployeesChanged {get;set;}
 
     private async Task RemoveEmployee(Employee employee)
     {
-        Employees.Remove(employee);
+        Employees.(employee);
         await OnEmployeesChanged.InvokeAsync(Employees);
     }
 

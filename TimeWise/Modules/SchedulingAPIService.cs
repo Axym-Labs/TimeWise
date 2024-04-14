@@ -4,6 +4,8 @@ using RestSharp;
 using TimeWise.Modules;
 using System.Net.Http;
 using Newtonsoft.Json;
+using SchedulingLib;
+
 
 public class SchedulingAPIService
 {
