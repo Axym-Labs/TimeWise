@@ -94,9 +94,9 @@
             isIncrementingStrain = true;
             while (StrainDiffDisplay > StrainDiff)
             {
-                StrainDiffDisplay -= 0.05;
+                StrainDiffDisplay -= 0.25;
                 StateHasChanged();
-                await Task.Delay(10);
+                await Task.Delay(5);
             }
             isIncrementingStrain = false;
         }
