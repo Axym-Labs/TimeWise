@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "IlpCostAvg": 29037.29,
   "IlpCostNum": 2,
   "ComparisonCostAvg": 27384.0,
@@ -7,4 +8,14 @@
   "IlpStrainNum": 3,
   "ComparisonStrainAvg": 176.0,
   "ComparisonStrainNum": 10
+=======
+  "IlpCostAvg": 6479.33,
+  "IlpCostNum": 2,
+  "ComparisonCostAvg": 27384.0,
+  "ComparisonCostNum": 12,
+  "IlpStrainAvg": 2.51,
+  "IlpStrainNum": 3,
+  "ComparisonStrainAvg": 176.0,
+  "ComparisonStrainNum": 12
+>>>>>>> ac2a529e0668c6913e5afd42f62f3fdc6c6def62
 }
