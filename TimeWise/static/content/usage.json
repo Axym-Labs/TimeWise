@@ -13,25 +13,10 @@
       "Role": "Student",
       "Feedback": "Hi"
     },
-    "John Doe": {
-      "Rating": 4,
-      "Role": "Project Manager",
-      "Feedback": "Thank you"
-    },
     "User #14": {
       "Rating": 4,
       "Role": "Manager",
       "Feedback": "I like that it's open source"
-    },
-    "User #15": {
-      "Rating": 5,
-      "Role": "Manager",
-      "Feedback": "Nice App"
-    },
-    "User #103": {
-      "Rating": 5,
-      "Role": "Manager",
-      "Feedback": ""
     }
   }
 }
