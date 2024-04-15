@@ -1,10 +1,10 @@
 {
-  "IlpCostAvg": 21556.5,
+  "IlpCostAvg": 6479.33,
   "IlpCostNum": 2,
   "ComparisonCostAvg": 27384.0,
-  "ComparisonCostNum": 6,
-  "IlpStrainAvg": 28.63,
+  "ComparisonCostNum": 12,
+  "IlpStrainAvg": 2.51,
   "IlpStrainNum": 3,
   "ComparisonStrainAvg": 176.0,
-  "ComparisonStrainNum": 6
+  "ComparisonStrainNum": 12
 }
