@@ -120,6 +120,8 @@
     private string Version = string.Empty;
     private bool ComparisonAlgorithmSuccessful = false; 
 
+    private bool showedDbInfoMsg = false;
+
     private string scheduleName = "Schedule";
 
     private async Task FetchSolution()
@@ -139,8 +141,11 @@
 
         var result = await problemLoggingTask;
 
-        if (!result)
-            Snackbar.Add("No connection to the Database could be established. This does not affect the operability of the webapp.", Severity.Error);
+        if (!result & !showedDbInfoMsg)
+        {
+            Snackbar.Add("No connection to the Database could be established. This does not affect the operability of the webapp.", Severity.Info);
+            showedDbInfoMsg = true;
+        }
 
         solution = await solutionTask;
         showSolutionLoadingCircle = false;
@@ -150,7 +155,6 @@
             Snackbar.Add(@<div>Schedule could not be generated. Try completing and sanitizing your inputs. If the error persists, try again later or <a href="/contact">contact us</a>.</div>, Severity.Error);
         } else
         {
-            Snackbar.Add("Your schedule was generated.", Severity.Success);
             await ResultsFileLoader.SaveIlpResults(solution.ObjectiveStrain, solution.ObjectiveCost);
         }
     }
