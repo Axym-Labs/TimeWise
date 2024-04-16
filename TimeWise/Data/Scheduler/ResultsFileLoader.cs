@@ -15,16 +15,11 @@ public static class ResultsFileLoader
         if (Strain.Count > 0)
         {
             strain = Strain.Average(x => x.Item2);
-        }
-        else
-        {
-            strain = 0;
+            sr.ComparisonStrainAvg = sr.ComparisonStrainAvg + (strain - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
+            sr.ComparisonStrainNum += 1;
         }
 
-        sr.ComparisonStrainAvg = sr.ComparisonStrainAvg + (strain - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
         sr.ComparisonCostAvg = sr.ComparisonCostAvg + (Cost - sr.ComparisonCostAvg) / sr.ComparisonCostNum;
-
-        sr.ComparisonStrainNum += 1;
         sr.ComparisonCostNum += 1;
 
         await SaveFileAsync(sr);
@@ -38,16 +33,11 @@ public static class ResultsFileLoader
         if (Strain.Count > 0)
         {
             strain = Strain.Average(x => x.Item2);
-        }
-        else
-        {
-            strain = 0;
+            sr.IlpStrainAvg = sr.IlpStrainAvg + (strain - sr.IlpStrainAvg) / sr.IlpStrainNum;
+            sr.IlpStrainNum += 1;
         }
 
-        sr.IlpStrainAvg = sr.IlpStrainAvg + (strain - sr.IlpStrainAvg) / sr.IlpStrainNum;
         sr.IlpCostAvg = sr.IlpCostAvg + (Cost - sr.IlpCostAvg) / sr.IlpCostNum;
-
-        sr.IlpStrainNum += 1;
         sr.IlpCostNum += 1;
 
         await SaveFileAsync(sr);
