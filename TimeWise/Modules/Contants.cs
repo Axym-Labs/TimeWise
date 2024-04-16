@@ -9,4 +9,7 @@ public class Constants
     public const string apiEndpoint = "http://localhost:8080/api";
     public const string apiTestEndpoint = "http://localhost:8080/api";
 
+    public const string DemoFilePath = "static/content/ScheduleInputs.json";
+
+    public const string ScheduleBaseUrl = "/scheduler";
 }

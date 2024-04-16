@@ -17,6 +17,8 @@
 @inject Constants constants
 @inject ContentStorage content
 @inject InputsExporter inputsExporter
+@inject NavigationManager NavManager
+
 
 
 @if (showLoadingCircle)
@@ -155,7 +157,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
+        // extract query parameter "action"
+        var uri = new Uri(NavManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+        if (queryParams["action"] == "usedemo")
+        {
+            ProblemScope = JsonConvert.DeserializeObject<ProblemScope>(File.ReadAllText(Constants.DemoFilePath))!;
+        }
+
         dynamic schedulingPage = content.files["schedulingPage"];
     }
 

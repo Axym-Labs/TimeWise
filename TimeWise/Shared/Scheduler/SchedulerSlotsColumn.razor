@@ -5,11 +5,12 @@
 @using System.Collections.Generic
 @using TimeWise.Data.Scheduler
 
-<div class="" aria-orientation="horizontal">
+<div class="slotsDiv" aria-orientation="horizontal">
     <div style="min-height: 10rem; overflow-x:auto;" class="flex flex-column">
-        <MudButton Class="bg-btnPrimary rounded-lg w-full text-sm md:text-base" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected" StartIcon="@Icons.Material.Filled.Remove">
-            Selected @tableName
-        </MudButton>
+        <h5 class="text-b800 text-xl mb-3">
+            @(tableName)s
+        </h5>
+        <MudButton Class="bg-btnPrimary rounded-lg w-full text-sm md:text-base" Variant="Variant.Filled" Color="Color.Secondary" Disabled="collection.Count == 0" OnClick="RemoveSelected" StartIcon="@Icons.Material.Filled.Delete"></MudButton>
 
 
         <MudList>
@@ -20,9 +21,7 @@
             }
         </MudList>
 
-        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddNew" StartIcon="@Icons.Material.Filled.Add">
-            @tableName
-        </MudButton>
+        <MudButton Class="bg-btnPrimary rounded-lg w-full" Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddNew" StartIcon="@Icons.Material.Filled.AddCircle"></MudButton>
     </div>
 </div>
 

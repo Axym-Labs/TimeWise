@@ -7,7 +7,7 @@
 <div class="flex flex-col justify-center" style="height: inherit;">
     @if (ShowCostDiff) {
         <div class="m-3">
-            <h1 class="text-4xl md:text-7xl text-b900 text-center code">
+            <h1 class="text-6xl md:text-7xl text-b900 text-center code">
                 @(CostDiffDisplay.ToString("00.00"))%
                 <br />
                 <p class="text-base text-b500" style="letter-spacing: initial;">
@@ -19,7 +19,7 @@
     @if (ShowStrainDiff)
     {
         <div class="m-3">
-            <h1 class="text-4xl md:text-7xl text-b900 text-center code">
+            <h1 class="text-6xl md:text-7xl text-b900 text-center code">
                 @(StrainDiffDisplay.ToString("00.00"))%
                 <br />
                 <p class="text-base text-b500" style="letter-spacing: initial;">
@@ -75,13 +75,11 @@
         if (!isIncrementingCost)
         {
             isIncrementingCost = true;
-            Console.WriteLine((CostDiffDisplay > CostDiff));
             while (CostDiffDisplay > CostDiff)
             {
-                Console.WriteLine((CostDiffDisplay > CostDiff));
-                CostDiffDisplay -= 0.02;
+                CostDiffDisplay -= 0.25;
                 StateHasChanged();
-                await Task.Delay(10);
+                await Task.Delay(5);
             }
             isIncrementingCost = false;
         }

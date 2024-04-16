@@ -13,18 +13,24 @@
 <div>
     <p class="mb-3">If you have saved your inputs as JSON, you can import it here to start your configuration off with them.</p>
 
-    <MudFileUpload T="IBrowserFile" Accept=".json" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
+    <MudFileUpload T="IBrowserFile" Accept=".json" Class="inline-block !m-1.5" FilesChanged="UploadJson" MaximumFileCount="1" Error="ErrorDisplayed" ErrorText="@ErrorMessage">
         <ButtonTemplate>
             <MudButton HtmlTag="label"
                        Variant="Variant.Filled"
                        Color="Color.Secondary"
-                       Class="rounded-lg"
+                       Class="rounded-lg inline-block !m-0"
                        StartIcon="@Icons.Material.Filled.Upload"
                        for="@context">
                 Import JSON Inputs
             </MudButton>
         </ButtonTemplate>
     </MudFileUpload>
+    <MudButton Color="Color.Secondary" Class="rounded-lg inline-block m-1.5" Variant="Variant.Filled" OnClick="LoadDefaultFile">
+        Use demo inputs
+    </MudButton>
+    <MudButton Color="Color.Error" Class="rounded-lg inline-block m-1.5" Variant="Variant.Filled" OnClick="ClearInputs">
+        Clear inputs
+    </MudButton>
 </div>
 @code {
     [Parameter]
@@ -65,6 +71,18 @@
             ErrorDisplayed = true;
             ErrorMessage = "Submitted Json seems to be corrupted";
         }
+    }
+
+    private async Task LoadDefaultFile()
+    {
+        var ProblemScope = JsonConvert.DeserializeObject<ProblemScope>(File.ReadAllText(Constants.DemoFilePath));
+        await OnProblemScopeChanged.InvokeAsync(ProblemScope);
+    }
+
+    private async Task ClearInputs()
+    {
+        ProblemScope = new ProblemScope();
+        await OnProblemScopeChanged.InvokeAsync(ProblemScope);
     }
 
 }
