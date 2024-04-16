@@ -14,7 +14,8 @@ public enum SupportedFileTypes2
 
 public class InputsExporter
 {
-    public const string FileName = "ScheduleInputs";
+    public const string FileName = "TimeWise_Inputs";
+
     public MemoryStream GetStreamByFileExt(ProblemScope ProblemScope, SupportedFileTypes2 FileExt)
     {
         switch (FileExt)

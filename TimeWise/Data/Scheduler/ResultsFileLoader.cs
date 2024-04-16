@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using TimeWise.Modules;
 
 namespace TimeWise.Data.Scheduler;
 
 
 public static class ResultsFileLoader
 {
+
     public static async Task SaveComparisonResults(List<Tuple<string, double>> Strain, double Cost)
     {
         ScheduleResults sr = await LoadFileAsync();
@@ -55,37 +57,14 @@ public static class ResultsFileLoader
     {
         // TODO: Fix this
         string basePath = AppDomain.CurrentDomain.BaseDirectory;
-        string fullPath = Path.Combine(basePath, "/static/content/scheduleResults.json");
-        string json = await File.ReadAllTextAsync("static/content/scheduleResults.json");
+        string json = await File.ReadAllTextAsync(Constants.ResultsFilePath);
         return JsonConvert.DeserializeObject<ScheduleResults>(json)!;
     }
 
     public static async Task SaveFileAsync(ScheduleResults sr)
     {
         string basePath = AppDomain.CurrentDomain.BaseDirectory;
-        string fullPath = Path.Combine(basePath, "/static/content/scheduleResults.json");
         string json = JsonConvert.SerializeObject(sr, Formatting.Indented);
-        await File.WriteAllTextAsync("static/content/scheduleResults.json", json);
+        await File.WriteAllTextAsync(Constants.ResultsFilePath, json);
     }
 }
-
-public static class UsageFileLoader
-{
-    public static async Task<UserRatings> LoadFileAsync()
-    {
-        // TODO: Fix this
-        string basePath = AppDomain.CurrentDomain.BaseDirectory;
-        string fullPath = Path.Combine(basePath, "/static/content/usage.json");
-        string json = await File.ReadAllTextAsync("static/content/usage.json");
-        return JsonConvert.DeserializeObject<UserRatings>(json)!;
-    }
-
-    public static async Task SaveFileAsync(UserRatings ro)
-    {
-        string basePath = AppDomain.CurrentDomain.BaseDirectory;
-        string fullPath = Path.Combine(basePath, "/static/content/usage.json");
-        string json = JsonConvert.SerializeObject(ro, Formatting.Indented);
-        await File.WriteAllTextAsync("static/content/usage.json", json);
-    }
-}
-

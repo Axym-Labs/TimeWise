@@ -9,7 +9,19 @@ public class Constants
     public const string apiEndpoint = "http://localhost:8080/api";
     public const string apiTestEndpoint = "http://localhost:8080/api";
 
-    public const string DemoFilePath = "static/content/ScheduleInputs.json";
+    public const string DemoFilePath = "static/content/inputsDemo.json";
 
     public const string ScheduleBaseUrl = "/scheduler";
+
+#if DEBUG
+    private static string ResultsFilePath = "static/content/scheduleResultsDevelopment.json";
+#else
+   private static string ResultsFilePath = "static/content/scheduleResults.json";
+#endif
+
+#if DEBUG
+    private static string UsageFilePath = "static/content/usage.json";
+#else
+    private static string UsageFilePath = "static/content/usageDevelopment.json";
+#endif
 }
