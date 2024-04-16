@@ -1,10 +1,10 @@
 {
   "IlpCostAvg": 6000,
   "IlpCostNum": 10,
-  "ComparisonCostAvg": 10000.0,
-  "ComparisonCostNum": 10,
+  "ComparisonCostAvg": 7500.0,
+  "ComparisonCostNum": 1,
   "IlpStrainAvg": 4,
   "IlpStrainNum": 10,
-  "ComparisonStrainAvg": 6,
-  "ComparisonStrainNum": 10
+  "ComparisonStrainAvg": 5,
+  "ComparisonStrainNum": 1
 }

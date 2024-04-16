@@ -20,8 +20,8 @@ public class Constants
 #endif
 
 #if DEBUG
-    public const string UsageFilePath = "static/content/usage.json";
-#else
     public const string UsageFilePath = "static/content/usageDevelopment.json";
+#else
+    public const string UsageFilePath = "static/content/usage.json";
 #endif
 }
