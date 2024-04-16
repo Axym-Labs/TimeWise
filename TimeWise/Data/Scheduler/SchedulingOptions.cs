@@ -1,6 +1,5 @@
 namespace TimeWise.Data.Scheduler;
 public class SchedulingOptions{
-    public bool ExpenseMinimizing { get; set; } = true;
     public bool StrainMinimizing { get; set; } = true;
     public bool EnsureQualifiedPersonnelConstraint { get; set; } = true;
     public bool NoDoubleShiftConstraint { get; set; } = true;
