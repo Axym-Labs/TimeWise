@@ -14,6 +14,11 @@ public class ShiftInfo {
     public double Length { get; set; }
     public List<RequiredPersonnel> RequiredPersonnel { get; set;} = new List<RequiredPersonnel>();
     public double Strain { get; set; }
+
+    public double GetWorkingHours()
+    {
+        return Length * RequiredPersonnel.Sum(x => x.Count);
+    }
 }
 
 public class RequiredPersonnel

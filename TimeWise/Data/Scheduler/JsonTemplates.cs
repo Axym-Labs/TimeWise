@@ -40,11 +40,18 @@ public static class ResultsFileLoader
     public static async Task SaveComparisonResults(List<Tuple<string,double>> Strain, double Cost)
     {
         ScheduleResults sr = await LoadFileAsync();
-        double Ds = (Strain.Min(x => x.Item2) - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
-        double Dc = (Cost - sr.ComparisonCostAvg) / sr.ComparisonCostNum;
 
-        sr.ComparisonStrainAvg = Math.Round(sr.ComparisonStrainAvg+Ds, 2, MidpointRounding.AwayFromZero);
-        sr.ComparisonCostAvg = Math.Round(sr.ComparisonCostAvg+Dc, 2, MidpointRounding.AwayFromZero);
+        double strain;
+        if (Strain.Count > 0)
+        {
+            strain = Strain.Average(x => x.Item2);
+        } else
+        {
+            strain = 0;
+        }
+
+        sr.ComparisonStrainAvg = sr.ComparisonStrainAvg + (strain - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
+        sr.ComparisonCostAvg = sr.ComparisonCostAvg + (Cost - sr.ComparisonCostAvg) / sr.ComparisonCostNum;
 
         sr.IlpStrainNum += 1;
         sr.IlpCostNum += 1;

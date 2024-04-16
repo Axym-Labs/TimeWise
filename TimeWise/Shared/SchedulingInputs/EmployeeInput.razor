@@ -11,7 +11,7 @@
         <div class="md:grid grid-cols-1 md:grid-cols-9">
             <MudTextField Class="mx-2 my-2 md:col-span-3" @bind-Value="EmployeeData.Name" Label="Full name" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
 
-            <MudTextField Class="mx-2 my-2 md:col-span-3" Margin="Margin.Dense" @bind-Value:get="StringHelper.JoinList(EmployeeData.Occupations)" @bind-Value:set="value => EmployeeData.Occupations = StringHelper.FormatSplitString(value)" Label="Occupations (seperate using ',')" Variant="Variant.Outlined" HelperTextOnFocus="true"></MudTextField>
+            <MudTextField Class="mx-2 my-2 md:col-span-3" Margin="Margin.Dense" @bind-Value:get="StringHelper.JoinList(EmployeeData.Occupations)" @bind-Value:set="value => EmployeeData.Occupations = StringHelper.FormatSplitString(value)" Label="Occupations (comma seperated)" Variant="Variant.Outlined" HelperTextOnFocus="true"></MudTextField>
 
             <MudNumericField Class="mx-2 my-2 md:col-span-2" @bind-Value="EmployeeData.Wage" Culture="@CultureInfo.GetCultureInfo("de-DE")" Margin="Margin.Dense" Variant="Variant.Outlined" T="double" Label="Hourly wage" Adornment="Adornment.End" AdornmentText="€"></MudNumericField>
 

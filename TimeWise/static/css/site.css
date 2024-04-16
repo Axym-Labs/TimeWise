@@ -78,3 +78,8 @@ a:hover {
 .mud-treeview-item-label {
     white-space: nowrap;
 }
+
+.slotsDiv .mud-button-label .mud-button-icon-start {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
