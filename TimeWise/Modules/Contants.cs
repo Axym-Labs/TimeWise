@@ -14,14 +14,14 @@ public class Constants
     public const string ScheduleBaseUrl = "/scheduler";
 
 #if DEBUG
-    private static string ResultsFilePath = "static/content/scheduleResultsDevelopment.json";
+    public const string ResultsFilePath = "static/content/scheduleResultsDevelopment.json";
 #else
-   private static string ResultsFilePath = "static/content/scheduleResults.json";
+   public const string ResultsFilePath = "static/content/scheduleResults.json";
 #endif
 
 #if DEBUG
-    private static string UsageFilePath = "static/content/usage.json";
+    public const string UsageFilePath = "static/content/usage.json";
 #else
-    private static string UsageFilePath = "static/content/usageDevelopment.json";
+    public const string UsageFilePath = "static/content/usageDevelopment.json";
 #endif
 }
