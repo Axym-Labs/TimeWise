@@ -53,8 +53,8 @@ public static class ResultsFileLoader
         sr.ComparisonStrainAvg = sr.ComparisonStrainAvg + (strain - sr.ComparisonStrainAvg) / sr.ComparisonStrainNum;
         sr.ComparisonCostAvg = sr.ComparisonCostAvg + (Cost - sr.ComparisonCostAvg) / sr.ComparisonCostNum;
 
-        sr.IlpStrainNum += 1;
-        sr.IlpCostNum += 1;
+        sr.ComparisonStrainNum += 1;
+        sr.ComparisonCostNum += 1;
 
         await SaveFileAsync(sr);
     }
@@ -62,14 +62,22 @@ public static class ResultsFileLoader
     public static async Task SaveIlpResults(List<Tuple<string,double>> Strain, double Cost)
     {
         ScheduleResults sr = await LoadFileAsync();
-        double Ds = (Strain.Min(x => x.Item2) - sr.IlpStrainAvg) / sr.IlpStrainNum;
-        double Dc = (Cost - sr.IlpCostAvg) / sr.IlpCostNum;
 
-        sr.IlpStrainAvg = Math.Round(sr.IlpStrainAvg+Ds, 2, MidpointRounding.AwayFromZero);
-        sr.IlpCostAvg = Math.Round(sr.IlpCostAvg+Dc, 2, MidpointRounding.AwayFromZero);
+        double strain;
+        if (Strain.Count > 0)
+        {
+            strain = Strain.Average(x => x.Item2);
+        }
+        else
+        {
+            strain = 0;
+        }
 
-        sr.ComparisonStrainNum += 1;
-        sr.ComparisonCostNum += 1;
+        sr.IlpStrainAvg = sr.IlpStrainAvg + (strain - sr.IlpStrainAvg) / sr.IlpStrainNum;
+        sr.IlpCostAvg = sr.IlpCostAvg + (Cost - sr.IlpCostAvg) / sr.IlpCostNum;
+
+        sr.IlpStrainNum += 1;
+        sr.IlpCostNum += 1;
 
         await SaveFileAsync(sr);
     }
