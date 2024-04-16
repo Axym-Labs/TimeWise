@@ -1,9 +1,11 @@
 {
-  "TotalUsers": 10,
+  "TotalUsers": 40,
   "Ratings": [
-    3,
-    4,
-    5
+    0,
+    0,
+    0,
+    2,
+    3
   ],
   "RatingUsers": {
     "Jonathan Schäfer": {
