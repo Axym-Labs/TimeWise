@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="d-flex flex-row">
-                            <MudText>Average strain per shift:</MudText>
+                            <MudText>Strain per worker per shift:</MudText>
                             <MudText Class="ml-2"> @($"{GetAverageStrain(AlternativeSolution, Problem):N}")</MudText>
                             <p class="w-4"></p>
                         </div>
@@ -224,8 +224,6 @@
             strain[i] = new Tuple<string, double>(
                 strain[i].Item1, strain[i].Item2 / GetTotalShifts(solution, problem, strain[i].Item1)
             );
-
-            Console.WriteLine(GetTotalHours(solution, problem, strain[i].Item1));
         }
 
         return strain.Where(x => !Double.IsNaN(x.Item2)).Average(x => x.Item2);
